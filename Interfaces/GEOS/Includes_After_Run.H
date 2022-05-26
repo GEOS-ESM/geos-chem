@@ -57,6 +57,32 @@
   State_Chm%Spc_Units = 'kg/kg total'
 
   !=========================================================================
+  ! Passing out GOCART variables - M. Long - May 3, 2022
+  !=========================================================================
+  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST1',     __RC__ )
+  IND = IND_( TRIM('DST1') )
+  Ptr3D(:,:,State_Grid%NZ:1:-1) =   State_Chm%SpeciesVec(IND)%Conc(:,:,:)
+  Ptr3D => NULL()
+  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST2',     __RC__ )
+  IND = IND_( TRIM('DST2') )
+  Ptr3D(:,:,State_Grid%NZ:1:-1) =   State_Chm%SpeciesVec(IND)%Conc(:,:,:)
+  Ptr3D => NULL()
+  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST3',     __RC__ )
+  IND = IND_( TRIM('DST3') )
+  Ptr3D(:,:,State_Grid%NZ:1:-1) =   State_Chm%SpeciesVec(IND)%Conc(:,:,:)
+  Ptr3D => NULL()
+  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST4',     __RC__ )
+  IND = IND_( TRIM('DST4') )
+  Ptr3D(:,:,State_Grid%NZ:1:-1) =   State_Chm%SpeciesVec(IND)%Conc(:,:,:)
+  Ptr3D => NULL()
+       
+!>>>>  if(am_I_root) write(*,*) '<<>> after DST: ', &
+!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST1'))%Conc(:,:,:)), &
+!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST2'))%Conc(:,:,:)), &
+!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST3'))%Conc(:,:,:)), &
+!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST4'))%Conc(:,:,:))
+
+  !=========================================================================
   ! Various other archived variables needed in internal state. 
   !=========================================================================
   CALL MAPL_GetPointer( INTSTATE, Ptr3D, 'H2O2AfterChem', notFoundOK=.TRUE., __RC__ ) 

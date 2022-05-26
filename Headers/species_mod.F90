@@ -109,6 +109,10 @@ MODULE Species_Mod
      LOGICAL            :: Is_WetDep        ! Is it wet-deposited?
      LOGICAL            :: Is_InRestart     ! Is it in the restart file?
 
+     !<<>> execution control toggles
+     LOGICAL            :: Do_DryDep
+     LOGICAL            :: Do_WetDep
+
      ! Molecular weights
      REAL(fp)           :: MW_g             ! Species molecular weight [g/mol]
 

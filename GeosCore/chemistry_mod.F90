@@ -487,17 +487,17 @@ CONTAINS
           !------------------------------------
           ! Do dust aerosol chemistry/removal
           !------------------------------------
-          IF ( LDUST .AND. id_DST1 > 0 ) THEN
-             CALL ChemDust( Input_Opt,  State_Chm, State_Diag, &
-                            State_Grid, State_Met, RC )
-
-             ! Trap potential errors
-             IF ( RC /= GC_SUCCESS ) THEN
-                ErrMsg = 'Error encountered in "ChemDust"!'
-                CALL GC_Error( ErrMsg, RC, ThisLoc )
-                RETURN
-             ENDIF
-          ENDIF
+!>>>>          IF ( LDUST .AND. id_DST1 > 0 ) THEN
+!>>>>             CALL ChemDust( Input_Opt,  State_Chm, State_Diag, &
+!>>>>                            State_Grid, State_Met, RC )
+!>>>>
+!>>>>             ! Trap potential errors
+!>>>>             IF ( RC /= GC_SUCCESS ) THEN
+!>>>>                ErrMsg = 'Error encountered in "ChemDust"!'
+!>>>>                CALL GC_Error( ErrMsg, RC, ThisLoc )
+!>>>>                RETURN
+!>>>>             ENDIF
+!>>>>          ENDIF
 
 #ifdef APM
           !--------------------------------------------

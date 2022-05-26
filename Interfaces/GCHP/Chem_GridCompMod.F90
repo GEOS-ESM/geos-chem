@@ -170,6 +170,10 @@ MODULE Chem_GridCompMod
   CHARACTER(LEN=ESMF_MAXSTR)       :: ANAO3FILE
   CHARACTER(LEN=ESMF_MAXSTR)       :: ANAO3VAR
   CHARACTER(LEN=ESMF_MAXSTR)       :: ANAO3VARUNIT
+
+  ! Force configuration of model ops if GOCART2G is enabled
+  LOGICAL                          :: isGOCART2G
+
 #else
   LOGICAL                          :: isProvider ! provider to AERO, RATS, ANOX?
   LOGICAL                          :: calcOzone  ! if PTR_GCCTO3 is associated
@@ -504,6 +508,7 @@ CONTAINS
                                   Default="PCHEM",        &
                                   __RC__                   )
     IF ( ProviderName == "GEOSCHEMCHEM" ) DoAERO = .TRUE.
+    IF ( ProviderName == "GOCART2G"     ) isGOCART2G = .TRUE.
 
     ! See if GC is the RATS provider
     DoRATS = .FALSE.
@@ -544,6 +549,48 @@ CONTAINS
        PRECISION          = ESMF_KIND_R8, &
        DIMS               = MAPL_DimsHorzVert,    &
        VLOCATION          = MAPL_VLocationEdge,    &
+                                                      RC=STATUS  )
+    _VERIFY(STATUS)
+#endif
+
+#if defined( MODEL_GEOS )
+    call MAPL_AddImportSpec(GC, &
+       SHORT_NAME         = 'DST1',  &
+       LONG_NAME          = 'dust bin1',  &
+       UNITS              = 'kg m-3', &
+!       PRECISION          = ESMF_KIND_R8, &
+       DIMS               = MAPL_DimsHorzVert,    &
+       VLOCATION          = MAPL_VLocationCenter,    &
+                                                      RC=STATUS  )
+    _VERIFY(STATUS)
+
+    call MAPL_AddImportSpec(GC, &
+       SHORT_NAME         = 'DST2',  &
+       LONG_NAME          = 'dust bin2',  &
+       UNITS              = 'kg m-3', &
+!       PRECISION          = ESMF_KIND_R8, &
+       DIMS               = MAPL_DimsHorzVert,    &
+       VLOCATION          = MAPL_VLocationCenter,    &
+                                                      RC=STATUS  )
+    _VERIFY(STATUS)
+
+    call MAPL_AddImportSpec(GC, &
+       SHORT_NAME         = 'DST3',  &
+       LONG_NAME          = 'dust bin3',  &
+       UNITS              = 'kg m-3', &
+!       PRECISION          = ESMF_KIND_R8, &
+       DIMS               = MAPL_DimsHorzVert,    &
+       VLOCATION          = MAPL_VLocationCenter,    &
+                                                      RC=STATUS  )
+    _VERIFY(STATUS)
+
+    call MAPL_AddImportSpec(GC, &
+       SHORT_NAME         = 'DST4',  &
+       LONG_NAME          = 'dust bin4',  &
+       UNITS              = 'kg m-3', &
+!       PRECISION          = ESMF_KIND_R8, &
+       DIMS               = MAPL_DimsHorzVert,    &
+       VLOCATION          = MAPL_VLocationCenter,    &
                                                       RC=STATUS  )
     _VERIFY(STATUS)
 #endif
@@ -2293,6 +2340,33 @@ CONTAINS
 
     ENDIF ! DoAERO
 
+    ! Configure for GOCART2G interface & control of phys ops
+    IF ( isGOCART2G) THEN
+       ! <<MSL>>
+       ! Ideally, we can query species to see if they're provided by GOCART2G
+       ! it was not clear if there was a method in MAPL. There is a structure
+       ! in MAPL that appeared to store the %FROM component ID as part of appending
+       ! a field to the connectivity list via MAPL_AddConnectivity().
+       ! 
+       ! For now, just going to force outcomes
+       ! <<\MSL>>
+
+       ! Dust
+       State_Chm%SpcData(IND_('DST1'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST2'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST3'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST4'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST1'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST2'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST3'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST4'))%Info%Do_WetDep = .false.
+       ! Sea salt
+!       State_Chm%SpcData(IND_('SALA'))%Info%Do_DryDep = .false.
+!       State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
+!       State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
+!       State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
+    ENDIF
+
 #else
     IF ( isProvider ) THEN
        CALL Provider_Initialize( am_I_Root, State_Chm, State_Grid, &
@@ -3240,6 +3314,7 @@ CONTAINS
     IF ( FIRST ) THEN
 #if defined( MODEL_GEOS )
 #      include "GEOSCHEMCHEM_GetPointer___.h"
+       call MAPL_GetPointer ( IMPORT, PLE,      'PLE',     __RC__ )
 #else
 #      include "GCHPchem_GetPointer___.h"
 
@@ -3279,6 +3354,9 @@ CONTAINS
             __RC__ )
        if (MAPL_Am_I_Root() .and. .not. ASSOCIATED(CostFuncMask)) &
             WRITE(*,*) ' No CFN_MASK import variable found'
+#endif
+
+#if defined( MODEL_GEOS )
 #endif
 
     ! Run when it's time to do so
