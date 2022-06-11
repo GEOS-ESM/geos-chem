@@ -569,7 +569,7 @@ CONTAINS
        ! Can go to next species if this species does not have
        ! dry deposition and/or emissions
        !--------------------------------------------------------------------
-       IF ( .NOT. DryDepSpec .AND. .NOT. EmisSpec ) CYCLE
+       IF ( .NOT. DryDepSpec .AND. .NOT. EmisSpec .and. .not. SpcInfo%Do_DryDep ) CYCLE
 
 !$OMP PARALLEL DO                                                           &
 !$OMP DEFAULT( SHARED                                                     ) &

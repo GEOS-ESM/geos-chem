@@ -593,6 +593,7 @@ CONTAINS
        VLOCATION          = MAPL_VLocationCenter,    &
                                                       RC=STATUS  )
     _VERIFY(STATUS)
+
 #endif
 
     !=======================================================================
@@ -791,7 +792,13 @@ CONTAINS
                    EXIT
                 ENDIF
              ENDDO
-          ENDIF 
+          ENDIF
+          
+!>>>          
+          IF (FullName .eq. 'SALACL') &
+             MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
+!>>>
+
           call MAPL_AddInternalSpec(GC, &
                SHORT_NAME         = TRIM(SPFX)//TRIM(SUBSTRS(1)), &
                LONG_NAME          = TRIM(FullName)//                &
@@ -2361,10 +2368,10 @@ CONTAINS
        State_Chm%SpcData(IND_('DST3'))%Info%Do_WetDep = .false.
        State_Chm%SpcData(IND_('DST4'))%Info%Do_WetDep = .false.
        ! Sea salt
-!       State_Chm%SpcData(IND_('SALA'))%Info%Do_DryDep = .false.
-!       State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
-!       State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
-!       State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALA'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
     ENDIF
 
 #else
@@ -2479,6 +2486,25 @@ CONTAINS
              ENDIF
           ENDIF
        ENDIF
+! >>>
+       IF (fieldName .eq. 'SPC_SALACL') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_is_inverted', &
+               value=.true., __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=2, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/1,2/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_bins_split', &
+               valueList=(/0.2,0.8/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/0.5504,0.5504/), __RC__)
+       ENDIF
+! >>>
 #endif
 
        ! Get pointer to field
@@ -3924,6 +3950,7 @@ CONTAINS
                    isStartTime = .TRUE.
                 ENDIF
 #endif
+
              ! Run the GEOS-Chem column chemistry code for the given phase
              CALL GCHP_Chunk_Run( GC         = GC,         & ! Grid comp ref. 
                                   nymd       = nymd,       & ! Current YYYYMMDD

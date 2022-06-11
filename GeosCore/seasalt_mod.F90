@@ -144,7 +144,7 @@ CONTAINS
     USE ErrCode_Mod
     USE ERROR_MOD,          ONLY : DEBUG_MSG
     USE Input_Opt_Mod,      ONLY : OptInput
-    USE Species_Mod,        ONLY : SpcConc
+    USE Species_Mod,        ONLY : SpcConc, SpcPtr
     USE State_Chm_Mod,      ONLY : ChmState
     USE State_Diag_Mod,     ONLY : DgnState
     USE State_Grid_Mod,     ONLY : GrdState
@@ -188,6 +188,7 @@ CONTAINS
 #endif
     ! Pointers
     TYPE(SpcConc), POINTER :: Spc(:)
+    TYPE(SpcPtr),  POINTER :: SpcData(:)
 
     !=================================================================
     ! CHEMSEASALT begins here!
@@ -196,6 +197,7 @@ CONTAINS
     ! Initialize
     RC       =  GC_SUCCESS
     Spc      => State_Chm%SpeciesVec
+    SpcData  => State_Chm%SpcData
 
     ! Do we have to print debug output?
     prtDebug = ( Input_Opt%LPRT .and. Input_Opt%amIRoot )
@@ -208,7 +210,7 @@ CONTAINS
     !=================================================================
     ! Accumulation mode wet settling
     !=================================================================
-    IF ( id_SALA > 0 ) THEN
+    IF ( id_SALA > 0 .and. SpcData(id_SALA)%Info%Do_Drydep ) THEN
        CALL WET_SETTLING( Input_Opt, State_Chm, State_Diag, State_Grid, &
                           State_Met, Spc(id_SALA)%Conc, 1,  RC )
 
@@ -220,7 +222,7 @@ CONTAINS
     !=================================================================
     ! Accumulation mode Chloride wet settling
     !=================================================================
-    IF ( id_SALACL > 0 ) THEN
+    IF ( id_SALACL > 0  .and. SpcData(id_SALA)%Info%Do_Drydep ) THEN
        
        CALL WET_SETTLING( Input_Opt, State_Chm,              &
                           State_Diag, State_Grid, State_Met, &
@@ -234,7 +236,7 @@ CONTAINS
     !=================================================================
     ! Accumulation mode Alkalinity wet settling
     !=================================================================
-    IF ( id_SALAAL > 0 ) THEN
+    IF ( id_SALAAL > 0  .and. SpcData(id_SALA)%Info%Do_Drydep ) THEN
        CALL WET_SETTLING(   Input_Opt, State_Chm,  &
                           State_Diag, State_Grid, State_Met, &
                           Spc(id_SALAAL)%Conc, 5, RC )
@@ -247,7 +249,7 @@ CONTAINS
     !=================================================================
     ! Coarse mode wet settling
     !=================================================================
-    IF ( id_SALC > 0 ) THEN
+    IF ( id_SALC > 0 .and. SpcData(id_SALC)%Info%Do_Drydep ) THEN
        CALL WET_SETTLING( Input_Opt, State_Chm, State_Diag, State_Grid, &
                           State_Met, Spc(id_SALC)%Conc, 2,  RC )
 
@@ -259,7 +261,7 @@ CONTAINS
     !=================================================================
     ! Coarse mode Choloride wet settling
     !=================================================================
-    IF ( id_SALCCL > 0 ) THEN
+    IF ( id_SALCCL > 0 .and. SpcData(id_SALC)%Info%Do_Drydep ) THEN
        CALL WET_SETTLING(   Input_Opt, State_Chm,  &
                           State_Diag, State_Grid, State_Met, &
                           Spc(id_SALCCL)%Conc, 4, RC )
@@ -272,7 +274,7 @@ CONTAINS
     !=================================================================
     ! Coarse mode Alkalinity wet settling
     !=================================================================
-    IF ( id_SALCAL > 0 ) THEN
+    IF ( id_SALCAL > 0 .and. SpcData(id_SALC)%Info%Do_Drydep ) THEN
        CALL WET_SETTLING(   Input_Opt, State_Chm,  &
                           State_Diag, State_Grid, State_Met, &
                           Spc(id_SALCAL)%Conc, 6, RC )
