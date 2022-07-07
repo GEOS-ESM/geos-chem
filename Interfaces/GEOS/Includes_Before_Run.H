@@ -250,38 +250,6 @@
   State_Chm%Spc_Units = 'kg/kg total'
 
   !=========================================================================
-  ! Passing in GOCART variables - M. Long - May 3, 2022
-  !=========================================================================
-
-
-  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST1',     __RC__ )
-  IND = IND_( TRIM('DST1') )
-  State_Chm%SpeciesVec(IND)%Conc(:,:,:) = &
-       Ptr3D(:,:,LM:1:-1)
-  Ptr3D => NULL()
-  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST2',     __RC__ )
-  IND = IND_( TRIM('DST2') )
-  State_Chm%SpeciesVec(IND)%Conc(:,:,:) = &
-       Ptr3D(:,:,LM:1:-1)
-  Ptr3D => NULL()
-  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST3',     __RC__ )
-  IND = IND_( TRIM('DST3') )
-  State_Chm%SpeciesVec(IND)%Conc(:,:,:) = &
-       Ptr3D(:,:,LM:1:-1)
-  Ptr3D => NULL()
-  call MAPL_GetPointer ( IMPORT, PTR3D, 'DST4',     __RC__ )
-  IND = IND_( TRIM('DST4') )
-  State_Chm%SpeciesVec(IND)%Conc(:,:,:) = &
-       Ptr3D(:,:,LM:1:-1)
-  Ptr3D => NULL()
-
-!>>>>  if(am_I_root) write(*,*) '<<>> before DST: ', &
-!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST1'))%Conc(:,:,:)), &
-!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST2'))%Conc(:,:,:)), &
-!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST3'))%Conc(:,:,:)), &
-!>>>>		  sum(State_Chm%SpeciesVec(IND_('DST4'))%Conc(:,:,:))
-
-  !=========================================================================
   ! Various other archived variables needed in internal state. Eventually,
   ! we may copy those only on the first time step but for now do it every
   ! time. (ckeller, 9/16/15)

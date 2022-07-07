@@ -553,49 +553,6 @@ CONTAINS
     _VERIFY(STATUS)
 #endif
 
-#if defined( MODEL_GEOS )
-    call MAPL_AddImportSpec(GC, &
-       SHORT_NAME         = 'DST1',  &
-       LONG_NAME          = 'dust bin1',  &
-       UNITS              = 'kg m-3', &
-!       PRECISION          = ESMF_KIND_R8, &
-       DIMS               = MAPL_DimsHorzVert,    &
-       VLOCATION          = MAPL_VLocationCenter,    &
-                                                      RC=STATUS  )
-    _VERIFY(STATUS)
-
-    call MAPL_AddImportSpec(GC, &
-       SHORT_NAME         = 'DST2',  &
-       LONG_NAME          = 'dust bin2',  &
-       UNITS              = 'kg m-3', &
-!       PRECISION          = ESMF_KIND_R8, &
-       DIMS               = MAPL_DimsHorzVert,    &
-       VLOCATION          = MAPL_VLocationCenter,    &
-                                                      RC=STATUS  )
-    _VERIFY(STATUS)
-
-    call MAPL_AddImportSpec(GC, &
-       SHORT_NAME         = 'DST3',  &
-       LONG_NAME          = 'dust bin3',  &
-       UNITS              = 'kg m-3', &
-!       PRECISION          = ESMF_KIND_R8, &
-       DIMS               = MAPL_DimsHorzVert,    &
-       VLOCATION          = MAPL_VLocationCenter,    &
-                                                      RC=STATUS  )
-    _VERIFY(STATUS)
-
-    call MAPL_AddImportSpec(GC, &
-       SHORT_NAME         = 'DST4',  &
-       LONG_NAME          = 'dust bin4',  &
-       UNITS              = 'kg m-3', &
-!       PRECISION          = ESMF_KIND_R8, &
-       DIMS               = MAPL_DimsHorzVert,    &
-       VLOCATION          = MAPL_VLocationCenter,    &
-                                                      RC=STATUS  )
-    _VERIFY(STATUS)
-
-#endif
-
     !=======================================================================
     ! Get meteorology vertical index orientation
     !=======================================================================
@@ -794,9 +751,24 @@ CONTAINS
              ENDDO
           ENDIF
           
-!>>>          
-          IF (FullName .eq. 'SALACL') &
-             MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
+!>>> Kludge to test internally mixed species connectivity with SS2G (MSL)
+          IF ( FullName .eq. 'SALACL' .or. &
+               FullName .eq. 'SALCCL' .or. &
+               FullName .eq. 'SALCAL' .or. &
+               FullName .eq. 'BrSALA' .or. &
+               FullName .eq. 'BrSALC' )    &
+               MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
+          IF ( FullName .eq. 'SALAAL' .or. &
+               FullName .eq. 'SALA'   .or. &
+               FullName .eq. 'SALC'   )    &
+               MYFRIENDLIES = 'SS'
+
+!>>> Same for DU2G
+          IF ( FullName .eq. 'DST1' .or. &
+               FullName .eq. 'DST2' .or. &
+               FullName .eq. 'DST3' .or. &
+               FullName .eq. 'DST4' ) &
+               MYFRIENDLIES = TRIM(MYFRIENDLIES)//':DU'
 !>>>
 
           call MAPL_AddInternalSpec(GC, &
@@ -2486,11 +2458,10 @@ CONTAINS
              ENDIF
           ENDIF
        ENDIF
-! >>>
+
+! >>> Kludge to get internally mixed connectivity to work with SS2G (MSL)
+       ! SALA
        IF (fieldName .eq. 'SPC_SALACL') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_is_inverted', &
-               value=.true., __RC__)
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_nbins', &
                value=2, __RC__)
@@ -2498,13 +2469,133 @@ CONTAINS
                name='internally_mixed_with_bins', &
                valueList=(/1,2/), __RC__)
           call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_bins_split', &
-               valueList=(/0.2,0.8/), __RC__)
+               name='internally_mixed_emis_frac', &
+               valueList=(/0.5504e0,0.5504e0/), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_SALAAL') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed', &
+               value=.true., __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_nbins', &
+               value=2, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_with_bins', &
+               valueList=(/1,2/), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_SALA') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed', &
+               value=.true., __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_nbins', &
+               value=2, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_with_bins', &
+               valueList=(/1,2/), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_BrSALA') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=2, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/1,2/), __RC__)
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_emis_frac', &
-               valueList=(/0.5504,0.5504/), __RC__)
+               valueList=(/2.11e-3,2.11e-3/), __RC__)
        ENDIF
-! >>>
+       ! SALC
+       IF (fieldName .eq. 'SPC_SALCCL') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=3, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/3,4,5/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/0.5504,0.5504,0.5504/), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_SALCAL') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed', &
+               value=.true., __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_nbins', &
+               value=3, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_with_bins', &
+               valueList=(/3,4,5/), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_SALC') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed', &
+               value=.true., __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_nbins', &
+               value=3, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='directly_mixed_with_bins', &
+               valueList=(/3,4,5/), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_BrSALC') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=3, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/3,4,5/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/2.11e-3,2.11e-3,2.11e-3/), __RC__)
+       ENDIF
+! >>> ... and for dust
+       IF (fieldName .eq. 'SPC_DST1') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=1, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/1/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/1./), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_DST2') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=1, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/2/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/1./), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_DST3') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=1, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/3/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/1./), __RC__)
+       ENDIF
+       IF (fieldName .eq. 'SPC_DST4') THEN
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_nbins', &
+               value=1, __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_with_bins', &
+               valueList=(/4/), __RC__)
+          call ESMF_AttributeSet( GcFld,  &
+               name='internally_mixed_emis_frac', &
+               valueList=(/1./), __RC__)
+       ENDIF
+
 #endif
 
        ! Get pointer to field
@@ -2929,6 +3020,9 @@ CONTAINS
     TYPE(ESMF_State),    INTENT(INOUT) :: Import   ! Import State
     TYPE(ESMF_State),    INTENT(INOUT) :: Export   ! Export State
     TYPE(ESMF_Clock),    INTENT(INOUT) :: Clock    ! ESMF Clock object
+    TYPE(MAPL_MetaComp), POINTER :: STATE
+    TYPE(ESMF_STATE)             :: INTSTATE
+    REAL, POINTER                :: Ptr3d   (:,:,:) => NULL()
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -2959,6 +3053,13 @@ CONTAINS
 
     ! Identify this routine to MAPL
     Iam = TRIM(compName)//'::Run1'
+
+    CALL MAPL_GetObjectFromGC(GC, STATE, __RC__)
+    CALL MAPL_Get ( STATE, INTERNAL_ESMF_STATE=INTSTATE, __RC__ )
+    call MAPL_GetPointer ( INTSTATE, Ptr3d,  'SPC_SALA',     __RC__ )
+
+    GCCSALAI = Ptr3d
+    Ptr3d    => null()
 
     ! Call run routine stage 1 if more than one phase. If not 2 phases, 
     ! such as in GCHP, then we do all chemistry related processes from 
@@ -2995,6 +3096,10 @@ CONTAINS
     TYPE(ESMF_State),    INTENT(INOUT) :: Import   ! Import State
     TYPE(ESMF_State),    INTENT(INOUT) :: Export   ! Export State
     TYPE(ESMF_Clock),    INTENT(INOUT) :: Clock    ! ESMF Clock object
+
+    TYPE(MAPL_MetaComp), POINTER :: STATE
+    TYPE(ESMF_STATE)             :: INTSTATE
+    REAL, POINTER                :: Ptr3d   (:,:,:) => NULL()
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -3037,6 +3142,13 @@ CONTAINS
 
     ! Call run routine stage 2
     CALL Run_ ( GC, IMPORT, EXPORT, CLOCK, PHASE, __RC__ )
+
+    CALL MAPL_GetObjectFromGC(GC, STATE, __RC__)
+    CALL MAPL_Get ( STATE, INTERNAL_ESMF_STATE=INTSTATE, __RC__ )
+    call MAPL_GetPointer ( INTSTATE, Ptr3d,  'SPC_SALA',     __RC__ )
+
+    GCCSALAF = Ptr3d
+    Ptr3d    => null()
 
     ! Return w/ success
     _RETURN(ESMF_SUCCESS)
@@ -4313,6 +4425,27 @@ CONTAINS
                    localPET = myPet,   &    ! PET # we are on now 
                    __RC__ )
 
+!>>>#if defined( MODEL_GEOS )
+!>>>    ! Get Internal state
+!>>>    CALL MAPL_Get ( STATE, INTERNAL_ESMF_STATE=INTSTATE, __RC__ ) 
+!>>>
+!>>>    ! Loop over all species
+!>>>    DO I = 1, State_Chm%nSpecies
+!>>>       ! Get info about this species from the species database
+!>>>       ThisSpc => State_Chm%SpcData(I)%Info
+!>>>       ! Skip if empty
+!>>>       IF ( TRIM(ThisSpc%Name) == '' ) CYCLE
+!>>>       ! Is this a tracer?
+!>>>       IND = IND_( TRIM(ThisSpc%Name) )
+!>>>       IF ( IND >= 0 ) THEN
+!>>>          ! Get data from internal state and copy to species array
+!>>>          CALL MAPL_GetPointer( INTSTATE, Ptr3D, TRIM(SPFX) // &
+!>>>               TRIM(ThisSpc%Name), &
+!>>>               notFoundOK=.TRUE., __RC__ )
+!>>>          ! just call MAPL_GetPointer to bring data to GCC at finalize
+!>>>       ENDIF
+!>>>    ENDDO
+!>>>#endif
 #if !defined( MODEL_GEOS )
     !=========================================================================
     ! Archive species in internal state. Also include certain State_Chm

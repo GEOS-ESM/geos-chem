@@ -12280,6 +12280,16 @@ CONTAINS
        IF ( isUnits   ) Units = 'ug m-3'
        IF ( isRank    ) Rank  =  3
 
+    ELSE IF ( TRIM( Name_AllCaps ) == 'GCCSALAI' ) THEN
+       IF ( isDesc    ) Desc  = ''
+       IF ( isUnits   ) Units = 'kg kg-1'
+       IF ( isRank    ) Rank  =  3
+
+    ELSE IF ( TRIM( Name_AllCaps ) == 'GCCSALAF' ) THEN
+       IF ( isDesc    ) Desc  = ''
+       IF ( isUnits   ) Units = 'kg kg-1'
+       IF ( isRank    ) Rank  =  3
+
    ELSE
 
        !--------------------------------------------------------------------
