@@ -537,6 +537,17 @@ CONTAINS
 !
 #if defined( MODEL_GEOS )
 #   include "GEOSCHEMCHEM_ImportSpec___.h"
+     call MAPL_AddExportSpec(GC,                                  &
+        SHORT_NAME         = 'fSPC',                              &
+        LONG_NAME          = 'shared_species_fields',             &
+        UNITS              = 'kg kg-1',                           &
+        DIMS               = MAPL_DimsHorzVert,                   &
+        VLOCATION          = MAPL_VLocationCenter,                &
+        DATATYPE           = MAPL_BundleItem,                     &
+!        RESTART    = MAPL_RestartSkip,                            &
+                                                      RC=STATUS  )
+     VERIFY_(STATUS)
+
 #else
 #   include "GCHPchem_ImportSpec___.h"
 #endif
@@ -751,24 +762,30 @@ CONTAINS
              ENDDO
           ENDIF
           
-!>>> Kludge to test internally mixed species connectivity with SS2G (MSL)
+!>>> Kludge to drive internally mixed species connectivity with SS2G (MSL)
+! -- This can all be managed with creative use of .rc files
           IF ( FullName .eq. 'SALACL' .or. &
                FullName .eq. 'SALCCL' .or. &
+               FullName .eq. 'SALAAL' .or. &
                FullName .eq. 'SALCAL' .or. &
                FullName .eq. 'BrSALA' .or. &
-               FullName .eq. 'BrSALC' )    &
+               FullName .eq. 'BrSALC' .or. &
+               FullName .eq. 'NITs'   .or. &
+               FullName .eq. 'SO4s'   )    &
                MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
-          IF ( FullName .eq. 'SALAAL' .or. &
-               FullName .eq. 'SALA'   .or. &
-               FullName .eq. 'SALC'   )    &
-               MYFRIENDLIES = 'SS'
-
+! -- directly mixed species have no friendlies. Instead, their
+!    analogs are made friendly to GEOSCHEMCHEM in addition to
+!    D:T:M
+          IF ( FullName .eq. 'SALA' ) MYFRIENDLIES = ''
+          IF ( FullName .eq. 'SALC' ) MYFRIENDLIES = ''
 !>>> Same for DU2G
-          IF ( FullName .eq. 'DST1' .or. &
-               FullName .eq. 'DST2' .or. &
-               FullName .eq. 'DST3' .or. &
-               FullName .eq. 'DST4' ) &
-               MYFRIENDLIES = TRIM(MYFRIENDLIES)//':DU'
+          IF ( FullName .eq. 'DST1' ) MYFRIENDLIES = ''
+          IF ( FullName .eq. 'DST2' ) MYFRIENDLIES = ''
+          IF ( FullName .eq. 'DST3' ) MYFRIENDLIES = ''
+          IF ( FullName .eq. 'DST4' ) MYFRIENDLIES = ''
+!>>> Same for SU2G
+! -- SO4 is the only shared species
+          IF ( FullName .eq. 'SO4' ) MYFRIENDLIES = ''
 !>>>
 
           call MAPL_AddInternalSpec(GC, &
@@ -2323,9 +2340,7 @@ CONTAINS
     IF ( isGOCART2G) THEN
        ! <<MSL>>
        ! Ideally, we can query species to see if they're provided by GOCART2G
-       ! it was not clear if there was a method in MAPL. There is a structure
-       ! in MAPL that appeared to store the %FROM component ID as part of appending
-       ! a field to the connectivity list via MAPL_AddConnectivity().
+       ! it was not clear if there was a method in MAPL. 
        ! 
        ! For now, just going to force outcomes
        ! <<\MSL>>
@@ -2344,6 +2359,25 @@ CONTAINS
        State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
        State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
        State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SO4s'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SO4s'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALACL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALACL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('BrSALC'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('BrSALC'))%Info%Do_WetDep = .false.
+       ! Sulfate
+       State_Chm%SpcData(IND_('SO4'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SO4'))%Info%Do_WetDep = .false.
     ENDIF
 
 #else
@@ -2474,25 +2508,14 @@ CONTAINS
        ENDIF
        IF (fieldName .eq. 'SPC_SALAAL') THEN
           call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed', &
-               value=.true., __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_nbins', &
+               name='internally_mixed_nbins', &
                value=2, __RC__)
           call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_with_bins', &
+               name='internally_mixed_with_bins', &
                valueList=(/1,2/), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_SALA') THEN
           call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed', &
-               value=.true., __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_nbins', &
-               value=2, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_with_bins', &
-               valueList=(/1,2/), __RC__)
+               name='internally_mixed_emis_frac', &
+               valueList=(/1e0,1e0/), __RC__)
        ENDIF
        IF (fieldName .eq. 'SPC_BrSALA') THEN
           call ESMF_AttributeSet( GcFld,  &
@@ -2519,25 +2542,14 @@ CONTAINS
        ENDIF
        IF (fieldName .eq. 'SPC_SALCAL') THEN
           call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed', &
-               value=.true., __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_nbins', &
+               name='internally_mixed_nbins', &
                value=3, __RC__)
           call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_with_bins', &
+               name='internally_mixed_with_bins', &
                valueList=(/3,4,5/), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_SALC') THEN
           call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed', &
-               value=.true., __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_nbins', &
-               value=3, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='directly_mixed_with_bins', &
-               valueList=(/3,4,5/), __RC__)
+               name='internally_mixed_emis_frac', &
+               valueList=(/1e0,1e0,1e0/), __RC__)
        ENDIF
        IF (fieldName .eq. 'SPC_BrSALC') THEN
           call ESMF_AttributeSet( GcFld,  &
@@ -2550,52 +2562,30 @@ CONTAINS
                name='internally_mixed_emis_frac', &
                valueList=(/2.11e-3,2.11e-3,2.11e-3/), __RC__)
        ENDIF
-! >>> ... and for dust
-       IF (fieldName .eq. 'SPC_DST1') THEN
+       IF (fieldName .eq. 'SPC_NITs') THEN
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_nbins', &
-               value=1, __RC__)
+               value=3, __RC__)
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_with_bins', &
-               valueList=(/1/), __RC__)
+               valueList=(/3,4,5/), __RC__)
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_emis_frac', &
-               valueList=(/1./), __RC__)
+               valueList=(/0.,0.,0./), __RC__)
        ENDIF
-       IF (fieldName .eq. 'SPC_DST2') THEN
+       IF (fieldName .eq. 'SPC_SO4s') THEN
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_nbins', &
-               value=1, __RC__)
+               value=3, __RC__)
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_with_bins', &
-               valueList=(/2/), __RC__)
+               valueList=(/3,4,5/), __RC__)
           call ESMF_AttributeSet( GcFld,  &
                name='internally_mixed_emis_frac', &
-               valueList=(/1./), __RC__)
+               valueList=(/0.,0.,0./), __RC__)
        ENDIF
-       IF (fieldName .eq. 'SPC_DST3') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=1, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/3/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/1./), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_DST4') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=1, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/4/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/1./), __RC__)
-       ENDIF
-
+! >>> ... DU2G
+! >>> ... SU2G
 #endif
 
        ! Get pointer to field
@@ -3338,6 +3328,7 @@ CONTAINS
     REAL(ESMF_KIND_r8), POINTER  :: CostFuncMask(:,:,:) => NULL()
 #endif
 
+    type(ESMF_FieldBundle)              :: fSPC ! Species fields friendly to GCC 
 
     __Iam__('Run_')
 
@@ -3628,6 +3619,53 @@ CONTAINS
 !       ! restart file (and stored in the internal state).
 !       !=======================================================================
        CALL MAPL_TimerOn(STATE, "CP_BFRE")
+       call ESMF_StateGet (EXPORT, 'fSPC', fSPC, __RC__ )
+       
+       !=========================================================================
+       ! Pass shared species from GOCART2G to the GEOSCHEMCHEM internal state
+       ! Species in internal state are in kg/kg total. MSL Jul 14, 2022
+       !=========================================================================
+       ! Seasalt -- hard-coded for now
+       I = IND_( 'SALA' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! Set SALA to SS2G:SS(bin 1)
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 2) to SALA
+       Ptr3d => null()
+       I = IND_( 'SALC' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! Set SALC to SS2G:SS(bin 3)
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 4) to SALC
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 5) to SALC
+       Ptr3d => null()
+       ! Dust -- hard-coded for now
+       I = IND_( 'DST1' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU',    Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! 
+       Ptr3d => null()
+       I = IND_( 'DST2' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU002', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! 
+       Ptr3d => null()
+       I = IND_( 'DST3' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! 
+       Ptr3d => null()
+       I = IND_( 'DST4' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! 
+       Ptr3d => null()
+       ! SO4 -- hard-coded for now
+       I = IND_( 'SO4' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
+       Int2Spc(I)%Internal = Ptr3d ! 
+       Ptr3d => null()
+
 #include "Includes_Before_Run.H"
        CALL MAPL_TimerOff(STATE, "CP_BFRE")
 
@@ -4157,6 +4195,11 @@ CONTAINS
        CALL MAPL_TimerOn(STATE, "CP_AFTR")
 #      include "Includes_After_Run.H"
        CALL MAPL_TimerOff(STATE, "CP_AFTR")
+
+       I = IND_( 'SO4' )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
+       Ptr3d = Int2Spc(I)%Internal ! Update SO4 after chem
+       Ptr3d => null()
 
        ! Archive last active time steps
        pymd = nymd
