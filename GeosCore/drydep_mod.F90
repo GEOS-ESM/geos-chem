@@ -1269,12 +1269,13 @@ CONTAINS
        ! a zero value in a denominator. (bmy, 8/29/13)
        ! (bmy, 8/29/13)
        IF ( ( HSTAR(K) > 0e+0_f8   .and. &
-              XMW  (K) > 0e+0_f8 ) .or.  AIROSOL(K) &
-              .and. SpcInfo%Do_Drydep ) THEN
+              XMW  (K) > 0e+0_f8 ) .or.  &
+              AIROSOL(K)                   ) THEN
           LDEP(K) = .TRUE.
        ELSE
           LDEP(K) = .FALSE.
        ENDIF
+       IF ( .not. SpcInfo%Do_Drydep ) LDEP(K) = .FALSE.
 
        SpcInfo => NULL()
 

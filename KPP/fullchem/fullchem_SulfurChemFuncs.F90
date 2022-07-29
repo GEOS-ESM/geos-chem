@@ -225,11 +225,17 @@ CONTAINS
     ! SALAAL + HNO3 = NIT
     !------------------------------------------------------------------------
 
-    ! 1st order uptake
-    k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,11),                &
-                    radius = State_Het%xRadi(11),                            &
-                    gamma  = 0.5_dp,                                         &
-                    srMw   = SR_MW(ind_HNO3)                                )
+!>>    ! 1st order uptake
+!>>    k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,11),                &
+!>>                    radius = State_Het%xRadi(11),                            &
+!>>                    gamma  = 0.5_dp,                                         &
+!>>                    srMw   = SR_MW(ind_HNO3)                                )
+
+    k_ex = Ars_L1K( xradi   = State_Chm%Aero(11)%WetAeroRadi(I,J,L,:),        &
+                    wetarea = State_Chm%Aero(11)%WetAeroArea(I,J,L,:),        &
+                    k_ex    = State_Chm%Aero(11)%k_Exchange(I,J,L,:),         &
+                    gamma   = 0.5_dp,                                         &
+                    srMw    = SR_MW(ind_HNO3)                                )
 
     ! Assume HNO3 is limiting, so recompute reaction rate accordingly
     IF ( SALAAL_gt_0_1 ) THEN
@@ -282,10 +288,16 @@ CONTAINS
     !------------------------------------------------------------------------
 
     ! 1st order uptake
-    k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,12),                &
-                    radius = State_Het%xRadi(12),                            &
-                    gamma  = 0.5_dp,                                         &
-                    srMw   = SR_MW(ind_HNO3)                                )
+!    k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,12),                &
+!                    radius = State_Het%xRadi(12),                            &
+!                    gamma  = 0.5_dp,                                         &
+!                    srMw   = SR_MW(ind_HNO3)                                )
+! <<>> Set State_Het%aero(12) here because State_Het hasn't yet been populated!
+    k_ex = Ars_L1K( xradi   = State_Chm%Aero(12)%WetAeroRadi(I,J,L,:),        &
+                    wetarea = State_Chm%Aero(12)%WetAeroArea(I,J,L,:),        &
+                    k_ex    = State_Chm%Aero(12)%k_Exchange(I,J,L,:),         &
+                    gamma   = 0.5_dp,                                         &
+                    srMw    = SR_MW(ind_HNO3)                                )
 
     ! Assume HNO3 is limiting, so recompute rxn rate accordingly
     IF ( SALCAL_gt_0_1 ) THEN

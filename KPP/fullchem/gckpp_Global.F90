@@ -161,7 +161,17 @@ MODULE gckpp_Global
   REAL(dp) :: PHOTOL(1000)
   !$OMP THREADPRIVATE( PHOTOL )
 
+  TYPE AeroState
+     REAL, POINTER :: wetArea(:)    ! Aerosol specific wet sfc area [cm3/cm3]
+     REAL, POINTER :: xArea(:)      ! Aerosol specific sfc area  [cm3/cm3]
+     REAL, POINTER :: xH2O(:)       ! Aerosol water content [cm3/cm3]
+     REAL, POINTER :: xRadi(:)      ! Aerosol effective radius [cm]
+     REAL, POINTER :: xVol(:)       ! Aerosol specific volume [cm3/cm3]
+     REAL, POINTER :: k_ex(:)       ! Aerosol specific exchange/uptake rate [1/s]
+  END TYPE AeroState
+
   TYPE, PUBLIC :: HetState
+     TYPE(AeroState) :: aero(14)
      REAL(dp) :: AVO            ! Avogadro's constant [molec/mol]
      LOGICAL  :: debugBox       ! Are we in a debugging box?
      LOGICAL  :: natSurface     ! Is there NAT in this box?
