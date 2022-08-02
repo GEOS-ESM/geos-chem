@@ -1723,6 +1723,12 @@ CONTAINS
 
        ! Compute reaction rates for aqueous sulfur chemistry
        ! (i.e. S(IV)->S(VI), HCl,  and HNO3)
+
+       !<<>> KLUDGE! This has to be done here for now. GCC needs to be updated
+       !             to account for some fixes to fullchem_*
+       NUMDEN  = State_Met%AIRNUMDEN(I,J,L)
+       SR_TEMP = sqrt(State_Met%T(I,J,L))
+
        CALL fullchem_SulfurAqChem( I          = I,                           &
                                    J          = J,                           &
                                    L          = L,                           &

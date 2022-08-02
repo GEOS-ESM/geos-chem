@@ -598,7 +598,6 @@ CONTAINS
                 RETURN
              ENDIF
           ENDIF
-
 #ifdef APM
           !------------------------------------------------------------------
           ! Do APM aerosol microphysics

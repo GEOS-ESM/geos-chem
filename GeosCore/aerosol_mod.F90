@@ -194,7 +194,7 @@ CONTAINS
 #ifdef TOMAS
     USE TOMAS_MOD,        ONLY : IBINS
 #endif
-!
+
 ! !INPUT PARAMETERS:
 !
     TYPE(OptInput), INTENT(IN)    :: Input_Opt   ! Input Options object
@@ -1825,6 +1825,7 @@ CONTAINS
 
                 WTAREA(I,J,L,N+NDUST)   = TAREA(I,J,L,N+NDUST)
                 WERADIUS(I,J,L,N+NDUST) = ERADIUS(I,J,L,N+NDUST)
+
                 ! For SO4-NIT-NH4-fine sea salt aerosol, re-calculate the wet
                 ! effective
                 ! radius using the water content from ISORROPIA.
@@ -1862,6 +1863,7 @@ CONTAINS
 
                    ACLRADIUS(I,J,L) = 1.0D-4 * REFF
                    ACLAREA(I,J,L) = 3.D0*(VH2O + VDry) / ACLRADIUS(I,J,L)
+
                 ENDIF
 
                 ! Save aerosol water content. Assume that the increase in volume

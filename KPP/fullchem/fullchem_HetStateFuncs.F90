@@ -667,5 +667,6 @@ CONTAINS
     L2G = L2G_8
 
   END SUBROUTINE Compute_L2G_Local
+
 !EOC
 END MODULE fullchem_HetStateFuncs

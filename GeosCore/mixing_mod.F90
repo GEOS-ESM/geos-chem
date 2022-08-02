@@ -570,6 +570,7 @@ CONTAINS
        ! dry deposition and/or emissions
        !--------------------------------------------------------------------
        IF ( .NOT. DryDepSpec .AND. .NOT. EmisSpec ) CYCLE
+       IF ( .NOT. SpcInfo%Do_DryDep ) CYCLE
 
 !$OMP PARALLEL DO                                                           &
 !$OMP DEFAULT( SHARED                                                     ) &

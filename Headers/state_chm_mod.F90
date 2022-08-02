@@ -58,6 +58,17 @@ MODULE State_Chm_Mod
 
   INTEGER, PRIVATE               :: nChmState = 0    ! # chemistry states,
 
+!>>><<>> GOCART2G COUPLING DEV CODE
+  TYPE :: Aero
+!     REAL(fp),          POINTER :: AeroArea   (:,:,:,:) ! i,j,k,n Aerosol Area [cm2/cm3]
+!     REAL(fp),          POINTER :: AeroRadi   (:,:,:,:) ! i,j,k,n Aerosol Radius [cm]
+     REAL(fp),          POINTER :: WetAeroArea(:,:,:,:) ! i,j,k,n Aerosol Area [cm2/cm3]
+     REAL(fp),          POINTER :: WetAeroRadi(:,:,:,:) ! i,j,k,n Aerosol Radius [cm]
+     REAL(fp),          POINTER :: k_Exchange(:,:,:,:)  ! i,j,k,n Aerosol/gas exchange rate
+     ! -- k_Exchange may need to be 5d to account for k_ex associated with more than 1 reaction.
+     !    This is an experimental feature <<>> MSL
+  END type Aero
+
   !==========================================================================
   ! Derived type for Chemistry State
   !==========================================================================
@@ -155,6 +166,7 @@ MODULE State_Chm_Mod
      REAL(fp),          POINTER :: ACLRadi      (:,:,:) ! Fine Cl- Radius [cm]
      REAL(fp),          POINTER :: QLxpHCloud   (:,:,:) !
      REAL(fp),          POINTER :: ORVCsesq     (:,:,:) ! Sesquiterpenes mass [kg/box]
+     TYPE(Aero)                 :: Aero         (14)    ! 
 
      !-----------------------------------------------------------------------
      ! Fields for nitrogen deposition

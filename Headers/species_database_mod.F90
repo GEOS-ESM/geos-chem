@@ -515,6 +515,7 @@ CONTAINS
                 SpcCount%nDryDep  = SpcCount%nDryDep + 1
                 ThisSpc%DryDepId  = SpcCount%nDryDep
                 ThisSpc%Is_DryDep = v_bool
+                ThisSpc%Do_DryDep = v_bool
              ENDIF
 
           ELSE IF ( INDEX( key, "%Is_HygroGrowth" ) > 0 ) THEN
@@ -587,6 +588,7 @@ CONTAINS
                 SpcCount%nWetDep  = SpcCount%nWetDep + 1
                 ThisSpc%WetDepID  = SpcCount%nWetDep
                 ThisSpc%Is_WetDep = v_bool
+                ThisSpc%Do_WetDep = v_bool
              ENDIF
 
           ELSE IF ( INDEX( key, "%MP_SizeResAer" ) > 0 ) THEN

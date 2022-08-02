@@ -58,6 +58,13 @@
   State_Chm%Spc_Units = 'kg/kg total'
 
   !=========================================================================
+  ! Pass shared species from the GEOSCHEMCHEM internal state to GOCART2G
+  ! Species in internal state are in kg/kg total.
+  !=========================================================================
+  ! Seasalt -- hard-coded for now
+  ! -- not needed since GCC does no action on the SS field
+
+  !=========================================================================
   ! Various other archived variables needed in internal state. 
   !=========================================================================
   CALL MAPL_GetPointer( INTSTATE, Ptr3D, 'H2O2AfterChem', notFoundOK=.TRUE., __RC__ ) 

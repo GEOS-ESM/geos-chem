@@ -92,6 +92,5 @@ MODULE gckpp_Global
 
 ! INLINED global variable declarations
 
-
 END MODULE gckpp_Global
 

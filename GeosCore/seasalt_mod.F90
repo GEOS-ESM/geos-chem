@@ -221,7 +221,7 @@ CONTAINS
     !========================================================================
     ! Accumulation mode (SALA) wet settling
     !========================================================================
-    IF ( id_SALA > 0 ) THEN
+    IF ( id_SALA > 0 .and. SpcData(id_SALA)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -246,7 +246,7 @@ CONTAINS
     !========================================================================
     ! Coarse mode (SALC) wet settling
     !========================================================================
-    IF ( id_SALC > 0 ) THEN
+    IF ( id_SALC > 0 .and. SpcData(id_SALC)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -271,7 +271,7 @@ CONTAINS
     !========================================================================
     ! Accumulation mode chloride (SALACL) wet settling
     !========================================================================
-    IF ( id_SALACL > 0 ) THEN
+    IF ( id_SALACL > 0 .and. SpcData(id_SALACL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -296,7 +296,7 @@ CONTAINS
     !========================================================================
     ! Coarse mode chloride (SALCCL) wet settling
     !========================================================================
-    IF ( id_SALCCL > 0 ) THEN
+    IF ( id_SALCCL > 0 .and. SpcData(id_SALCCL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -321,7 +321,7 @@ CONTAINS
     !========================================================================
     ! Accumulation mode alkalinity (SALAAL) wet settling
     !========================================================================
-    IF ( id_SALAAL > 0 ) THEN
+    IF ( id_SALAAL > 0 .and. SpcData(id_SALAAL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -346,7 +346,7 @@ CONTAINS
     !========================================================================
     ! Coarse mode Alkalinity (SALCAL) wet settling
     !========================================================================
-    IF ( id_SALCAL > 0 ) THEN
+    IF ( id_SALCAL > 0 .and. SpcData(id_SALCAL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &

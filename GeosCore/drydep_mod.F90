@@ -1260,17 +1260,25 @@ CONTAINS
     !** Deposition is applied only to species with LDEP=T.
     DO K = 1,NUMDEP
 
+       SpcId   =  NTRAIND(K)
+       SpcInfo => State_Chm%SpcData(SpcId)%Info
+
        ! Better test for depositing species K: We need both HSTAR and XMW
        ! to be nonzero, OR the value of AIROSOL to be true.  This should
        ! avoid any futher floating point invalid issues caused by putting
        ! a zero value in a denominator. (bmy, 8/29/13)
        ! (bmy, 8/29/13)
        IF ( ( HSTAR(K) > 0e+0_f8   .and. &
-              XMW  (K) > 0e+0_f8 ) .or.  AIROSOL(K) ) THEN
+              XMW  (K) > 0e+0_f8 ) .or.  &
+              AIROSOL(K)                   ) THEN
           LDEP(K) = .TRUE.
        ELSE
           LDEP(K) = .FALSE.
        ENDIF
+       IF ( .not. SpcInfo%Do_Drydep ) LDEP(K) = .FALSE.
+
+       SpcInfo => NULL()
+
     ENDDO
 
 #ifdef LUO_WETDEP
