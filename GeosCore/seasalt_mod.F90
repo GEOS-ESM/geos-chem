@@ -163,7 +163,7 @@ CONTAINS
     USE ErrCode_Mod
     USE Error_Mod,      ONLY : Debug_Msg
     USE Input_Opt_Mod,  ONLY : OptInput
-    USE Species_Mod,    ONLY : SpcConc
+    USE Species_Mod,    ONLY : SpcConc, SpcPtr
     USE State_Chm_Mod,  ONLY : ChmState
     USE State_Diag_Mod, ONLY : DgnState
     USE State_Grid_Mod, ONLY : GrdState
@@ -206,6 +206,8 @@ CONTAINS
     CHARACTER(LEN=255) :: thisLoc
     CHARACTER(LEN=512) :: errMsg
 
+    TYPE(SpcPtr),  POINTER :: SpcData(:)
+
 #if   defined( APM )
     INTEGER           :: N, Seasalt_ids(NSALTBIN)
 #endif
@@ -216,6 +218,7 @@ CONTAINS
 
     ! Initialize
     RC       =  GC_SUCCESS
+    SpcData  => State_Chm%SpcData
     prtDebug = ( Input_Opt%LPRT .and. Input_Opt%amIRoot )
 
     !========================================================================

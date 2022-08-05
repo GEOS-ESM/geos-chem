@@ -2624,53 +2624,53 @@ CONTAINS
        ! Pass shared species from GOCART2G to the GEOSCHEMCHEM internal state
        ! Species in internal state are in kg/kg total. MSL Jul 14, 2022
        !=========================================================================
-       ! Seasalt -- hard-coded for now
-       I = IND_( 'SALA' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! Set SALA to SS2G:SS(bin 1)
-       Ptr3d => null()
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 2) to SALA
-       Ptr3d => null()
-       I = IND_( 'SALC' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! Set SALC to SS2G:SS(bin 3)
-       Ptr3d => null()
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 4) to SALC
-       Ptr3d => null()
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 5) to SALC
-       Ptr3d => null()
-       ! Dust -- hard-coded for now
-       I = IND_( 'DST1' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU',    Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'DST2' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU002', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'DST3' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'DST4' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       ! SO4 -- hard-coded for now
-       I = IND_( 'SO4' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       ! Nitrogen -- hard-coded for now
-       I = IND_( 'NH4' ) ! Is this even necessary? <<>>
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'NIT' )
-       IF (.not. FIRST) THEN ! <<>> TEMPORARY: This lets GEOS-Chem initialize NO3an1:3. <<>>
+       IF (.not. FIRST) THEN ! <<>> TEMPORARY: This lets GEOS-Chem initialize fields
+          ! Seasalt -- hard-coded for now
+          I = IND_( 'SALA' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! Set SALA to SS2G:SS(bin 1)
+          Ptr3d => null()
+          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 2) to SALA
+          Ptr3d => null()
+          I = IND_( 'SALC' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! Set SALC to SS2G:SS(bin 3)
+          Ptr3d => null()
+          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 4) to SALC
+          Ptr3d => null()
+          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 5) to SALC
+          Ptr3d => null()
+          ! Dust -- hard-coded for now
+          I = IND_( 'DST1' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU',    Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'DST2' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU002', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'DST3' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'DST4' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          ! SO4 -- hard-coded for now
+          I = IND_( 'SO4' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          ! Nitrogen -- hard-coded for now
+          I = IND_( 'NH4' ) ! Is this even necessary? <<>>
+          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'NIT' )
           call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
@@ -2682,23 +2682,23 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
           Ptr3d => null()
-       ! CA.oc & CA.bc -- hard-coded for now
-       I = IND_( 'BCPI' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'BCPO' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'OCPI' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
-       I = IND_( 'OCPO' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
-       Int2Spc(I)%Internal = Ptr3d ! 
-       Ptr3d => null()
+          ! CA.oc & CA.bc -- hard-coded for now
+          I = IND_( 'BCPI' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'BCPO' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'OCPI' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
+          I = IND_( 'OCPO' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
+          Int2Spc(I)%Internal = Ptr3d ! 
+          Ptr3d => null()
        ENDIF
 
 #include "Includes_Before_Run.H"
@@ -2724,46 +2724,61 @@ CONTAINS
        allocate (state_chm%aero(12)%WetAeroRadi(state_grid%nx, state_grid%ny, state_grid%nz, 3), __STAT__ ) ! SALC -> SS::SS003:005
        allocate (state_chm%aero(12)%WetAeroArea(state_grid%nx, state_grid%ny, state_grid%nz, 3), __STAT__ ) ! SALC
        allocate (state_chm%aero(12)%k_Exchange (state_grid%nx, state_grid%ny, state_grid%nz, 3), __STAT__ ) ! SALC
+       state_chm%aero(11)%k_exchange = 0.d0
+       state_chm%aero(12)%k_exchange = 0.d0
        do L=1,state_grid%NZ
           do J=1,state_grid%NY
              do I=1,state_grid%NX
-                call wetradius( REAL(SSradii(1:2),8), State_Met%RH(I,J,L), State_Chm%aero(11)%wetAeroRadi(I,J,L,:)) ! calculate for SALA
-                call wetradius( REAL(SSradii(3:5),8), State_Met%RH(I,J,L), State_Chm%aero(12)%wetAeroRadi(I,J,L,:)) ! calculate for SALA
+                call wetradius( REAL(SSradii(1:2),8), State_Met%RH(I,J,L), State_Chm%aero(11)%wetAeroRadi(I,J,L,:)) ! calculate for SALA, returns in [cm]
+                call wetradius( REAL(SSradii(3:5),8), State_Met%RH(I,J,L), State_Chm%aero(12)%wetAeroRadi(I,J,L,:)) ! calculate for SALC
              enddo
           enddo
        enddo
 
-       ! Wet Surface Area = 3 * (Wet Volume) / (Wet Radius)
-       ! Area (cm2/cm3)   = 3 * (kg/kg)*(kg/m3)*(m3/kg)*(1/cm)
+       ! Wet Surface Area (cm2/cm3)
+       ! -- FOR SOME REASON I CAN'T DISCERN, THE AREA CALCULATED BELOW IS CONSISTENTLY A FACTOR OF 3 SMALLER THAN THAT
+       !    CALCULATED FOR ONE BIN IN AEROSOL_MOD.F90. SO THE 9.d0 BELOW IS ACTUALLY 3d0*3d0. INCLUDING 3 AS PART OF 
+       !    THE CALCULATION OF AREA, AND THE OTHER 3 TO SCALE THE AREA CLOSER TO GEOS-Chem's RESULT FROM AEROSOL_MOD.F90
+       !
        ! -- SALA = SS(bin1) + SS(bin2) (SS from GOCART2G)
        I = IND_( 'SALA' )
        ! -- SS(bin1)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ ) ! Bin 1
-       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN / &
-            ( State_Chm%SpcData(I)%Info%Density * State_Chm%aero(11)%wetAeroRadi(:,:,:,1) )
+       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+            ((State_Chm%aero(11)%wetAeroRadi(:,:,:,1)/(1d-4*SSradii(1)))**3)*(1d0/State_Chm%aero(11)%wetAeroRadi(:,:,:,1))
+!       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(11)%wetAeroRadi(:,:,:,1)**2 / &
+!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(1)**3 )
        Ptr3d => null()
        ! -- SS(bin2)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN / &
-            ( State_Chm%SpcData(I)%Info%Density * State_Chm%aero(11)%wetAeroRadi(:,:,:,2) )
+       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+            ((State_Chm%aero(11)%wetAeroRadi(:,:,:,2)/(1d-4*SSradii(2)))**3)*(1d0/State_Chm%aero(11)%wetAeroRadi(:,:,:,2))
+!       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(11)%wetAeroRadi(:,:,:,2)**2 / &
+!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(2)**3 )
        Ptr3d => null()
 
        ! -- SALC = SS(bin3) + SS(bin4) + SS(bin5) (SS from GOCART2G)
-       I = IND_( 'SALA' )
+       I = IND_( 'SALC' )
        ! -- SS(bin3)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ ) ! Bin 1
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN / &
-            ( State_Chm%SpcData(I)%Info%Density * State_Chm%aero(12)%wetAeroRadi(:,:,:,1) )
+       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+            ((State_Chm%aero(12)%wetAeroRadi(:,:,:,1)/(1d-4*SSradii(3)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,1))
+!       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,1)**2 / &
+!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(3)**3 )
        Ptr3d => null()
        ! -- SS(bin4)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN / &
-            ( State_Chm%SpcData(I)%Info%Density * State_Chm%aero(12)%wetAeroRadi(:,:,:,2) )
+       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+            ((State_Chm%aero(12)%wetAeroRadi(:,:,:,2)/(1d-4*SSradii(4)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,2))
+!       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,2)**2 / &
+!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(4)**3 )
        Ptr3d => null()
        ! -- SS(bin5)
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN / &
-            ( State_Chm%SpcData(I)%Info%Density * State_Chm%aero(12)%wetAeroRadi(:,:,:,3) )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ ) ! Bin 3
+       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+            ((State_Chm%aero(12)%wetAeroRadi(:,:,:,3)/(1d-4*SSradii(5)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,3))
+!       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,3)**2 / &
+!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(5)**3 )
        Ptr3d => null()
 
 #if defined( MODEL_GCHPCTM )

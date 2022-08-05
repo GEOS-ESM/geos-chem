@@ -200,6 +200,15 @@
   LIGHTNING_CLOUD_TOP             | 1              | xy  |   |    |   |   |     | Lightning_convective_cloud_top_level
   CH4_EMIS_RICE                   | kg m-2 s-1     | xy  |   |    |   |   |     | CH4_emis_rice
   CH4_EMIS_WETLAND                | kg m-2 s-1     | xy  |   |    |   |   |     | CH4_emis_wetland
+  GCC_KEX1 | s-1 | xyz | C | | | | tmp
+  GCC_KEX2 | s-1 | xyz | C | | | | tmp
+  GCC_KEX3 | s-1 | xyz | C | | | | tmp
+  GCC_WRD1 | cm  | xyz | C | | | | tmp
+  GCC_WRD2 | cm  | xyz | C | | | | tmp
+  GCC_WRD3 | cm  | xyz | C | | | | tmp
+  GCC_WAR1 | cm2 cm3-1 | xyz | C | | | | tmp
+  GCC_WAR2 | cm2 cm3-1 | xyz | C | | | | tmp
+  GCC_WAR3 | cm2 cm3-1 | xyz | C | | | | tmp
 # --------------------------------|----------------|-----|---|----|---|---|-----|---------------------------------
 </ExportSpec>
 #                               --------------
