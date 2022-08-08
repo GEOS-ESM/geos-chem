@@ -1493,12 +1493,12 @@ CONTAINS
        State_Chm%SpcData(IND_('SO4'))%Info%Do_DryDep = .false.
        State_Chm%SpcData(IND_('SO4'))%Info%Do_WetDep = .false.
        ! Nitrogen
-       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
+!>>       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
+!>>       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
+!>>       State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
+!>>       State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
+!>>       State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
+!>>       State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
        ! Doesn't currently include dust-nitrate, equiv. to
        ! bins ___
        ! Organic & black carbon
@@ -2744,14 +2744,14 @@ CONTAINS
        I = IND_( 'SALA' )
        ! -- SS(bin1)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ ) ! Bin 1
-       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
             ((State_Chm%aero(11)%wetAeroRadi(:,:,:,1)/(1d-4*SSradii(1)))**3)*(1d0/State_Chm%aero(11)%wetAeroRadi(:,:,:,1))
 !       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(11)%wetAeroRadi(:,:,:,1)**2 / &
 !            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(1)**3 )
        Ptr3d => null()
        ! -- SS(bin2)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
             ((State_Chm%aero(11)%wetAeroRadi(:,:,:,2)/(1d-4*SSradii(2)))**3)*(1d0/State_Chm%aero(11)%wetAeroRadi(:,:,:,2))
 !       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(11)%wetAeroRadi(:,:,:,2)**2 / &
 !            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(2)**3 )
@@ -2761,21 +2761,21 @@ CONTAINS
        I = IND_( 'SALC' )
        ! -- SS(bin3)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ ) ! Bin 1
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
             ((State_Chm%aero(12)%wetAeroRadi(:,:,:,1)/(1d-4*SSradii(3)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,1))
 !       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,1)**2 / &
 !            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(3)**3 )
        Ptr3d => null()
        ! -- SS(bin4)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
             ((State_Chm%aero(12)%wetAeroRadi(:,:,:,2)/(1d-4*SSradii(4)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,2))
 !       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,2)**2 / &
 !            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(4)**3 )
        Ptr3d => null()
        ! -- SS(bin5)
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ ) ! Bin 3
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 9.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
+       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
             ((State_Chm%aero(12)%wetAeroRadi(:,:,:,3)/(1d-4*SSradii(5)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,3))
 !       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,3)**2 / &
 !            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(5)**3 )
@@ -3284,10 +3284,11 @@ CONTAINS
        GCC_WAR2 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,2)
        GCC_WAR3 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,3)
        IF (input_Opt%LCHEM) THEN
-       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
-          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-       elsewhere ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
+!       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
+!          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
+!          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
+!       elsewhere ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
+       where ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
           NO3an2 = Int2Spc(I)%Internal * (SSbin3       )/Int2Spc(Ind_('SALC'))%Internal
           NO3an3 = Int2Spc(I)%Internal * (SSbin4+SSbin5)/Int2Spc(Ind_('SALC'))%Internal
        end where ! Else, there .should. be no change in NITs, so leave it alone.
