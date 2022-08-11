@@ -519,6 +519,8 @@ CONTAINS
                DryDepSpec = .TRUE.
        ENDIF
 
+       IF ( .NOT. SpcInfo%Do_DryDep ) DryDepSpec = .FALSE.
+
        ! Set emissions top level:
        ! This is the top of atmosphere unless concentration build-up
        ! in stratosphere wants to be avoided.
@@ -570,7 +572,6 @@ CONTAINS
        ! dry deposition and/or emissions
        !--------------------------------------------------------------------
        IF ( .NOT. DryDepSpec .AND. .NOT. EmisSpec ) CYCLE
-       IF ( .NOT. SpcInfo%Do_DryDep ) CYCLE
 
 !$OMP PARALLEL DO                                                           &
 !$OMP DEFAULT( SHARED                                                     ) &

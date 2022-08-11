@@ -209,6 +209,9 @@
   GCC_WAR1 | cm2 cm3-1 | xyz | C | | | | tmp
   GCC_WAR2 | cm2 cm3-1 | xyz | C | | | | tmp
   GCC_WAR3 | cm2 cm3-1 | xyz | C | | | | tmp
+  GCC_SS3  | kg kg-1   | xyz | C | | | | tmp
+  GCC_SS4  | kg kg-1   | xyz | C | | | | tmp
+  GCC_SS5  | kg kg-1   | xyz | C | | | | tmp
 # --------------------------------|----------------|-----|---|----|---|---|-----|---------------------------------
 </ExportSpec>
 #                               --------------

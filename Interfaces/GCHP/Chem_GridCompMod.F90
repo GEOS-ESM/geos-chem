@@ -1493,12 +1493,12 @@ CONTAINS
        State_Chm%SpcData(IND_('SO4'))%Info%Do_DryDep = .false.
        State_Chm%SpcData(IND_('SO4'))%Info%Do_WetDep = .false.
        ! Nitrogen
-!>>       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
-!>>       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
-!>>       State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
-!>>       State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
-!>>       State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
-!>>       State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
        ! Doesn't currently include dust-nitrate, equiv. to
        ! bins ___
        ! Organic & black carbon
@@ -2624,7 +2624,7 @@ CONTAINS
        ! Pass shared species from GOCART2G to the GEOSCHEMCHEM internal state
        ! Species in internal state are in kg/kg total. MSL Jul 14, 2022
        !=========================================================================
-       IF (.not. FIRST) THEN ! <<>> TEMPORARY: This lets GEOS-Chem initialize fields
+!       IF (.not. FIRST) THEN ! <<>> TEMPORARY: This lets GEOS-Chem initialize fields
           ! Seasalt -- hard-coded for now
           I = IND_( 'SALA' )
           call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ )
@@ -2699,7 +2699,7 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
-       ENDIF
+!       ENDIF
 
 #include "Includes_Before_Run.H"
        CALL MAPL_TimerOff(STATE, "CP_BFRE")
@@ -3265,6 +3265,10 @@ CONTAINS
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004',  SSbin4, __RC__ )
        call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005',  SSbin5, __RC__ )
 
+       GCC_SS3 = SSbin3
+       GCC_SS4 = SSbin4
+       GCC_SS5 = SSbin5
+
        I = IND_( 'NIT' )
        NO3an1 = Int2Spc(I)%Internal ! NIT just points straight to this. Includes ISORROPIA+KPP REACTION K_MT(3)
        I = IND_( 'NITs' )
@@ -3284,13 +3288,16 @@ CONTAINS
        GCC_WAR2 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,2)
        GCC_WAR3 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,3)
        IF (input_Opt%LCHEM) THEN
-!       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
-!          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-!          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
+       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
+          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
+          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
 !       elsewhere ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
-       where ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
-          NO3an2 = Int2Spc(I)%Internal * (SSbin3       )/Int2Spc(Ind_('SALC'))%Internal
-          NO3an3 = Int2Spc(I)%Internal * (SSbin4+SSbin5)/Int2Spc(Ind_('SALC'))%Internal
+!       where ( (SSbin3+SSbin4+SSbin5)  .gt. 1.e-20 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
+!          NO3an2 = Int2Spc(I)%Internal * (SSbin3       )/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
+!          NO3an3 = Int2Spc(I)%Internal * (SSbin4+SSbin5)/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
+       elsewhere ! Approximation for low SALC concentrations.
+          NO3an2 = Int2Spc(I)%Internal * 0.2e0
+          NO3an3 = Int2Spc(I)%Internal * 0.8e0
        end where ! Else, there .should. be no change in NITs, so leave it alone.
        ENDIF
        NO3an1 => null()
