@@ -149,7 +149,7 @@ MODULE Chem_GridCompMod
   INTEGER                          :: ANAPHASE
 
   ! Force configuration of model ops if GOCART2G is enabled
-  LOGICAL                          :: isGOCART2G
+  LOGICAL                          :: isGOCART2G, G2G_DU, G2G_SS, G2G_NI, G2G_SU, G2G_CA
 
 #else
   LOGICAL                          :: isProvider ! provider to AERO, RATS, ANOX?
@@ -405,6 +405,76 @@ CONTAINS
 !
 ! !IMPORT STATE:
 !
+   call MAPL_AddImportSpec(gc,&
+        & short_name='SSEMOUT', &
+        & long_name='SSEMOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzOnly, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='SSDDOUT', &
+        & long_name='SSDDOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzOnly, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='SSSDOUT', &
+        & long_name='SSSDOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzVert, &
+        & vlocation=MAPL_VlocationCenter, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='SSWDOUT', &
+        & long_name='SSWDOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzVert, &
+        & vlocation=MAPL_VlocationCenter, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='DUEMOUT', &
+        & long_name='DUEMOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzVert, &
+        & vlocation=MAPL_VlocationCenter, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='DUDDOUT', &
+        & long_name='DUDDOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzOnly, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='DUSDOUT', &
+        & long_name='DUSDOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzVert, &
+        & vlocation=MAPL_VlocationCenter, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+   call MAPL_AddImportSpec(gc,&
+        & short_name='DUWDOUT', &
+        & long_name='DUWDOUT', &
+        & units='kg kg-1', &
+        & dims=MAPL_DimsHorzVert, &
+        & vlocation=MAPL_VlocationCenter, &
+        & ungridded_dims=[5], &
+        & rc=status)
+        VERIFY_(status)
+
 #if defined( MODEL_GEOS )
 #   include "GEOSCHEMCHEM_ImportSpec___.h"
      call MAPL_AddExportSpec(GC,                                  &
@@ -583,6 +653,7 @@ CONTAINS
           ENDIF
 
 #if defined( MODEL_GEOS )
+          isGOCART2G = .true. ! HARDCODE!! <<>>
           ! %%% GEOS-Chem in GEOS %%%
           ! Define friendliness to dynamics / turbulence
           MYFRIENDLIES = 'DYNAMICS:TURBULENCE'
@@ -600,42 +671,60 @@ CONTAINS
              ENDDO
           ENDIF
 
+          G2G_SS = .true.
+          G2G_DU = .false.
+          G2G_SU = .false.
+          G2G_NI = .false.
+!          IF (G2G_NI) G2G_SS = .true. !NI depends on SS
+          G2G_CA = .false.
+
 !>>> Kludge to drive internally mixed species connectivity with SS2G (MSL)
 ! -- This can all be managed with creative use of .rc files
 ! -- Internally mixed species are made friendly to the aerosol component
 !    the species is associated with.
-          IF ( FullName .eq. 'SALACL' .or. &
-               FullName .eq. 'SALCCL' .or. &
-               FullName .eq. 'SALAAL' .or. &
-               FullName .eq. 'SALCAL' .or. &
-               FullName .eq. 'BrSALA' .or. &
-               FullName .eq. 'BrSALC' .or. &
-!               FullName .eq. 'NITs'   .or. &
-               FullName .eq. 'SO4s'   )    &
-               MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
-! -- directly mixed species have no friendlies. Instead, their
-!    analogs are made friendly to GEOSCHEMCHEM in addition to
-!    D:T:M
-          IF ( FullName .eq. 'SALA' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'SALC' ) MYFRIENDLIES = ''
-!>>> Same for DU2G
-          IF ( FullName .eq. 'DST1' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'DST2' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'DST3' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'DST4' ) MYFRIENDLIES = ''
-!>>> Same for SU2G
-! -- SO4 is the only shared species
-          IF ( FullName .eq. 'SO4' ) MYFRIENDLIES = ''
+          IF (G2G_SS) THEN
+             IF ( FullName .eq. 'SALACL' .or. &
+                  FullName .eq. 'SALCCL' .or. &
+                  FullName .eq. 'SALAAL' .or. &
+                  FullName .eq. 'SALCAL' .or. &
+                  FullName .eq. 'BrSALA' .or. &
+                  FullName .eq. 'BrSALC' .or. &
+                  FullName .eq. 'NITs'   .or. &
+                  FullName .eq. 'SO4s'   )    &
+                  MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
+             ! -- directly mixed species have no friendlies. Instead, their
+             !    analogs are made friendly to GEOSCHEMCHEM in addition to
+             !    D:T:M
+             IF ( FullName .eq. 'SALA' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'SALC' ) MYFRIENDLIES = ''
+          ENDIF
+          IF (G2G_DU) THEN
+             !>>> Same for DU2G
+             IF ( FullName .eq. 'DST1' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'DST2' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'DST3' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'DST4' ) MYFRIENDLIES = ''
+          ENDIF
+          IF (G2G_SU) THEN
+             !>>> Same for SU2G
+             ! -- SO4 is the only shared species
+             IF ( FullName .eq. 'SO4' ) MYFRIENDLIES = ''
+          ENDIF
+          IF (G2G_NI) THEN
 !>>> Same for NI2G
 ! -- 
-          IF ( FullName .eq. 'NIT' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'NH4' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'NIT' ) MYFRIENDLIES = ''
+!             IF ( FullName .eq. 'NITs') MYFRIENDLIES = ''
+             IF ( FullName .eq. 'NH4' ) MYFRIENDLIES = ''
+          ENDIF
+          IF (G2G_CA) THEN
 !>>> Same for CA.bc & CA.oc
 ! --
-          IF ( FullName .eq. 'OCPI' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'OCPO' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'BCPI' ) MYFRIENDLIES = ''
-          IF ( FullName .eq. 'BCPO' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'OCPI' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'OCPO' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'BCPI' ) MYFRIENDLIES = ''
+             IF ( FullName .eq. 'BCPO' ) MYFRIENDLIES = ''
+          ENDIF
 !>>>
 
           call MAPL_AddInternalSpec(GC, &
@@ -647,6 +736,7 @@ CONTAINS
                VLOCATION          = MAPL_VLocationCenter,     &
                !!!PRECISION          = ESMF_KIND_R8,             &
                FRIENDLYTO         = TRIM(MYFRIENDLIES),       &
+               RESTART = MAPL_RestartOptional, &
                RC                 = RC  )
           Nadv = Nadv+1
           AdvSpc(Nadv) = TRIM(SUBSTRS(1))
@@ -1460,56 +1550,65 @@ CONTAINS
        ! 
        ! For now, just going to force outcomes
        ! <<\MSL>>
-
        ! Dust
-       State_Chm%SpcData(IND_('DST1'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('DST2'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('DST3'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('DST4'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('DST1'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('DST2'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('DST3'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('DST4'))%Info%Do_WetDep = .false.
+       IF (G2G_DU) THEN
+          State_Chm%SpcData(IND_('DST1'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('DST2'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('DST3'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('DST4'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('DST1'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('DST2'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('DST3'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('DST4'))%Info%Do_WetDep = .false.
+       ENDIF
        ! Sea salt
-       State_Chm%SpcData(IND_('SALA'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('SO4s'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SO4s'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('SALACL'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SALACL'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('BrSALC'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('BrSALC'))%Info%Do_WetDep = .false.
+       IF (G2G_SS) THEN
+          State_Chm%SpcData(IND_('SALA'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SO4s'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SO4s'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SALACL'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SALACL'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SALAAL'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SALAAL'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SALCCL'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SALCCL'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SALCAL'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SALCAL'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('BrSALA'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('BrSALA'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('BrSALC'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('BrSALC'))%Info%Do_WetDep = .false.
+       ENDIF
        ! Sulfate
-       State_Chm%SpcData(IND_('SO4'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('SO4'))%Info%Do_WetDep = .false.
+       IF (G2G_SU) THEN
+          State_Chm%SpcData(IND_('SO4'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('SO4'))%Info%Do_WetDep = .false.
+       ENDIF
        ! Nitrogen
-       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
+       IF (G2G_SU) THEN
+          State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
+       ENDIF
        ! Doesn't currently include dust-nitrate, equiv. to
        ! bins ___
        ! Organic & black carbon
-       State_Chm%SpcData(IND_('OCPO'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('OCPO'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('OCPI'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('OCPI'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('BCPO'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('BCPO'))%Info%Do_WetDep = .false.
-       State_Chm%SpcData(IND_('BCPI'))%Info%Do_DryDep = .false.
-       State_Chm%SpcData(IND_('BCPI'))%Info%Do_WetDep = .false.
+       IF (G2G_CA) THEN
+          State_Chm%SpcData(IND_('OCPO'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('OCPO'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('OCPI'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('OCPI'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('BCPO'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('BCPO'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('BCPI'))%Info%Do_DryDep = .false.
+          State_Chm%SpcData(IND_('BCPI'))%Info%Do_WetDep = .false.
+       ENDIF
     ENDIF
 
 #else
@@ -1601,7 +1700,7 @@ CONTAINS
                         'at the same time', FRIENDLY, Input_Opt%LCONV,     &
                         TRIM(Int2Spc(I)%Name)
              WRITE(*,*) '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-             _ASSERT(.FALSE.,'MOIST friendly error')
+!             _ASSERT(.FALSE.,'MOIST friendly error')
           ENDIF
 
           ! Check for friendliness to turbulence: only if GEOS-Chem turbulence
@@ -1626,96 +1725,98 @@ CONTAINS
        ENDIF
 
 ! >>> Kludge to get internally mixed connectivity to work with SS2G (MSL)
-       ! SALA
-       IF (fieldName .eq. 'SPC_SALACL') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=2, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/1,2/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/0.5504e0,0.5504e0/), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_SALAAL') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=2, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/1,2/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/1e0,1e0/), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_BrSALA') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=2, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/1,2/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/2.11e-3,2.11e-3/), __RC__)
-       ENDIF
-       ! SALC
-       IF (fieldName .eq. 'SPC_SALCCL') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=3, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/3,4,5/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/0.5504,0.5504,0.5504/), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_SALCAL') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=3, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/3,4,5/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/1e0,1e0,1e0/), __RC__)
-       ENDIF
-       IF (fieldName .eq. 'SPC_BrSALC') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=3, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/3,4,5/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/2.11e-3,2.11e-3,2.11e-3/), __RC__)
-       ENDIF
-!<<       IF (fieldName .eq. 'SPC_NITs') THEN
-!<<          call ESMF_AttributeSet( GcFld,  &
-!<<               name='internally_mixed_nbins', &
-!<<               value=3, __RC__)
-!<<          call ESMF_AttributeSet( GcFld,  &
-!<<               name='internally_mixed_with_bins', &
-!<<               valueList=(/3,4,5/), __RC__)
-!<<          call ESMF_AttributeSet( GcFld,  &
-!<<               name='internally_mixed_emis_frac', &
-!<<               valueList=(/0.,0.,0./), __RC__)
-!<<       ENDIF
-       IF (fieldName .eq. 'SPC_SO4s') THEN
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_nbins', &
-               value=3, __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_with_bins', &
-               valueList=(/3,4,5/), __RC__)
-          call ESMF_AttributeSet( GcFld,  &
-               name='internally_mixed_emis_frac', &
-               valueList=(/0.,0.,0./), __RC__)
-       ENDIF
+       IF (G2G_SS) THEN
+          ! SALA
+          IF (fieldName .eq. 'SPC_SALACL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=2, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/1,2/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.5504e0,0.5504e0/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SALAAL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=2, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/1,2/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/1e0,1e0/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_BrSALA') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=2, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/1,2/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/2.11e-3,2.11e-3/), __RC__)
+          ENDIF
+          ! SALC
+          IF (fieldName .eq. 'SPC_SALCCL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.5504,0.5504,0.5504/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SALCAL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/1e0,1e0,1e0/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_BrSALC') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/2.11e-3,2.11e-3,2.11e-3/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SO4s') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.,0.,0./), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_NITs') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.,0.,0./), __RC__)
+          ENDIF
+       END IF
 ! >>> ... DU2G
 ! >>> ... SU2G
 ! >>> ... NI2G
@@ -2326,6 +2427,14 @@ CONTAINS
     REAL, POINTER                :: SSbin3(:,:,:) => NULL()
     REAL, POINTER                :: SSbin4(:,:,:) => NULL()
     REAL, POINTER                :: SSbin5(:,:,:) => NULL()
+    REAL, POINTER                :: SSDDOUT(:,:,:) => NULL()
+    REAL, POINTER                :: SSEMOUT(:,:,:) => NULL()
+    REAL, POINTER                :: SSWDOUT(:,:,:,:) => NULL()
+    REAL, POINTER                :: SSSDOUT(:,:,:,:) => NULL()
+    REAL, POINTER                :: DUDDOUT(:,:,:) => NULL()
+    REAL, POINTER                :: DUEMOUT(:,:,:,:) => NULL()
+    REAL, POINTER                :: DUWDOUT(:,:,:,:) => NULL()
+    REAL, POINTER                :: DUSDOUT(:,:,:,:) => NULL()
     INTEGER                      :: itemCount
     TYPE(ESMF_Field)             :: Fld
 
@@ -2625,6 +2734,7 @@ CONTAINS
        ! Species in internal state are in kg/kg total. MSL Jul 14, 2022
        !=========================================================================
 !       IF (.not. FIRST) THEN ! <<>> TEMPORARY: This lets GEOS-Chem initialize fields
+       IF (G2G_SS) THEN
           ! Seasalt -- hard-coded for now
           I = IND_( 'SALA' )
           call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ )
@@ -2643,6 +2753,8 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! Add SS2G:SS(bin 5) to SALC
           Ptr3d => null()
+       END IF
+       IF (G2G_DU) THEN
           ! Dust -- hard-coded for now
           I = IND_( 'DST1' )
           call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU',    Ptr3d, __RC__ )
@@ -2660,11 +2772,15 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
+       ENDIF
+       IF (G2G_SU) THEN
           ! SO4 -- hard-coded for now
           I = IND_( 'SO4' )
           call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
+       ENDIF
+       IF (G2G_NI) THEN
           ! Nitrogen -- hard-coded for now
           I = IND_( 'NH4' ) ! Is this even necessary? <<>>
           call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
@@ -2675,13 +2791,15 @@ CONTAINS
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
           ! Summed over 2 bins from NI2G
-          I = IND_( 'NITs' )
-          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', Ptr3d, __RC__ )
-          Int2Spc(I)%Internal = Ptr3d ! 
-          Ptr3d => null()
-          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
-          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
-          Ptr3d => null()
+!          I = IND_( 'NITs' )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', Ptr3d, __RC__ )
+!          Int2Spc(I)%Internal = Ptr3d ! 
+!          Ptr3d => null()
+!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
+!          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
+!          Ptr3d => null()
+       ENDIF
+       IF (G2G_CA) THEN
           ! CA.oc & CA.bc -- hard-coded for now
           I = IND_( 'BCPI' )
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
@@ -2695,91 +2813,20 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
+!          call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphilicCA.br', Ptr3d, __RC__ )
+!          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
+!          Ptr3d => null()
           I = IND_( 'OCPO' )
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
-!       ENDIF
+!          call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphobicCA.br', Ptr3d, __RC__ )
+!          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
+!          Ptr3d => null()
+       ENDIF
 
 #include "Includes_Before_Run.H"
        CALL MAPL_TimerOff(STATE, "CP_BFRE")
-
-       !=========================================================================
-       ! Get GOCART2G aerosol physical data for chem calculation MSL Jul 22, 2022
-       ! This is done in the Run_() method because the field bundle hasn't been set
-       ! by the time GCC's Initialize_() method is run.
-       !=========================================================================
-       IF ( FIRST ) THEN ! Only need to do once. Save FLOPS & RAM, however small!
-          call ESMF_FieldBundleGet( fSPC, 'SS::SS', field=Fld, __RC__ )
-          call ESMF_AttributeGet( Fld, 'radius', itemCount=itemCount, __RC__ )
-          allocate( SSradii(itemCount), __STAT__ )
-          call ESMF_AttributeGet( Fld, 'radius', valueList=SSradii,   __RC__ )
-       ENDIF
-! Allocate local wetradius fields (not using ESMF/MAPL state fields, here.
-! Don't need to preserve or export info between timesteps. Would rather
-! free up the memory in the interim  -- MSL
-       allocate (state_chm%aero(11)%WetAeroRadi(state_grid%nx, state_grid%ny, state_grid%nz, 2), __STAT__ ) ! SALA -> SS::SS+SS::SS002
-       allocate (state_chm%aero(11)%WetAeroArea(state_grid%nx, state_grid%ny, state_grid%nz, 2), __STAT__ ) ! SALA
-       allocate (state_chm%aero(11)%k_Exchange (state_grid%nx, state_grid%ny, state_grid%nz, 2), __STAT__ ) ! SALA
-       allocate (state_chm%aero(12)%WetAeroRadi(state_grid%nx, state_grid%ny, state_grid%nz, 3), __STAT__ ) ! SALC -> SS::SS003:005
-       allocate (state_chm%aero(12)%WetAeroArea(state_grid%nx, state_grid%ny, state_grid%nz, 3), __STAT__ ) ! SALC
-       allocate (state_chm%aero(12)%k_Exchange (state_grid%nx, state_grid%ny, state_grid%nz, 3), __STAT__ ) ! SALC
-       state_chm%aero(11)%k_exchange = 0.d0
-       state_chm%aero(12)%k_exchange = 0.d0
-       do L=1,state_grid%NZ
-          do J=1,state_grid%NY
-             do I=1,state_grid%NX
-                call wetradius( REAL(SSradii(1:2),8), State_Met%RH(I,J,L), State_Chm%aero(11)%wetAeroRadi(I,J,L,:)) ! calculate for SALA, returns in [cm]
-                call wetradius( REAL(SSradii(3:5),8), State_Met%RH(I,J,L), State_Chm%aero(12)%wetAeroRadi(I,J,L,:)) ! calculate for SALC
-             enddo
-          enddo
-       enddo
-
-       ! Wet Surface Area (cm2/cm3)
-       ! -- FOR SOME REASON I CAN'T DISCERN, THE AREA CALCULATED BELOW IS CONSISTENTLY A FACTOR OF 3 SMALLER THAN THAT
-       !    CALCULATED FOR ONE BIN IN AEROSOL_MOD.F90. SO THE 9.d0 BELOW IS ACTUALLY 3d0*3d0. INCLUDING 3 AS PART OF 
-       !    THE CALCULATION OF AREA, AND THE OTHER 3 TO SCALE THE AREA CLOSER TO GEOS-Chem's RESULT FROM AEROSOL_MOD.F90
-       !
-       ! -- SALA = SS(bin1) + SS(bin2) (SS from GOCART2G)
-       I = IND_( 'SALA' )
-       ! -- SS(bin1)
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ ) ! Bin 1
-       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
-            ((State_Chm%aero(11)%wetAeroRadi(:,:,:,1)/(1d-4*SSradii(1)))**3)*(1d0/State_Chm%aero(11)%wetAeroRadi(:,:,:,1))
-!       State_Chm%Aero(11)%WetAeroArea(:,:,:,1) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(11)%wetAeroRadi(:,:,:,1)**2 / &
-!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(1)**3 )
-       Ptr3d => null()
-       ! -- SS(bin2)
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
-            ((State_Chm%aero(11)%wetAeroRadi(:,:,:,2)/(1d-4*SSradii(2)))**3)*(1d0/State_Chm%aero(11)%wetAeroRadi(:,:,:,2))
-!       State_Chm%Aero(11)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(11)%wetAeroRadi(:,:,:,2)**2 / &
-!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(2)**3 )
-       Ptr3d => null()
-
-       ! -- SALC = SS(bin3) + SS(bin4) + SS(bin5) (SS from GOCART2G)
-       I = IND_( 'SALC' )
-       ! -- SS(bin3)
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ ) ! Bin 1
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
-            ((State_Chm%aero(12)%wetAeroRadi(:,:,:,1)/(1d-4*SSradii(3)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,1))
-!       State_Chm%Aero(12)%WetAeroArea(:,:,:,1) = 3.d0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,1)**2 / &
-!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(3)**3 )
-       Ptr3d => null()
-       ! -- SS(bin4)
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ ) ! Bin 2
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
-            ((State_Chm%aero(12)%wetAeroRadi(:,:,:,2)/(1d-4*SSradii(4)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,2))
-!       State_Chm%Aero(12)%WetAeroArea(:,:,:,2) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,2)**2 / &
-!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(4)**3 )
-       Ptr3d => null()
-       ! -- SS(bin5)
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ ) ! Bin 3
-       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 3.d0*Ptr3d(:,:,LM:1:-1)*(State_Met%AIRDEN/State_Chm%SpcData(I)%Info%Density)* &
-            ((State_Chm%aero(12)%wetAeroRadi(:,:,:,3)/(1d-4*SSradii(5)))**3)*(1d0/State_Chm%aero(12)%wetAeroRadi(:,:,:,3))
-!       State_Chm%Aero(12)%WetAeroArea(:,:,:,3) = 3.e0*Ptr3d(:,:,LM:1:-1)*State_Met%AIRDEN*State_Chm%aero(12)%wetAeroRadi(:,:,:,3)**2 / &
-!            ( State_Chm%SpcData(I)%Info%Density * 1d-4*SSradii(5)**3 )
-       Ptr3d => null()
 
 #if defined( MODEL_GCHPCTM )
        !=======================================================================
@@ -3244,86 +3291,156 @@ CONTAINS
           CALL GEOS_FillAeroBundle ( GC, EXPORT, State_Chm, State_Grid, Input_Opt, __RC__ )
        ENDIF
 
-       ! Since chem has acted on it, we have to pass SO4 back to SU2G
-       I = IND_( 'SO4' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
-       Ptr3d = Int2Spc(I)%Internal ! Update SO4 after chem
-       Ptr3d => null()
+       call MAPL_GetPointer ( IMPORT, SSEMOUT,      'SSEMOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, SSDDOUT,      'SSDDOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, SSWDOUT,      'SSWDOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, SSSDOUT,      'SSSDOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, DUEMOUT,      'DUEMOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, DUDDOUT,      'DUDDOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, DUWDOUT,      'DUWDOUT',  __RC__ )
+       call MAPL_GetPointer ( IMPORT, DUSDOUT,      'DUSDOUT',  __RC__ )
 
+       ! DUST TESTING
+       if (PHASE .eq. 1) then
+          !drydep
+          I = IND_( 'DST1' )
+          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,1  )
+          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,1)
+          I = IND_( 'DST2' )
+          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,2  )
+          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,2)
+          I = IND_( 'DST3' )
+          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,3  )
+          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,3)
+          I = IND_( 'DST4' )
+          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,4  )
+          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,4)
+          !emissions -- GOCART2G dust emissions are 3-D
+
+!          I = IND_( 'DST1' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUEMOUT(:,:,:,1 )
+!          I = IND_( 'DST2' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUEMOUT(:,:,:,2 )
+!          I = IND_( 'DST3' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUEMOUT(:,:,:,3 )
+!          I = IND_( 'DST4' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUEMOUT(:,:,:,4 )
+       endif
+       if (PHASE .eq. 2) then
+          ! WetDep
+          I = IND_( 'DST1' )
+          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,1 )
+          I = IND_( 'DST2' )
+          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,2 )
+          I = IND_( 'DST3' )
+          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,3 )
+          I = IND_( 'DST4' )
+          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,4 )
+       endif
+
+       ! SEASALT TESTING
+       if (PHASE .eq. 1) then
+          ! Drydep
+!          I = IND_( 'SALA' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,1:2),3)
+!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,1:2),4)
+!          I = IND_( 'SALC' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,3:5),3)
+!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,3:5),4)
+          ! Emissions
+!          I = IND_( 'SALA' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,1:2),3)
+!          I = IND_( 'SALC' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,3:5),3)
+       endif
+       if (PHASE .eq. 2) then
+          ! WetDep
+!          I = IND_( 'SALA' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + sum(SSWDOUT(:,:,:,1:2),4)
+!          I = IND_( 'SALC' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + sum(SSWDOUT(:,:,:,3:5),4)
+       endif
+       
+
+       IF (G2G_SU) THEN
+       ! Since chem has acted on it, we have to pass SO4 back to SU2G
+          I = IND_( 'SO4' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
+          Ptr3d = Int2Spc(I)%Internal ! Update SO4 after chem
+          Ptr3d => null()
+       ENDIF
+
+       IF (G2G_NI) THEN
        ! Since chem has acted on them, we have to pass NH4+ and NO3- aerosol
        ! back to NI2G. Since NO3- aerosol is partitioned into bins in NI2G
        ! we have to be careful to preserve the proportions WITHOUT destabilizing
        ! the fields (which is possible!) or NaNning/Infing them out
-       I = IND_( 'NH4' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
-       Ptr3d = Int2Spc(I)%Internal ! Update SO4 after chem
-       Ptr3d => null()
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', NO3an1, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', NO3an2, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', NO3an3, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003',  SSbin3, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004',  SSbin4, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005',  SSbin5, __RC__ )
+          I = IND_( 'NH4' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
+          Ptr3d = Int2Spc(I)%Internal ! Update SO4 after chem
+          Ptr3d => null()
+          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', NO3an1, __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', NO3an2, __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', NO3an3, __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003',  SSbin3, __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004',  SSbin4, __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005',  SSbin5, __RC__ )
 
-       GCC_SS3 = SSbin3
-       GCC_SS4 = SSbin4
-       GCC_SS5 = SSbin5
+!          GCC_SS3 = SSbin3
+!          GCC_SS4 = SSbin4
+!          GCC_SS5 = SSbin5
 
-       I = IND_( 'NIT' )
-       NO3an1 = Int2Spc(I)%Internal ! NIT just points straight to this. Includes ISORROPIA+KPP REACTION K_MT(3)
-       I = IND_( 'NITs' )
-       ! <<>> The following is an apportionment issue. We can't currently partition ISORROPIA based on aerosol size.
-       !      ISORROPIA acts if SALC > 1e-30. KPP acts if SALCAL > 0. We have to partition accordingly. But we have to 
-       !      .guess. at an order of precedence. Currently, if KPP uptake happened, it controls the partitioning. Other-
-       !      wise, we apportion based on the proportion of seasalt bins relative to total SALC. For NO3an2, NI2G
-       !      uses only SSbin3, NO3an3 uses bins4 & 5
-       ! <<>> A WHOLE LOT OF TESTING GOING ON HERE <<>>
-       GCC_KEX1 = State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1)
-       GCC_KEX2 = State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,2)
-       GCC_KEX3 = State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)
-       GCC_WRD1 = State_Chm%Aero(12)%WetAeroRadi(:,:,LM:1:-1,1)
-       GCC_WRD2 = State_Chm%Aero(12)%WetAeroRadi(:,:,LM:1:-1,2)
-       GCC_WRD3 = State_Chm%Aero(12)%WetAeroRadi(:,:,LM:1:-1,3)
-       GCC_WAR1 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,1)
-       GCC_WAR2 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,2)
-       GCC_WAR3 = State_Chm%Aero(12)%WetAeroArea(:,:,LM:1:-1,3)
-       IF (input_Opt%LCHEM) THEN
-       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
-          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-!       elsewhere ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
-!       where ( (SSbin3+SSbin4+SSbin5)  .gt. 1.e-20 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
-!          NO3an2 = Int2Spc(I)%Internal * (SSbin3       )/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
-!          NO3an3 = Int2Spc(I)%Internal * (SSbin4+SSbin5)/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
-       elsewhere ! Approximation for low SALC concentrations.
-          NO3an2 = Int2Spc(I)%Internal * 0.2e0
-          NO3an3 = Int2Spc(I)%Internal * 0.8e0
-       end where ! Else, there .should. be no change in NITs, so leave it alone.
+          I = IND_( 'NIT' )
+          NO3an1 = Int2Spc(I)%Internal ! NIT just points straight to this. Includes ISORROPIA+KPP REACTION K_MT(3)
+!          I = IND_( 'NITs' )
+!          ! <<>> The following is an apportionment issue. We can't currently partition ISORROPIA based on aerosol size.
+!          !      ISORROPIA acts if SALC > 1e-30. KPP acts if SALCAL > 0. We have to partition accordingly. But we have to 
+!          !      .guess. at an order of precedence. Currently, if KPP uptake happened, it controls the partitioning. Other-
+!          !      wise, we apportion based on the proportion of seasalt bins relative to total SALC. For NO3an2, NI2G
+!          !      uses only SSbin3, NO3an3 uses bins4 & 5
+!          ! <<>> A WHOLE LOT OF TESTING GOING ON HERE <<>>
+!          IF (input_Opt%LCHEM) THEN
+!             !       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
+!             !XX          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
+!             !XX          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
+!             NO3an2 = Int2Spc(I)%Internal * 0.95e0
+!             NO3an3 = Int2Spc(I)%Internal * 0.05e0
+!             !       elsewhere ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
+!             !       where ( (SSbin3+SSbin4+SSbin5)  .gt. 1.e-20 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
+!             !          NO3an2 = Int2Spc(I)%Internal * (SSbin3       )/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
+!             !          NO3an3 = Int2Spc(I)%Internal * (SSbin4+SSbin5)/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
+!             !       elsewhere ! Approximation for low SALC concentrations.
+!             !          NO3an2 = Int2Spc(I)%Internal * 0.2e0
+!             !          NO3an3 = Int2Spc(I)%Internal * 0.8e0
+!             !       end where ! Else, there .should. be no change in NITs, so leave it alone.
+!          ENDIF
+!          NO3an1 => null()
+!          NO3an2 => null()
+!          NO3an3 => null()
+!          SSbin3 => null()
+!          SSbin4 => null()
+!          SSbin5 => null()
        ENDIF
-       NO3an1 => null()
-       NO3an2 => null()
-       NO3an3 => null()
-       SSbin3 => null()
-       SSbin4 => null()
-       SSbin5 => null()
-
-       ! Since chem has acted on it, we have to pass OC & BC back to CA2G
-       I = IND_( 'BCPI' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
-       Ptr3d =  Int2Spc(I)%Internal! 
-       Ptr3d => null()
-       I = IND_( 'BCPO' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
-       Ptr3d =  Int2Spc(I)%Internal! 
-       Ptr3d => null()
-       I = IND_( 'OCPI' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
-       Ptr3d =  Int2Spc(I)%Internal! 
-       Ptr3d => null()
-       I = IND_( 'OCPO' )
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
-       Ptr3d =  Int2Spc(I)%Internal! 
-       Ptr3d => null()
+       
+       IF (G2G_CA) THEN
+          ! Since chem has acted on it, we have to pass OC & BC back to CA2G
+          I = IND_( 'BCPI' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
+          Ptr3d =  Int2Spc(I)%Internal! 
+          Ptr3d => null()
+          I = IND_( 'BCPO' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
+          Ptr3d =  Int2Spc(I)%Internal! 
+          Ptr3d => null()
+          I = IND_( 'OCPI' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
+          Ptr3d =  Int2Spc(I)%Internal! 
+          Ptr3d => null()
+          I = IND_( 'OCPO' )
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
+          Ptr3d =  Int2Spc(I)%Internal! 
+          Ptr3d => null()
+       ENDIF
 
        ! Archive last active time steps
        pymd = nymd
@@ -3379,9 +3496,6 @@ CONTAINS
 
        ENDIF ! IsTendTime
 #endif
-
-       deallocate(state_chm%aero(11)%WetAeroRadi, state_chm%aero(11)%WetAeroArea, state_chm%aero(11)%k_exchange) ! SALA
-       deallocate(state_chm%aero(12)%WetAeroRadi, state_chm%aero(12)%WetAeroArea, state_chm%aero(12)%k_exchange) ! SALC
 
     ENDIF RunningGEOSChem
 
@@ -4554,28 +4668,6 @@ CONTAINS
    end subroutine Adjoint_StateRefresh
 
 #endif
-  ! Calculate seasalt wet radius, following Gerber, 1985 
-  ! (taken from GOCART2G_Process.F90; MSL)
-  subroutine wetRadius( radius, rh, radiuswet )
-    real(ESMF_KIND_R8), intent(in)  :: radius(:) ! dry radius [um]
-    real(ESMF_KIND_R8), intent(in)  :: rh        ! relative humidity [0-1]
-    real(ESMF_KIND_R8), intent(out) :: radiuswet(:) ! [cm]
-    real(ESMF_KIND_R8)              ::  sat
-    !  parameter from Gerber 1985 (units require radius in cm)
-    real(ESMF_KIND_R8), parameter   :: c1=0.7674, c2=3.079, c3=2.573e-11, c4=-1.424
-    
-    !  Default is to return radius as radius_wet
-!    write(*,*) '<<>>1: ', size(radius), radius
-!    write(*,*) '<<>>2: ', size(radiuswet), radiuswet
-    radiuswet = radius
-    !  Make sure saturation ratio (RH) is sensible
-    sat = max(rh*1d-2,tiny(1.0)) ! to avoid zero FPE
-    sat = min(0.995,sat)
-    radiuswet = radius*1d-4 ! um->cm
-    radiuswet = (c1*radiuswet**c2 / (c3*radiuswet**c4-log10(sat)) &
-         + radiuswet**3.)**(1./3.)
-  end subroutine wetRadius
-
 #ifdef MODEL_GEOS
 END MODULE GEOSCHEMchem_GridCompMod
 #else

@@ -5149,7 +5149,7 @@ CONTAINS
        ! Get species ID from wetdep ID
        N = State_Chm%Map_WetDep(NW)
 
-       if ( .not. State_Chm%SpcData(N)%Info%Do_WetDep ) CYCLE
+       if ( .not. State_Chm%SpcData(N)%Info%Do_WetDep ) cycle
 
        ! Call WASHOUT to compute the fraction of species
        ! in grid box (I,J,L) that is lost to washout.

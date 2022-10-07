@@ -1561,10 +1561,7 @@ CONTAINS
     ThisSpc       => State_Chm%SpcData(N)%Info
 
     ! Cycle out if not Do_DryDep
-    IF ( .not. ThisSpc%Do_DryDep ) then
-       if (Input_Opt%amIRoot) write(*,*) 'skipping grav_settling for '//trim(thisSpc%name)
-       RETURN
-    ENDIF
+    IF ( .not. ThisSpc%Do_DryDep ) RETURN
 
     ! Point to the species concentration array
     TC            => State_Chm%Species(N)%Conc(:,:,:)
