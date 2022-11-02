@@ -550,7 +550,7 @@ CONTAINS
        !--------------------------------------------------------------------
        ! Check if we need to do emissions for this species
        !--------------------------------------------------------------------
-       IF ( LEMIS ) THEN
+       IF ( LEMIS .and. SpcInfo%Do_Emis ) THEN !<<>> MSL
           CALL InquireHco ( N, Emis=EmisSpec )
        ELSE
           EmisSpec = .FALSE.

@@ -176,10 +176,6 @@ MODULE Chem_GridCompMod
   LOGICAL                          :: InitFromFile
 #endif
 
-#if defined( MODEL_GEOS )
-  REAL, ALLOCATABLE, SAVE      :: SSradii(:) ! Sea salt aerosol radii from GOCART2G:SS2G
-#endif
- 
   ! Pointers to import, export and internal state data. Declare them as 
   ! module variables so that we have to assign them only on first call.
   ! NOTE: Any provider-related exports (e.g. H2O_TEND) are now handled within
@@ -672,11 +668,11 @@ CONTAINS
           ENDIF
 
           G2G_SS = .true.
-          G2G_DU = .false.
-          G2G_SU = .false.
-          G2G_NI = .false.
+          G2G_DU = .true.
+          G2G_SU = .true.
+          G2G_NI = .true.
 !          IF (G2G_NI) G2G_SS = .true. !NI depends on SS
-          G2G_CA = .false.
+          G2G_CA = .true.
 
 !>>> Kludge to drive internally mixed species connectivity with SS2G (MSL)
 ! -- This can all be managed with creative use of .rc files
@@ -1560,6 +1556,10 @@ CONTAINS
           State_Chm%SpcData(IND_('DST2'))%Info%Do_WetDep = .false.
           State_Chm%SpcData(IND_('DST3'))%Info%Do_WetDep = .false.
           State_Chm%SpcData(IND_('DST4'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('DST1'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('DST2'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('DST3'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('DST4'))%Info%Do_Emis = .false.
        ENDIF
        ! Sea salt
        IF (G2G_SS) THEN
@@ -1581,6 +1581,14 @@ CONTAINS
           State_Chm%SpcData(IND_('BrSALA'))%Info%Do_WetDep = .false.
           State_Chm%SpcData(IND_('BrSALC'))%Info%Do_DryDep = .false.
           State_Chm%SpcData(IND_('BrSALC'))%Info%Do_WetDep = .false.
+          State_Chm%SpcData(IND_('SALA'))%Info%Do_Emis   = .false.
+          State_Chm%SpcData(IND_('SALC'))%Info%Do_Emis   = .false.
+          State_Chm%SpcData(IND_('SALACL'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('SALCCL'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('SALAAL'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('SALCAL'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('BrSALA'))%Info%Do_Emis = .false.
+          State_Chm%SpcData(IND_('BrSALA'))%Info%Do_Emis = .false.
        ENDIF
        ! Sulfate
        IF (G2G_SU) THEN
@@ -2358,6 +2366,8 @@ CONTAINS
     CHARACTER(LEN=2)             :: intStr
     REAL, POINTER                :: Ptr2d   (:,:)   => NULL()
     REAL, POINTER                :: Ptr3d   (:,:,:) => NULL()
+    REAL, POINTER                :: Ptr3D_1(:,:,:)  => NULL() ! Extra
+    REAL, POINTER                :: Ptr3D_2(:,:,:)  => NULL() ! Extra
     REAL(ESMF_KIND_R8), POINTER  :: Ptr2d_R8(:,:)   => NULL()
     REAL(ESMF_KIND_R8), POINTER  :: Ptr3d_R8(:,:,:) => NULL()
 
@@ -2810,6 +2820,7 @@ CONTAINS
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
           I = IND_( 'OCPI' )
+          ! Add G2G's brown and org carbon into one field for GCC.
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
@@ -2817,12 +2828,13 @@ CONTAINS
 !          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
 !          Ptr3d => null()
           I = IND_( 'OCPO' )
+          ! Add G2G's brown and org carbon into one field for GCC.
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
-!          call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphobicCA.br', Ptr3d, __RC__ )
-!          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
-!          Ptr3d => null()
+ !         call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphobicCA.br', Ptr3d, __RC__ )
+ !         Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
+ !         Ptr3d => null()
        ENDIF
 
 #include "Includes_Before_Run.H"
@@ -3432,14 +3444,20 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
           Ptr3d =  Int2Spc(I)%Internal! 
           Ptr3d => null()
-          I = IND_( 'OCPI' )
-          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
-          Ptr3d =  Int2Spc(I)%Internal! 
-          Ptr3d => null()
-          I = IND_( 'OCPO' )
-          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
-          Ptr3d =  Int2Spc(I)%Internal! 
-          Ptr3d => null()
+          I = IND_( 'OCPI' ) ! Have to break OCPI into OC and BrC for G2G
+          ! I did it this way to prevent having to create any new 3D fields. This only
+          ! uses pointers.
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d  , __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphilicCA.br', Ptr3d_1, __RC__ )
+          Ptr3d   =  Int2Spc(I)%Internal! - Ptr3d_1 ! Remove Brown C for passing back to CA.oc 
+          Ptr3d   => null()
+!          Ptr3d_1 => null()
+          I = IND_( 'OCPO' ) ! Have to break OCPO into OC and BrC for G2G
+          call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d  , __RC__ )
+!          call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphobicCA.br', Ptr3d_1, __RC__ )
+          Ptr3d   =  Int2Spc(I)%Internal! - Ptr3d_1 ! Remove Brown C for passing back to CA.oc 
+          Ptr3d   => null()
+!          Ptr3d_1 => null()
        ENDIF
 
        ! Archive last active time steps
@@ -4020,8 +4038,6 @@ CONTAINS
        DEALLOCATE(Int2Adj)
     ENDIF
 #endif
-
-    IF (ALLOCATED(SSradii)) deallocate(SSradii)
 
     ! Deallocate the history interface between GC States and ESMF Exports
     CALL Destroy_HistoryConfig( am_I_Root, HistoryConfig, RC )
