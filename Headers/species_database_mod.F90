@@ -311,6 +311,9 @@ CONTAINS
        ThisSpc%Name      =  TRIM( spc )
        SpcCount%nRealSpc =  SpcCount%nRealSpc + 1
 
+       ! Go ahead and set Do_Emis to .true. for all species <<>> MSL
+       ThisSpc%Do_Emis   = .true.
+
        !--------------------------------------------------------------------
        ! Set the Is_Advected tag (check against Input_Opt%AdvecSpc list)
        !-------------------------------------------------------------------

@@ -656,6 +656,8 @@ CONTAINS
 #endif
     USE Species_Mod,   ONLY : Species
 
+    use seasalt_mod
+
 !
 ! !INPUT PARAMETERS:
 !
@@ -1330,6 +1332,13 @@ CONTAINS
                   'gchp_chunk_run:, before Do_Chemistry', RC=STATUS )
           _VERIFY(STATUS)
        endif
+
+!>>       CALL ChemSeaSalt( Input_Opt  = Input_Opt,                       &
+!>>            State_Chm  = State_Chm,                       &
+!>>            State_Diag = State_Diag,                      &
+!>>            State_Grid = State_Grid,                      &
+!>>            State_Met  = State_Met,                       &
+!>>            RC         = RC                              )
 
        ! Do chemistry
        CALL Do_Chemistry( Input_Opt, State_Chm, State_Diag, &

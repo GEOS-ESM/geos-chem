@@ -471,6 +471,26 @@ CONTAINS
         & rc=status)
         VERIFY_(status)
 
+     call MAPL_AddExportSpec(GC,                                  &
+        SHORT_NAME         = 'GCC_LSALA',                      &
+        LONG_NAME          = 'LOCAL SALA',          &
+        UNITS              = 'kg kg-1',                        &
+        DIMS               = MAPL_DimsHorzVert,                   &
+        VLOCATION          = MAPL_VLocationCenter,                &
+!        RESTART    = MAPL_RestartSkip,                            &
+                                                      RC=STATUS  )
+     VERIFY_(STATUS)
+
+     call MAPL_AddExportSpec(GC,                                  &
+        SHORT_NAME         = 'GCC_LSALC',                      &
+        LONG_NAME          = 'LOCAL SALC',          &
+        UNITS              = 'kg kg-1',                        &
+        DIMS               = MAPL_DimsHorzVert,                   &
+        VLOCATION          = MAPL_VLocationCenter,                &
+!        RESTART    = MAPL_RestartSkip,                            &
+                                                      RC=STATUS  )
+     VERIFY_(STATUS)
+
 #if defined( MODEL_GEOS )
 #   include "GEOSCHEMCHEM_ImportSpec___.h"
      call MAPL_AddExportSpec(GC,                                  &
@@ -667,12 +687,12 @@ CONTAINS
              ENDDO
           ENDIF
 
-          G2G_SS = .true.
-          G2G_DU = .true.
-          G2G_SU = .true.
-          G2G_NI = .true.
+          G2G_SS = .false.
+          G2G_DU = .false.
+          G2G_SU = .false.
+          G2G_NI = .false.
 !          IF (G2G_NI) G2G_SS = .true. !NI depends on SS
-          G2G_CA = .true.
+          G2G_CA = .false.
 
 !>>> Kludge to drive internally mixed species connectivity with SS2G (MSL)
 ! -- This can all be managed with creative use of .rc files
@@ -2445,6 +2465,8 @@ CONTAINS
     REAL, POINTER                :: DUEMOUT(:,:,:,:) => NULL()
     REAL, POINTER                :: DUWDOUT(:,:,:,:) => NULL()
     REAL, POINTER                :: DUSDOUT(:,:,:,:) => NULL()
+    REAL, POINTER                :: LSALA(:,:,:) => NULL()
+    REAL, POINTER                :: LSALC(:,:,:) => NULL()
     INTEGER                      :: itemCount
     TYPE(ESMF_Field)             :: Fld
 
@@ -3311,22 +3333,26 @@ CONTAINS
        call MAPL_GetPointer ( IMPORT, DUDDOUT,      'DUDDOUT',  __RC__ )
        call MAPL_GetPointer ( IMPORT, DUWDOUT,      'DUWDOUT',  __RC__ )
        call MAPL_GetPointer ( IMPORT, DUSDOUT,      'DUSDOUT',  __RC__ )
+       call MAPL_GetPointer ( EXPORT, LSALA,      'GCC_LSALA',  __RC__ )
+       call MAPL_GetPointer ( EXPORT, LSALC,      'GCC_LSALC',  __RC__ )
 
-       ! DUST TESTING
-       if (PHASE .eq. 1) then
-          !drydep
-          I = IND_( 'DST1' )
-          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,1  )
-          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,1)
-          I = IND_( 'DST2' )
-          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,2  )
-          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,2)
-          I = IND_( 'DST3' )
-          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,3  )
-          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,3)
-          I = IND_( 'DST4' )
-          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,4  )
-          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,4)
+       
+
+        ! DUST TESTING
+!       if (PHASE .eq. 1) then
+!          !drydep
+!          I = IND_( 'DST1' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,1  )
+!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,1)
+!          I = IND_( 'DST2' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,2  )
+!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,2)
+!          I = IND_( 'DST3' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,3  )
+!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,3)
+!          I = IND_( 'DST4' )
+!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - DUDDOUT(:,:,4  )
+!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + DUSDOUT(:,:,:,4)
           !emissions -- GOCART2G dust emissions are 3-D
 
 !          I = IND_( 'DST1' )
@@ -3337,41 +3363,41 @@ CONTAINS
 !          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUEMOUT(:,:,:,3 )
 !          I = IND_( 'DST4' )
 !          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUEMOUT(:,:,:,4 )
-       endif
-       if (PHASE .eq. 2) then
-          ! WetDep
-          I = IND_( 'DST1' )
-          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,1 )
-          I = IND_( 'DST2' )
-          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,2 )
-          I = IND_( 'DST3' )
-          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,3 )
-          I = IND_( 'DST4' )
-          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,4 )
-       endif
+!       endif
+!       if (PHASE .eq. 2) then
+!          ! WetDep
+!          I = IND_( 'DST1' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,1 )
+!          I = IND_( 'DST2' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,2 )
+!          I = IND_( 'DST3' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,3 )
+!          I = IND_( 'DST4' )
+!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + DUWDOUT(:,:,:,4 )
+!       endif
 
        ! SEASALT TESTING
-       if (PHASE .eq. 1) then
-          ! Drydep
-!          I = IND_( 'SALA' )
-!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,1:2),3)
-!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,1:2),4)
-!          I = IND_( 'SALC' )
-!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,3:5),3)
-!          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,3:5),4)
-          ! Emissions
-!          I = IND_( 'SALA' )
-!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,1:2),3)
-!          I = IND_( 'SALC' )
-!          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,3:5),3)
-       endif
-       if (PHASE .eq. 2) then
-          ! WetDep
-!          I = IND_( 'SALA' )
-!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + sum(SSWDOUT(:,:,:,1:2),4)
-!          I = IND_( 'SALC' )
-!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + sum(SSWDOUT(:,:,:,3:5),4)
-       endif
+!<<>>       if (PHASE .eq. 1) then
+!<<>>          ! Drydep
+!<<>>          I = IND_( 'SALA' )
+!<<>>          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,1:2),3)
+!<<>>          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,1:2),4)
+!<<>>          I = IND_( 'SALC' )
+!<<>>          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,3:5),3)
+!<<>>          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,3:5),4)
+!<<>>          ! Emissions
+          I = IND_( 'SALA' )
+          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,1:2),3)
+          I = IND_( 'SALC' )
+          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,3:5),3)
+!<<>>       endif
+!<<>>       if (PHASE .eq. 2) then
+!<<>>          ! WetDep
+!<<>>          I = IND_( 'SALA' )
+!<<>>!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + sum(SSWDOUT(:,:,:,1:2),4)
+!<<>>          I = IND_( 'SALC' )
+!<<>>!          Int2Spc(I)%Internal(:,:,:) = Int2Spc(I)%Internal(:,:,:) + sum(SSWDOUT(:,:,:,3:5),4)
+!<<>>       endif
        
 
        IF (G2G_SU) THEN
