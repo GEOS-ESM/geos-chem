@@ -401,75 +401,75 @@ CONTAINS
 !
 ! !IMPORT STATE:
 !
-   call MAPL_AddImportSpec(gc,&
-        & short_name='SSEMOUT', &
-        & long_name='SSEMOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzOnly, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='SSDDOUT', &
-        & long_name='SSDDOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzOnly, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='SSSDOUT', &
-        & long_name='SSSDOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzVert, &
-        & vlocation=MAPL_VlocationCenter, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='SSWDOUT', &
-        & long_name='SSWDOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzVert, &
-        & vlocation=MAPL_VlocationCenter, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='DUEMOUT', &
-        & long_name='DUEMOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzVert, &
-        & vlocation=MAPL_VlocationCenter, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='DUDDOUT', &
-        & long_name='DUDDOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzOnly, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='DUSDOUT', &
-        & long_name='DUSDOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzVert, &
-        & vlocation=MAPL_VlocationCenter, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
-   call MAPL_AddImportSpec(gc,&
-        & short_name='DUWDOUT', &
-        & long_name='DUWDOUT', &
-        & units='kg kg-1', &
-        & dims=MAPL_DimsHorzVert, &
-        & vlocation=MAPL_VlocationCenter, &
-        & ungridded_dims=[5], &
-        & rc=status)
-        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='SSEMOUT', &
+!>>        & long_name='SSEMOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzOnly, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='SSDDOUT', &
+!>>        & long_name='SSDDOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzOnly, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='SSSDOUT', &
+!>>        & long_name='SSSDOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzVert, &
+!>>        & vlocation=MAPL_VlocationCenter, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='SSWDOUT', &
+!>>        & long_name='SSWDOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzVert, &
+!>>        & vlocation=MAPL_VlocationCenter, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='DUEMOUT', &
+!>>        & long_name='DUEMOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzVert, &
+!>>        & vlocation=MAPL_VlocationCenter, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='DUDDOUT', &
+!>>        & long_name='DUDDOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzOnly, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='DUSDOUT', &
+!>>        & long_name='DUSDOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzVert, &
+!>>        & vlocation=MAPL_VlocationCenter, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
+!>>   call MAPL_AddImportSpec(gc,&
+!>>        & short_name='DUWDOUT', &
+!>>        & long_name='DUWDOUT', &
+!>>        & units='kg kg-1', &
+!>>        & dims=MAPL_DimsHorzVert, &
+!>>        & vlocation=MAPL_VlocationCenter, &
+!>>        & ungridded_dims=[5], &
+!>>        & rc=status)
+!>>        VERIFY_(status)
 
      call MAPL_AddExportSpec(GC,                                  &
         SHORT_NAME         = 'GCC_LSALA',                      &
@@ -687,12 +687,12 @@ CONTAINS
              ENDDO
           ENDIF
 
-          G2G_SS = .false.
-          G2G_DU = .false.
-          G2G_SU = .false.
-          G2G_NI = .false.
+          G2G_SS = .true.
+          G2G_DU = .true.
+          G2G_SU = .true.
+          G2G_NI = .true.
 !          IF (G2G_NI) G2G_SS = .true. !NI depends on SS
-          G2G_CA = .false.
+          G2G_CA = .true.
 
 !>>> Kludge to drive internally mixed species connectivity with SS2G (MSL)
 ! -- This can all be managed with creative use of .rc files
@@ -2822,14 +2822,6 @@ CONTAINS
           call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
-          ! Summed over 2 bins from NI2G
-!          I = IND_( 'NITs' )
-!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', Ptr3d, __RC__ )
-!          Int2Spc(I)%Internal = Ptr3d ! 
-!          Ptr3d => null()
-!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
-!          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
-!          Ptr3d => null()
        ENDIF
        IF (G2G_CA) THEN
           ! CA.oc & CA.bc -- hard-coded for now
@@ -2842,21 +2834,13 @@ CONTAINS
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
           I = IND_( 'OCPI' )
-          ! Add G2G's brown and org carbon into one field for GCC.
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
-!          call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphilicCA.br', Ptr3d, __RC__ )
-!          Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
-!          Ptr3d => null()
           I = IND_( 'OCPO' )
-          ! Add G2G's brown and org carbon into one field for GCC.
           call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
           Int2Spc(I)%Internal = Ptr3d ! 
           Ptr3d => null()
- !         call ESMFL_BundleGetPointerToData( fSPC, 'CA.br::CAphobicCA.br', Ptr3d, __RC__ )
- !         Int2Spc(I)%Internal = Int2Spc(I)%Internal + Ptr3d ! 
- !         Ptr3d => null()
        ENDIF
 
 #include "Includes_Before_Run.H"
@@ -3325,18 +3309,16 @@ CONTAINS
           CALL GEOS_FillAeroBundle ( GC, EXPORT, State_Chm, State_Grid, Input_Opt, __RC__ )
        ENDIF
 
-       call MAPL_GetPointer ( IMPORT, SSEMOUT,      'SSEMOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, SSDDOUT,      'SSDDOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, SSWDOUT,      'SSWDOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, SSSDOUT,      'SSSDOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, DUEMOUT,      'DUEMOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, DUDDOUT,      'DUDDOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, DUWDOUT,      'DUWDOUT',  __RC__ )
-       call MAPL_GetPointer ( IMPORT, DUSDOUT,      'DUSDOUT',  __RC__ )
-       call MAPL_GetPointer ( EXPORT, LSALA,      'GCC_LSALA',  __RC__ )
-       call MAPL_GetPointer ( EXPORT, LSALC,      'GCC_LSALC',  __RC__ )
-
-       
+!<<>>       call MAPL_GetPointer ( IMPORT, SSEMOUT,      'SSEMOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, SSDDOUT,      'SSDDOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, SSWDOUT,      'SSWDOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, SSSDOUT,      'SSSDOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, DUEMOUT,      'DUEMOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, DUDDOUT,      'DUDDOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, DUWDOUT,      'DUWDOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( IMPORT, DUSDOUT,      'DUSDOUT',  __RC__ )
+!<<>>       call MAPL_GetPointer ( EXPORT, LSALA,      'GCC_LSALA',  __RC__ )
+!<<>>       call MAPL_GetPointer ( EXPORT, LSALC,      'GCC_LSALC',  __RC__ )
 
         ! DUST TESTING
 !       if (PHASE .eq. 1) then
@@ -3386,10 +3368,10 @@ CONTAINS
 !<<>>          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) - sum(SSDDOUT(:,:,3:5),3)
 !<<>>          Int2Spc(I)%Internal(:,:,:)  = Int2Spc(I)%Internal(:,:,:)  + sum(SSSDOUT(:,:,:,3:5),4)
 !<<>>          ! Emissions
-          I = IND_( 'SALA' )
-          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,1:2),3)
-          I = IND_( 'SALC' )
-          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,3:5),3)
+!<<>>          I = IND_( 'SALA' )
+!<<>>          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,1:2),3)
+!<<>>          I = IND_( 'SALC' )
+!<<>>          Int2Spc(I)%Internal(:,:,LM) = Int2Spc(I)%Internal(:,:,LM) + sum(SSEMOUT(:,:,3:5),3)
 !<<>>       endif
 !<<>>       if (PHASE .eq. 2) then
 !<<>>          ! WetDep
@@ -3409,55 +3391,15 @@ CONTAINS
        ENDIF
 
        IF (G2G_NI) THEN
-       ! Since chem has acted on them, we have to pass NH4+ and NO3- aerosol
-       ! back to NI2G. Since NO3- aerosol is partitioned into bins in NI2G
-       ! we have to be careful to preserve the proportions WITHOUT destabilizing
-       ! the fields (which is possible!) or NaNning/Infing them out
           I = IND_( 'NH4' )
           call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
           Ptr3d = Int2Spc(I)%Internal ! Update SO4 after chem
           Ptr3d => null()
+
           call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', NO3an1, __RC__ )
-!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', NO3an2, __RC__ )
-!          call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', NO3an3, __RC__ )
-!          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003',  SSbin3, __RC__ )
-!          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004',  SSbin4, __RC__ )
-!          call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005',  SSbin5, __RC__ )
-
-!          GCC_SS3 = SSbin3
-!          GCC_SS4 = SSbin4
-!          GCC_SS5 = SSbin5
-
           I = IND_( 'NIT' )
           NO3an1 = Int2Spc(I)%Internal ! NIT just points straight to this. Includes ISORROPIA+KPP REACTION K_MT(3)
-!          I = IND_( 'NITs' )
-!          ! <<>> The following is an apportionment issue. We can't currently partition ISORROPIA based on aerosol size.
-!          !      ISORROPIA acts if SALC > 1e-30. KPP acts if SALCAL > 0. We have to partition accordingly. But we have to 
-!          !      .guess. at an order of precedence. Currently, if KPP uptake happened, it controls the partitioning. Other-
-!          !      wise, we apportion based on the proportion of seasalt bins relative to total SALC. For NO3an2, NI2G
-!          !      uses only SSbin3, NO3an3 uses bins4 & 5
-!          ! <<>> A WHOLE LOT OF TESTING GOING ON HERE <<>>
-!          IF (input_Opt%LCHEM) THEN
-!             !       where (sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4) .gt. 1.e-30) ! Apportion based on bin-resolved aerosol uptake rates
-!             !XX          NO3an2 = Int2Spc(I)%Internal * sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,1:2),4)/sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-!             !XX          NO3an3 = Int2Spc(I)%Internal *     State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,3)     /sum(State_Chm%Aero(12)%k_exchange(:,:,LM:1:-1,:),4)
-!             NO3an2 = Int2Spc(I)%Internal * 0.95e0
-!             NO3an3 = Int2Spc(I)%Internal * 0.05e0
-!             !       elsewhere ( Int2Spc(Ind_('SALC'))%Internal  .gt. 1.e-30 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
-!             !       where ( (SSbin3+SSbin4+SSbin5)  .gt. 1.e-20 ) ! If k_Exchange .eq. 0, then only ISORROPIA left to account for. If SALC .ne. 0, then...
-!             !          NO3an2 = Int2Spc(I)%Internal * (SSbin3       )/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
-!             !          NO3an3 = Int2Spc(I)%Internal * (SSbin4+SSbin5)/(SSbin3+SSbin4+SSbin5)!Int2Spc(Ind_('SALC'))%Internal
-!             !       elsewhere ! Approximation for low SALC concentrations.
-!             !          NO3an2 = Int2Spc(I)%Internal * 0.2e0
-!             !          NO3an3 = Int2Spc(I)%Internal * 0.8e0
-!             !       end where ! Else, there .should. be no change in NITs, so leave it alone.
-!          ENDIF
-!          NO3an1 => null()
-!          NO3an2 => null()
-!          NO3an3 => null()
-!          SSbin3 => null()
-!          SSbin4 => null()
-!          SSbin5 => null()
+          NO3an1 => null()
        ENDIF
        
        IF (G2G_CA) THEN
