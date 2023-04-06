@@ -2688,6 +2688,15 @@ CONTAINS
                                   PLE, GCCTROPP, IsFirst, __RC__ )
        ENDIF
 
+       ! Testing only
+       IF ( IsFirst ) THEN
+          IND = Ind_('NOtag1')
+          IF ( IND > 0 ) THEN
+             State_Chm%Species(IND)%Conc(I,J,L) = 1.0E-30_FP
+             IF ( MAPL_am_I_Root() ) write(*,*) 'Initialize to zero: NOtag1'
+          ENDIF
+       ENDIF
+
        ! Initialize RATS and OX tendency diagnostics
        IF ( PHASE == ANAPHASE ) THEN
           CALL GEOS_RATSandOxDiags( GC, INTSTATE, Export, Input_Opt, State_Met, &

@@ -72,6 +72,13 @@ MODULE FullChem_Mod
   REAL(f4), ALLOCATABLE :: JvSumDay  (:,:,:,:)
   REAL(f4), ALLOCATABLE :: JvSumMon  (:,:,:,:)
 
+  ! Tagged tracers: 
+  INTEGER, PARAMETER    :: MaxTag = 100
+  INTEGER               :: nTagged
+  INTEGER, ALLOCATABLE  :: TagID(:)
+  INTEGER, ALLOCATABLE  :: ParentID_GCC(:)
+  INTEGER, ALLOCATABLE  :: ParentID_KPP(:)
+
 CONTAINS
 !EOC
 !------------------------------------------------------------------------------
@@ -213,6 +220,10 @@ CONTAINS
 #ifdef MODEL_WRF
     REAL(dp)               :: localC(NSPEC)
 #endif
+
+    ! Tagged species stuff
+    INTEGER  :: iTagID
+    REAL(fp) :: Tag0, Tag1, Parent0, Parent1, Prat
 
     ! Grid box integration time diagnostic
     REAL(fp)               :: TimeStart, TimeEnd
@@ -525,6 +536,7 @@ CONTAINS
     !$OMP PRIVATE( Aout,     Thread,   RC,      S,         LCH4             )&
     !$OMP PRIVATE( OHreact,  PCO_TOT,  PCO_CH4, PCO_NMVOC, SR               )&
     !$OMP PRIVATE( SIZE_RES, LWC                                            )&
+    !$OMP PRIVATE( Tag0, Tag1, Parent0, Parent1, Prat, iTagID               )&
 #ifdef MODEL_GEOS
     !$OMP PRIVATE( NOxTau,     NOxConc, localC                              )&
     !$OMP PRIVATE( NOx_weight, NOx_tau_weighted                             )&
@@ -1357,6 +1369,28 @@ CONTAINS
        IF ( State_Diag%Archive_KppTime ) THEN
           call cpu_time(TimeEnd)
           State_Diag%KppTime(I,J,L) = TimeEnd - TimeStart
+       ENDIF
+
+       !=====================================================================
+       ! Check for tagged tracers and adjust those before updating the
+       ! Species arrays 
+       !=====================================================================
+       IF ( nTagged > 0 ) THEN 
+          DO N = 1, nTagged
+             iTagID  = TagID(N)
+             SpcID   = ParentID_GCC(N)
+             KppID   = ParentID_KPP(N)
+             Tag0    = State_Chm%Species(iTagID)%Conc(I,J,L)
+             Parent0 = State_Chm%Species(SpcID)%Conc(I,J,L)
+             Prat    = SAFE_DIV( Tag0, Parent0, 1.0_fp, 1.0_fp, 0.0_fp )
+             ! testing only
+             IF ( Prat > 1.0 ) write(*,*) 'Warning: NOtag1 > NO: ',Prat
+             Prat    = MAX(MIN(Prat,1.0),0.0)
+             Parent1 = REAL(MAX(C(KppID),0.0_dp),kind=fp)
+             State_Chm%Species(iTagID)%Conc(I,J,L) = State_Chm%Species(iTagID)%Conc(I,J,L) & 
+                                                   + ( Parent1 - Parent0 ) * Prat
+             State_Chm%Species(iTagID)%Conc(I,J,L) = MAX(State_Chm%Species(iTagID)%Conc(I,J,L),0.0_fp)
+          ENDDO
        ENDIF
 
        !=====================================================================
@@ -2601,6 +2635,10 @@ CONTAINS
     ! Strings
     CHARACTER(LEN=255) :: ErrMsg,   ThisLoc
 
+    ! Temporary arrays for tagging
+    INTEGER            :: tTagID(MaxTag), tParentID_GCC(MaxTag), tParentID_KPP(MaxTag)
+    CHARACTER(LEN=255) :: TagName, ParentName 
+
     !=======================================================================
     ! Init_FullChem begins here!
     !=======================================================================
@@ -2806,6 +2844,50 @@ CONTAINS
        ENDIF
     ENDIF
 
+    !--------------------------------------------------------------------
+    ! Initialize tagged tracer chemistry 
+    !--------------------------------------------------------------------
+    nTagged          = 0
+    tTagID(:)        = -1
+    tParentID_GCC(:) = -1
+    tParentID_KPP(:) = -1
+
+    TagName    = 'NOtag1'
+    ParentName = 'NO'
+
+    N =  Ind_(TRIM(TagName))
+    IF ( N > 0 ) THEN
+       nTagged = nTagged + 1
+       IF ( nTagged > MaxTag ) THEN
+          ErrMsg = 'Too many tagged species, please increase parameter MaxTag'
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       tTagID(nTagged)        = N 
+       tParentID_GCC(nTagged) = Ind_(TRIM(ParentName))
+       DO KppID = 1, State_Chm%nKppSpc + State_Chm%nOmitted
+          IF ( State_Chm%Map_KppSpc(KppId) == tParentID_GCC(nTagged) ) THEN
+             tParentID_KPP(nTagged) = KppID
+             EXIT
+          ENDIF
+       ENDDO
+       IF ( tParentID_KPP(nTagged) <= 0 ) THEN
+          ErrMsg = 'Species not found in KPP: '//TRIM(TagName)
+          CALL GC_Error( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+       IF ( Input_Opt%AmIRoot ) THEN
+          WRITE(*,*) 'Tagged species: will apply chem P/L rates of '//TRIM(ParentName)//' to '//TRIM(TagName) 
+       ENDIF
+    ENDIF 
+
+    IF ( nTagged > 0 ) THEN
+       ALLOCATE(TagID(nTagged), ParentID_GCC(nTagged), ParentID_KPP(nTagged))
+       TagID(1:nTagged)        = tTagID(1:nTagged)
+       ParentID_GCC(1:nTagged) = tParentID_GCC(1:nTagged)
+       ParentID_KPP(1:nTagged) = tParentID_KPP(1:nTagged)
+    ENDIF
+
   END SUBROUTINE Init_FullChem
 !EOC
 !------------------------------------------------------------------------------
@@ -2871,6 +2953,22 @@ CONTAINS
     IF ( ALLOCATED( JvSumMon ) ) THEN
        DEALLOCATE( JvSumMon, STAT=RC  )
        CALL GC_CheckVar( 'fullchem_mod.F90:JvCountMon', 2, RC )
+       IF ( RC /= GC_SUCCESS ) RETURN
+    ENDIF
+
+    IF ( ALLOCATED ( TagID ) ) THEN
+       DEALLOCATE( TagID, STAT=RC  )
+       CALL GC_CheckVar( 'fullchem_mod.F90:TagID', 2, RC )
+       IF ( RC /= GC_SUCCESS ) RETURN
+    ENDIF
+    IF ( ALLOCATED ( ParentID_GCC ) ) THEN
+       DEALLOCATE( ParentID_GCC, STAT=RC  )
+       CALL GC_CheckVar( 'fullchem_mod.F90:ParentID_GCC', 2, RC )
+       IF ( RC /= GC_SUCCESS ) RETURN
+    ENDIF
+    IF ( ALLOCATED ( ParentID_KPP ) ) THEN
+       DEALLOCATE( ParentID_KPP, STAT=RC  )
+       CALL GC_CheckVar( 'fullchem_mod.F90:ParentID_KPP', 2, RC )
        IF ( RC /= GC_SUCCESS ) RETURN
     ENDIF
 
