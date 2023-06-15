@@ -38,6 +38,11 @@ MODULE GEOS_AeroCoupler
   PUBLIC   :: GEOS_AeroSetServices
   PUBLIC   :: GEOS_AeroInit
   PUBLIC   :: GEOS_AerosolOptics
+  PUBLIC   :: GEOS_SetGOCART2G
+  PUBLIC   :: GEOS_SetMixGOCART2G
+  PUBLIC   :: GEOS_ToggleOpsGOCART2G
+  PUBLIC   :: GEOS_BeforeRunGOCART2G
+  PUBLIC   :: GEOS_AfterRunGOCART2G
 !
 ! !PRIVATE MEMBER FUNCTIONS:
 !
@@ -1136,6 +1141,603 @@ CONTAINS
 
   end subroutine GEOS_AerosolOptics 
 !EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Model                            !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: GEOS_SetGOCART2G
+!
+! !DESCRIPTION: GEOS_SetGOCART2G sets the friendly states for the aerosol
+!               species coupled with GOCART2G. This is a convenience routine
+!               created for cleanliness in Interfaces/GCHP/Chem_GridComp.F90
+!\\
+!\\
+! !INTERFACE:
+!
+  SUBROUTINE GEOS_SetGOCART2G ( FullName, MyFriendlies, RC )
+!
+! !USES:
+!
+
+!
+! !INPUT PARAMETERS:
+!
+    CHARACTER(*), INTENT(IN)    :: FullName
+!
+! !INPUT/OUTPUT PARAMETERS:
+!
+    CHARACTER(*), INTENT(INOUT) :: MyFriendlies
+!
+! !OUTPUT PARAMETERS:
+!
+    INTEGER, INTENT(OUT), OPTIONAL     :: RC
+!
+! !REVISION HISTORY:
+!  14 Mar 2023 - M. Long - Initial version
+!  See https://github.com/geoschem/geos-chem for history
+!EOP
+!------------------------------------------------------------------------------
+!BOC
+!
+! LOCAL VARIABLES:
+!
+
+! -- Internally mixed species are made friendly to the aerosol component
+!    the species is associated with.
+
+!          IF (G2G_SS) THEN <-- for now we just assume all aerosols are coupled.
+    IF ( FullName .eq. 'SALACL' .or. &
+         FullName .eq. 'SALCCL' .or. &
+         FullName .eq. 'SALAAL' .or. &
+         FullName .eq. 'SALCAL' .or. &
+         FullName .eq. 'BrSALA' .or. &
+         FullName .eq. 'BrSALC' .or. &
+         FullName .eq. 'NITs'   .or. &
+         FullName .eq. 'SO4s'   )    &
+         MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SS'
+    ! -- directly mixed species have no friendlies. Instead, their
+    !    G2G analogs are made friendly to GEOSCHEMCHEM in addition to
+    !    D:T:M
+    IF ( FullName .eq. 'SALA' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'SALC' ) MYFRIENDLIES = ''
+!          ENDIF
+!          IF (G2G_DU) THEN
+    IF ( FullName .eq. 'DST1' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'DST2' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'DST3' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'DST4' ) MYFRIENDLIES = ''
+!          ENDIF
+!          IF (G2G_SU) THEN
+    ! -- SO4 is the only shared species
+    IF ( FullName .eq. 'SO4' ) MYFRIENDLIES = ''
+!          ENDIF
+!          IF (G2G_NI) THEN
+    IF ( FullName .eq. 'NIT' ) MYFRIENDLIES = ''
+!             IF ( FullName .eq. 'NITs') MYFRIENDLIES = ''
+    IF ( FullName .eq. 'NH4' ) MYFRIENDLIES = ''
+!          ENDIF
+!          IF (G2G_CA) THEN
+    IF ( FullName .eq. 'OCPI' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'OCPO' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'BCPI' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'BCPO' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'SOAS' ) &
+         MYFRIENDLIES = TRIM(MYFRIENDLIES)//':CA.oc'
+!          ENDIF
+
+    ! Successful return
+    RC = ESMF_SUCCESS
+
+  END SUBROUTINE GEOS_SetGOCART2G
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Model                            !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: GEOS_SetMixGOCART
+!
+! !DESCRIPTION: GEOS_InitGOCART This is a convenience routine
+!               created for cleanliness in Interfaces/GCHP/Chem_GridComp.F90
+!\\
+!\\
+! !INTERFACE:
+!
+  SUBROUTINE GEOS_SetMixGOCART2G ( GcFld, FieldName, RC )
+!
+! !USES:
+!
+
+!
+! !INPUT PARAMETERS:
+!
+    CHARACTER(*), INTENT(IN)           :: FieldName
+!
+! !INPUT/OUTPUT PARAMETERS:
+!
+    TYPE(ESMF_Field), INTENT(INOUT)    :: GcFld
+!
+! !OUTPUT PARAMETERS:
+!
+    INTEGER, INTENT(OUT), OPTIONAL     :: RC
+!
+! !REVISION HISTORY:
+!  14 Mar 2023 - M. Long - Initial version
+!  See https://github.com/geoschem/geos-chem for history
+!EOP
+!------------------------------------------------------------------------------
+!BOC
+!
+! LOCAL VARIABLES:
+!
+
+    INTEGER :: STATUS
+
+! >>> Kludge to get internally mixed connectivity to work with SS2G (MSL)
+!       IF (G2G_SS) THEN
+          ! SALA
+          IF (fieldName .eq. 'SPC_SALACL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=2, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/1,2/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.5504e0,0.5504e0/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SALAAL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=2, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/1,2/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/1e0,1e0/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_BrSALA') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=2, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/1,2/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/2.11e-3,2.11e-3/), __RC__)
+          ENDIF
+          ! SALC
+          IF (fieldName .eq. 'SPC_SALCCL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.5504,0.5504,0.5504/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SALCAL') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/1e0,1e0,1e0/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_BrSALC') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/2.11e-3,2.11e-3,2.11e-3/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SO4s') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.,0.,0./), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_NITs') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_nbins', &
+                  value=3, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_with_bins', &
+                  valueList=(/3,4,5/), __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='internally_mixed_emis_frac', &
+                  valueList=(/0.,0.,0./), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_SOAS') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='externally_mixed_nbins', &
+                  value=1, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='externally_mixed_with_bins', &
+                  valueList=(/2/), __RC__)
+          ENDIF
+!       END IF
+
+    ! Successful return
+    RC = ESMF_SUCCESS
+
+  END SUBROUTINE GEOS_SetMixGOCART2G
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Model                            !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: GEOS_InitGOCART
+!
+! !DESCRIPTION: GEOS_InitGOCART This is a convenience routine
+!               created for cleanliness in Interfaces/GCHP/Chem_GridComp.F90
+!\\
+!\\
+! !INTERFACE:
+!
+  SUBROUTINE GEOS_ToggleOpsGOCART2G ( State_Chm, RC )
+!
+! !USES:
+!
+
+!
+! !INPUT PARAMETERS:
+!
+
+!
+! !INPUT/OUTPUT PARAMETERS:
+!
+    TYPE(ChmState), INTENT(INOUT)      :: State_Chm      ! Chemistry state
+!
+! !OUTPUT PARAMETERS:
+!
+    INTEGER, INTENT(OUT), OPTIONAL     :: RC
+!
+! !REVISION HISTORY:
+!  14 Mar 2023 - M. Long - Initial version
+!  See https://github.com/geoschem/geos-chem for history
+!EOP
+!------------------------------------------------------------------------------
+!BOC
+!
+! LOCAL VARIABLES:
+!
+
+    ! Configure for GOCART2G interface & control of phys ops
+    ! <<MSL>>
+    ! Ideally, we can query species to see if they're provided by GOCART2G
+    ! it was not clear if there was a method in MAPL. 
+    ! 
+    ! For now, just going to force outcomes
+    ! <<\MSL>>
+    ! Dust
+!    IF (G2G_DU) THEN
+       State_Chm%SpcData(IND_('DST1'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST2'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST3'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST4'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('DST1'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST2'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST3'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST4'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('DST1'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('DST2'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('DST3'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('DST4'))%Info%Do_Emis = .false.
+!    ENDIF
+    ! Sea salt
+!    IF (G2G_SS) THEN
+       State_Chm%SpcData(IND_('SALA'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALC'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALA'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALC'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SO4s'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SO4s'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALACL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALACL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('BrSALC'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('BrSALC'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SALA'))%Info%Do_Emis   = .false.
+       State_Chm%SpcData(IND_('SALC'))%Info%Do_Emis   = .false.
+       State_Chm%SpcData(IND_('SALACL'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('SALCCL'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('SALAAL'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('SALCAL'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_Emis = .false.
+       State_Chm%SpcData(IND_('BrSALA'))%Info%Do_Emis = .false.
+!    ENDIF
+    ! Sulfate
+!    IF (G2G_SU) THEN
+       State_Chm%SpcData(IND_('SO4'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SO4'))%Info%Do_WetDep = .false.
+!    ENDIF
+    ! Nitrogen
+!    IF (G2G_SU) THEN
+       State_Chm%SpcData(IND_('NITs'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NITs'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('NIT'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NIT'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('NH4'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('NH4'))%Info%Do_WetDep = .false.
+!    ENDIF
+    ! Doesn't currently include dust-nitrate, equiv. to
+    ! bins ___
+    ! Organic & black carbon
+!    IF (G2G_CA) THEN
+       State_Chm%SpcData(IND_('OCPO'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('OCPO'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('OCPI'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('OCPI'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('BCPO'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('BCPO'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('BCPI'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('BCPI'))%Info%Do_WetDep = .false.
+       State_Chm%SpcData(IND_('SOAS'))%Info%Do_DryDep = .false.
+       State_Chm%SpcData(IND_('SOAS'))%Info%Do_WetDep = .false.
+!    ENDIF
+
+    ! Successful return
+    RC = ESMF_SUCCESS
+
+  END SUBROUTINE GEOS_ToggleOpsGOCART2G
+!EOC
+
+  SUBROUTINE GEOS_BeforeRunGOCART2G( Internal, I, fSPC, RC )
+    REAL, POINTER, INTENT(INOUT)          :: Internal(:,:,:)
+    INTEGER, INTENT(IN)                   :: I
+    type(ESMF_FieldBundle), INTENT(INOUT) :: fSPC ! Species fields friendly to GCC 
+    INTEGER, INTENT(OUT), OPTIONAL        :: RC
+
+    INTEGER :: STATUS
+    REAL, POINTER :: Ptr3d(:,:,:)
+
+    !=========================================================================
+    ! Pass shared species from GOCART2G to the GEOSCHEMCHEM internal state
+    ! Species in internal state are in kg/kg total. MSL Jul 14, 2022
+    !=========================================================================
+!       IF (G2G_SS) THEN
+    ! Seasalt -- hard-coded for now
+    if (I == IND_( 'SALA' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS', Ptr3d, __RC__ )
+       Internal = Ptr3d ! Set SALA to SS2G:SS(bin 1)
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS002', Ptr3d, __RC__ )
+       Internal = Internal + Ptr3d ! Add SS2G:SS(bin 2) to SALA
+       Ptr3d => null()
+       return
+    endif
+    if (I == IND_( 'SALC' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', Ptr3d, __RC__ )
+       Internal = Ptr3d ! Set SALC to SS2G:SS(bin 3)
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', Ptr3d, __RC__ )
+       Internal = Internal + Ptr3d ! Add SS2G:SS(bin 4) to SALC
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', Ptr3d, __RC__ )
+       Internal = Internal + Ptr3d ! Add SS2G:SS(bin 5) to SALC
+       Ptr3d => null()
+       return
+    endif
+!       END IF
+!       IF (G2G_DU) THEN
+    ! Dust -- hard-coded for now
+    if (I == IND_( 'DST1' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU',    Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'DST2' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU002', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'DST3' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'DST4' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+!       ENDIF
+!       IF (G2G_SU) THEN
+    ! SO4 -- hard-coded for now
+
+    if (I == IND_( 'SO4' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+!       ENDIF
+!       IF (G2G_NI) THEN
+    ! Nitrogen -- hard-coded for now
+
+    if (I == IND_( 'NH4' )) then ! Is this even necessary? <<>>
+       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'NIT' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+!       ENDIF
+!       IF (G2G_CA) THEN
+    ! CA.oc & CA.bc -- hard-coded for now
+
+    if (I == IND_( 'BCPI' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'BCPO' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
+       Internal = Ptr3d ! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'OCPI' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
+       Internal = Ptr3d / 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'OCPO' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
+       Internal = Ptr3d / 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
+       Ptr3d => null()
+    endif
+!       ENDIF
+  END SUBROUTINE GEOS_BeforeRunGOCART2G
+
+  SUBROUTINE GEOS_AfterRunGOCART2G( Internal, I, fSPC, RC )
+    REAL, POINTER, INTENT(INOUT)          :: Internal(:,:,:)
+    INTEGER, INTENT(IN)                   :: I
+    type(ESMF_FieldBundle), INTENT(INOUT) :: fSPC ! Species fields friendly to GCC 
+    INTEGER, INTENT(OUT), OPTIONAL        :: RC
+
+    INTEGER :: STATUS
+    REAL, POINTER :: Ptr3d(:,:,:),SS3(:,:,:),SS4(:,:,:),SS5(:,:,:),DU3(:,:,:),DU4(:,:,:)
+
+!       IF (G2G_SU) THEN
+    ! Since chem has acted on it, we have to pass SO4 back to SU2G
+    if (I == IND_( 'SO4' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'SU::SO4', Ptr3d, __RC__ )
+       Ptr3d = Internal ! Update SO4 after chem
+       Ptr3d => null()
+       return
+    endif
+!       ENDIF
+
+!       IF (G2G_NI) THEN
+    if (I == IND_( 'NH4' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NH4a', Ptr3d, __RC__ )
+       Ptr3d = Internal ! Update SO4 after chem
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'NIT' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an1', Ptr3d, __RC__ )
+       Ptr3d = Internal ! NIT just points straight to this. Includes ISORROPIA+KPP REACTION K_MT(3)
+       Ptr3d => null()
+       return
+    endif
+
+    ! Testing! <<>> MSL Apr 24, 2023
+    if (I == IND_( 'NITs' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', SS3, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', SS4, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', SS5, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', DU3, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', DU4, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', Ptr3d, __RC__ )
+       ! Convert seasalt mass fraction to surface area fraction
+       ! SS density, 2200 kg/m3
+       ! CVFAC = 1/2200 * 3/r
+       ! SS3 radius midpoint = 1 um; CVFAC = 1363.64
+       ! SS4 radius midpoint = 3.25 um; CVFAC = 419.58
+       ! SS5 radius midpoing = 7.5 um; CVFAC = 181.82
+       !
+       ! DU density, 2500 kg/m3
+       ! CVFAC = 1/2500 * 3/r
+       ! DU3 radius midpoint = 2.4 um; CVFAC = 500.00
+       ! DU4 radius midpoint = 4.5 um; CVFAC = 266.67
+       Ptr3d = Internal*&
+            ((DU3*500.00+SS3*1363.64+SS4*419.58)/(DU3*500.00+DU4*266.67+SS3*1363.64+SS4*419.58+SS5*181.82))
+       Ptr3d => null()
+       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
+       Ptr3d = Internal*&
+            ((DU4*266.67+SS5*181.82)/(DU3*500.00+DU4*266.67+SS3*1363.64+SS4*419.58+SS5*181.82))
+!       Ptr3d = Internal*1./3.!((SS4+SS5)/(SS3+SS4+SS5))
+       Ptr3d => null()
+       SS3   => null()
+       SS4   => null()
+       SS5   => null()
+       DU3   => null()
+       DU4   => null()
+       return
+    endif
+!       ENDIF
+       
+!       IF (G2G_CA) THEN
+    ! Since chem has acted on it, we have to pass OC & BC back to CA2G
+    if (I == IND_( 'BCPI' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
+       Ptr3d =  Internal! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'BCPO' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
+       Ptr3d =  Internal! 
+       Ptr3d => null()
+       return
+    endif
+
+    if (I == IND_( 'OCPI' )) then
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d  , __RC__ )
+       Ptr3d   =  Internal * 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
+       Ptr3d   => null()
+       return
+    endif
+
+    if (I == IND_( 'OCPO' )) then ! Have to break OCPO into OC and BrC for G2G
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d  , __RC__ )
+       Ptr3d   =  Internal * 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
+       Ptr3d   => null()
+       return
+    endif
+
+!       ENDIF
+  END SUBROUTINE GEOS_AfterRunGOCART2G
+
 !------------------------------------------------------------------------------
 !                  GEOS-Chem Global Chemical Model                            !
 !------------------------------------------------------------------------------
