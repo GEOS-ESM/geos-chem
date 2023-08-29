@@ -2146,25 +2146,6 @@ CONTAINS
 #endif
 
     type(ESMF_FieldBundle)       :: fSPC ! Species fields friendly to GCC 
-    REAL, POINTER                :: NO3an1(:,:,:) => NULL()
-    REAL, POINTER                :: NO3an2(:,:,:) => NULL()
-    REAL, POINTER                :: NO3an3(:,:,:) => NULL()
-    REAL, POINTER                :: SSbin1(:,:,:) => NULL()
-    REAL, POINTER                :: SSbin2(:,:,:) => NULL()
-    REAL, POINTER                :: SSbin3(:,:,:) => NULL()
-    REAL, POINTER                :: SSbin4(:,:,:) => NULL()
-    REAL, POINTER                :: SSbin5(:,:,:) => NULL()
-    REAL, POINTER                :: SSDDOUT(:,:,:) => NULL()
-    REAL, POINTER                :: SSEMOUT(:,:,:) => NULL()
-    REAL, POINTER                :: SSWDOUT(:,:,:,:) => NULL()
-    REAL, POINTER                :: SSSDOUT(:,:,:,:) => NULL()
-    REAL, POINTER                :: DUDDOUT(:,:,:) => NULL()
-    REAL, POINTER                :: DUEMOUT(:,:,:,:) => NULL()
-    REAL, POINTER                :: DUWDOUT(:,:,:,:) => NULL()
-    REAL, POINTER                :: DUSDOUT(:,:,:,:) => NULL()
-    REAL, POINTER                :: LSALA(:,:,:) => NULL()
-    REAL, POINTER                :: LSALC(:,:,:) => NULL()
-    INTEGER                      :: itemCount
     TYPE(ESMF_Field)             :: Fld
 
     __Iam__('Run_')

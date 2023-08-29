@@ -1211,10 +1211,12 @@ CONTAINS
 !          IF (G2G_SU) THEN
     ! -- SO4 is the only shared species
     IF ( FullName .eq. 'SO4' ) MYFRIENDLIES = ''
+    IF ( FullName .eq. 'HMS' ) &
+         MYFRIENDLIES = TRIM(MYFRIENDLIES)//':SU'
 !          ENDIF
 !          IF (G2G_NI) THEN
     IF ( FullName .eq. 'NIT' ) MYFRIENDLIES = ''
-!             IF ( FullName .eq. 'NITs') MYFRIENDLIES = ''
+    IF ( FullName .eq. 'NITs') MYFRIENDLIES = ''
     IF ( FullName .eq. 'NH4' ) MYFRIENDLIES = ''
 !          ENDIF
 !          IF (G2G_CA) THEN
@@ -1373,6 +1375,14 @@ CONTAINS
              call ESMF_AttributeSet( GcFld,  &
                   name='externally_mixed_with_bins', &
                   valueList=(/2/), __RC__)
+          ENDIF
+          IF (fieldName .eq. 'SPC_HMS') THEN
+             call ESMF_AttributeSet( GcFld,  &
+                  name='externally_mixed_nbins', &
+                  value=1, __RC__)
+             call ESMF_AttributeSet( GcFld,  &
+                  name='externally_mixed_with_bins', &
+                  valueList=(/3/), __RC__)
           ENDIF
 !       END IF
 
@@ -1670,39 +1680,42 @@ CONTAINS
     endif
 
     ! Testing! <<>> MSL Apr 24, 2023
-    if (I == IND_( 'NITs' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', SS3, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', SS4, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', SS5, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', DU3, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', DU4, __RC__ )
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', Ptr3d, __RC__ )
-       ! Convert seasalt mass fraction to surface area fraction
-       ! SS density, 2200 kg/m3
-       ! CVFAC = 1/2200 * 3/r
-       ! SS3 radius midpoint = 1 um; CVFAC = 1363.64
-       ! SS4 radius midpoint = 3.25 um; CVFAC = 419.58
-       ! SS5 radius midpoing = 7.5 um; CVFAC = 181.82
-       !
-       ! DU density, 2500 kg/m3
-       ! CVFAC = 1/2500 * 3/r
-       ! DU3 radius midpoint = 2.4 um; CVFAC = 500.00
-       ! DU4 radius midpoint = 4.5 um; CVFAC = 266.67
-       Ptr3d = Internal*&
-            ((DU3*500.00+SS3*1363.64+SS4*419.58)/(DU3*500.00+DU4*266.67+SS3*1363.64+SS4*419.58+SS5*181.82))
-       Ptr3d => null()
-       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
-       Ptr3d = Internal*&
-            ((DU4*266.67+SS5*181.82)/(DU3*500.00+DU4*266.67+SS3*1363.64+SS4*419.58+SS5*181.82))
-!       Ptr3d = Internal*1./3.!((SS4+SS5)/(SS3+SS4+SS5))
-       Ptr3d => null()
-       SS3   => null()
-       SS4   => null()
-       SS5   => null()
-       DU3   => null()
-       DU4   => null()
-       return
-    endif
+! BELOW is an attempt to pass some of GEOS-Chem's NITs to NO3 bins 2 & 3 in 
+! GOCART. It does not work well. It's not clear whether or not there will be
+! an elegant solution to this.
+!>>    if (I == IND_( 'NITs' )) then
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS003', SS3, __RC__ )
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS004', SS4, __RC__ )
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'SS::SS005', SS5, __RC__ )
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU003', DU3, __RC__ )
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'DU::DU004', DU4, __RC__ )
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an2', Ptr3d, __RC__ )
+!>>       ! Convert seasalt mass fraction to surface area fraction
+!>>       ! SS density, 2200 kg/m3
+!>>       ! CVFAC = 1/2200 * 3/r
+!>>       ! SS3 radius midpoint = 1 um; CVFAC = 1363.64
+!>>       ! SS4 radius midpoint = 3.25 um; CVFAC = 419.58
+!>>       ! SS5 radius midpoing = 7.5 um; CVFAC = 181.82
+!>>       !
+!>>       ! DU density, 2500 kg/m3
+!>>       ! CVFAC = 1/2500 * 3/r
+!>>       ! DU3 radius midpoint = 2.4 um; CVFAC = 500.00
+!>>       ! DU4 radius midpoint = 4.5 um; CVFAC = 266.67
+!>>       Ptr3d = Internal*&
+!>>            ((DU3*500.00+SS3*1363.64+SS4*419.58)/(DU3*500.00+DU4*266.67+SS3*1363.64+SS4*419.58+SS5*181.82))
+!>>       Ptr3d => null()
+!>>       call ESMFL_BundleGetPointerToData( fSPC, 'NI::NO3an3', Ptr3d, __RC__ )
+!>>       Ptr3d = Internal*&
+!>>            ((DU4*266.67+SS5*181.82)/(DU3*500.00+DU4*266.67+SS3*1363.64+SS4*419.58+SS5*181.82))
+!>>!       Ptr3d = Internal*1./3.!((SS4+SS5)/(SS3+SS4+SS5))
+!>>       Ptr3d => null()
+!>>       SS3   => null()
+!>>       SS4   => null()
+!>>       SS5   => null()
+!>>       DU3   => null()
+!>>       DU4   => null()
+!>>       return
+!>>    endif
 !       ENDIF
        
 !       IF (G2G_CA) THEN
