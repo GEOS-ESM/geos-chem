@@ -2292,7 +2292,8 @@ CONTAINS
     !------------------------------------------------------------------------
     ! Species concentration diagnostic
     !------------------------------------------------------------------------
-    diagId  = 'SpeciesConc'
+    !diagId  = 'SpeciesConc'
+    diagId  = 'S'
     CALL Init_and_Register(                                                  &
          Input_Opt      = Input_Opt,                                         &
          State_Chm      = State_Chm,                                         &
@@ -5211,7 +5212,8 @@ CONTAINS
        !--------------------------------------------------------------------
        ! Species concentration at user-defined height above surface
        !--------------------------------------------------------------------
-       diagID  = 'SpeciesConc' // TRIM( TmpHt )
+       !diagID  = 'SpeciesConc' // TRIM( TmpHt )
+       diagID  = 'S' // TRIM( TmpHt )
        CALL Init_and_Register(                                               &
             Input_Opt      = Input_Opt,                                      &
             State_Chm      = State_Chm,                                      &
@@ -9434,7 +9436,7 @@ CONTAINS
                    RC       = RC                                            )
     IF ( RC /= GC_SUCCESS ) RETURN
 
-    CALL Finalize( diagId   = 'SpeciesConc',                                 &
+    CALL Finalize( diagId   = 'S',                                           &
                    Ptr2Data = State_Diag%SpeciesConc,                        &
                    mapData  = State_Diag%Map_SpeciesConc,                    &
                    RC       = RC                                            )
@@ -10933,7 +10935,8 @@ CONTAINS
        IF ( isTagged  ) TagId = 'ALL'
        IF ( isSrcType ) SrcType  = KINDVAL_F8
 
-    ELSE IF ( TRIM( Name_AllCaps ) == 'SPECIESCONC' ) THEN
+    !ELSE IF ( TRIM( Name_AllCaps ) == 'SPECIESCONC' ) THEN
+    ELSE IF ( TRIM( Name_AllCaps ) == 'S' ) THEN
        IF ( isDesc    ) Desc  = 'Dry mixing ratio of species'
        IF ( isUnits   ) Units = 'mol mol-1 dry'
        IF ( isRank    ) Rank  = 3
@@ -12575,6 +12578,16 @@ CONTAINS
     ELSE IF ( TRIM( Name_AllCaps ) == 'AERMASSSOAGX' ) THEN
        IF ( isDesc    ) Desc  = 'Mass of aerosol-phase glyoxal'
        IF ( isUnits   ) Units = 'ug m-3'
+       IF ( isRank    ) Rank  =  3
+
+    ELSE IF ( TRIM( Name_AllCaps ) == 'GCCSALAI' ) THEN
+       IF ( isDesc    ) Desc  = ''
+       IF ( isUnits   ) Units = 'kg kg-1'
+       IF ( isRank    ) Rank  =  3
+
+    ELSE IF ( TRIM( Name_AllCaps ) == 'GCCSALAF' ) THEN
+       IF ( isDesc    ) Desc  = ''
+       IF ( isUnits   ) Units = 'kg kg-1'
        IF ( isRank    ) Rank  =  3
 
    ELSE

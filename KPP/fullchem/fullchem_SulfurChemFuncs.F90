@@ -165,7 +165,7 @@ CONTAINS
     ! Scalars
     LOGICAL            :: SALAAL_gt_0_1
     LOGICAL            :: SALCAL_gt_0_1
-    REAL(fp)           :: k_ex
+    REAL(fp)           :: k_ex, k_ex_
 
     ! Strings
     CHARACTER(LEN=255) :: ErrMsg
@@ -230,7 +230,8 @@ CONTAINS
 
        ! 1st order uptake
        k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,11),             &
-                       radius = State_Chm%AeroRadi(I,J,L,11),                &
+!                       radius = State_Chm%AeroRadi(I,J,L,11),                &
+                        radius = State_Het%xRadi(11),                        &
                        gamma  = 0.5_dp,                                      &
                        srMw   = SR_MW(ind_HNO3)                             )
 
@@ -285,10 +286,14 @@ CONTAINS
     IF ( SALCAL_gt_0_1 ) THEN
 
        ! 1st order uptake
-       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,12),             &
-                       radius = State_Chm%AeroRadi(I,J,L,12),                &
-                       gamma  = 0.5_dp,                                      &
-                       srMw   = SR_MW(ind_HNO3)                             )
+!       k_ex = Ars_L1K( area   = State_Chm%WetAeroArea(I,J,L,12),             &
+!                       radius = State_Chm%AeroRadi(I,J,L,12),                &
+!                       gamma  = 0.5_dp,                                      &
+!                       srMw   = SR_MW(ind_HNO3)                             )
+        k_ex_ = Ars_L1K(area   = State_Chm%WetAeroArea(I,J,L,12),                &
+                        radius = State_Het%xRadi(12),                            &
+                        gamma  = 0.5_dp,                                         &
+                        srMw   = SR_MW(ind_HNO3)                                )
 
        ! Assume HNO3 is limiting, so recompute rxn rate accordingly
        K_MT(6) = kIIR1Ltd( C(ind_HNO3), C(ind_SALCAL), k_ex )

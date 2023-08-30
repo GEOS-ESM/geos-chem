@@ -148,6 +148,10 @@ MODULE Chem_GridCompMod
   ! When to do the analysis
   INTEGER                          :: ANAPHASE
   INTEGER, PARAMETER               :: CHEMPHASE = 2
+
+  ! Force configuration of model ops if GOCART2G is enabled
+  LOGICAL                          :: isGOCART2G
+  INTEGER                          :: isTRUE
 #else
   LOGICAL                          :: isProvider ! provider to AERO, RATS, ANOX?
   LOGICAL                          :: calcOzone  ! if PTR_GCCTO3 is associated
@@ -246,7 +250,7 @@ CONTAINS
     USE GEOS_Analysis,        ONLY : GEOS_AnaInit
     USE GEOS_Interface,       ONLY : MetVars_For_Lightning_Init, &
                                      GEOS_CheckRATSandOx 
-    USE GEOS_AeroCoupler,     ONLY : GEOS_AeroSetServices
+    USE GEOS_AeroCoupler !,     ONLY : GEOS_AeroSetServices
     USE GEOS_CarbonInterface, ONLY : GEOS_CarbonSetServices
 #endif
 !
@@ -404,6 +408,17 @@ CONTAINS
 !
 #if defined( MODEL_GEOS )
 #   include "GEOSCHEMCHEM_ImportSpec___.h"
+     call MAPL_AddExportSpec(GC,                                  &
+        SHORT_NAME         = 'fSPC',                              &
+        LONG_NAME          = 'shared_species_fields',             &
+        UNITS              = 'kg kg-1',                           &
+        DIMS               = MAPL_DimsHorzVert,                   &
+        VLOCATION          = MAPL_VLocationCenter,                &
+        DATATYPE           = MAPL_BundleItem,                     &
+!        RESTART    = MAPL_RestartSkip,                            &
+                                                      RC=STATUS  )
+     VERIFY_(STATUS)
+
 #else
 #   include "GCHPchem_ImportSpec___.h"
 #endif
@@ -532,6 +547,12 @@ CONTAINS
        ENDIF
     ENDIF
 
+    ! Determine if we're using GEOS-Chem or GOCART2G aerosols (MSL)
+    CALL ESMF_ConfigGetAttribute( myState%myCF, isTRUE, &
+                                  Label = "GOCART2G_COUPLING:", &
+                                  Default = 0, __RC__ )
+    isGOCART2G = (isTRUE == 1) ! if true, toggle aerosol coupling 'ON'
+
     ! Sulfur-nitrogen-ammonia water content computed in Isorropia after needed in RDAER
     call MAPL_AddInternalSpec(GC, &
        SHORT_NAME         = 'AeroH2O_SNA',  &
@@ -618,20 +639,40 @@ CONTAINS
              ENDIF 
           ENDIF 
 
-          ! Now add to internal state
-          CALL MAPL_AddInternalSpec(GC,                                     &
-               SHORT_NAME      = TRIM(SPFX)//TRIM(SUBSTRS(1)),              &
-               LONG_NAME       = TRIM(FullName)//                           &
-                                 ' mass mixing ratio total air',            &
-               UNITS           = 'kg kg-1',                                 &
-               DIMS            = MAPL_DimsHorzVert,                         &
-               VLOCATION       = MAPL_VLocationCenter,                      &
-            !!!PRECISION       = ESMF_KIND_R8,                              &
-               FRIENDLYTO      = TRIM(MYFRIENDLIES),                        &
-               RC              = RC                                        )
+!          ! Now add to internal state
+!          CALL MAPL_AddInternalSpec(GC,                                     &
+!               SHORT_NAME      = TRIM(SPFX)//TRIM(SUBSTRS(1)),              &
+!               LONG_NAME       = TRIM(FullName)//                           &
+!                                 ' mass mixing ratio total air',            &
+!               UNITS           = 'kg kg-1',                                 &
+!               DIMS            = MAPL_DimsHorzVert,                         &
+!               VLOCATION       = MAPL_VLocationCenter,                      &
+!            !!!PRECISION       = ESMF_KIND_R8,                              &
+!               FRIENDLYTO      = TRIM(MYFRIENDLIES),                        &
+!               RC              = RC                                        )
+!
+!          ! Update count of advected species
+!          Nadv = Nadv + 1
+!          AdvSpc(Nadv) = TRIM(SUBSTRS(1))
 
-          ! Update count of advected species
-          Nadv = Nadv + 1
+          IF (isGOCART2G) THEN
+             ! Set the friendly state of the various aerosol species coupled
+             ! with GOCART2G aerosols.
+             call GEOS_SetGOCART2G( FullName, MYFRIENDLIES, RC )
+          ENDIF             
+
+          call MAPL_AddInternalSpec(GC, &
+               SHORT_NAME         = TRIM(SPFX)//TRIM(SUBSTRS(1)), &
+               LONG_NAME          = TRIM(FullName)//                &
+                                    ' mass mixing ratio total air', &
+               UNITS              = 'kg kg-1',                &
+               DIMS               = MAPL_DimsHorzVert,        &
+               VLOCATION          = MAPL_VLocationCenter,     &
+               !!!PRECISION          = ESMF_KIND_R8,             &
+               FRIENDLYTO         = TRIM(MYFRIENDLIES),       &
+               RESTART = MAPL_RestartOptional, &
+               RC                 = RC  )
+          Nadv = Nadv+1
           AdvSpc(Nadv) = TRIM(SUBSTRS(1))
 
           ! verbose
@@ -1080,7 +1121,7 @@ CONTAINS
     USE TIME_MOD,  ONLY : GET_TS_RAD
 #if defined( MODEL_GEOS )
     USE GEOS_INTERFACE,       ONLY : GEOS_AddSpecInfoForMoist
-    USE GEOS_AeroCoupler,     ONLY : GEOS_AeroInit
+    USE GEOS_AeroCoupler !,     ONLY : GEOS_AeroInit
     USE GEOS_CarbonInterface, ONLY : GEOS_CarbonInit
 !    USE TENDENCIES_MOD, ONLY : Tend_CreateClass
 !    USE TENDENCIES_MOD, ONLY : Tend_Add
@@ -1437,6 +1478,10 @@ CONTAINS
        CALL GEOS_AeroInit( GC, MaplCF, INTSTATE, EXPORT, Grid, __RC__ )
     ENDIF
 
+    IF (isGOCART2G) THEN
+       CALL GEOS_ToggleOpsGOCART2G( State_Chm, RC )
+    ENDIF
+
 #else
     IF ( isProvider ) THEN
        CALL Provider_Initialize( am_I_Root, State_Chm, State_Grid, &
@@ -1521,7 +1566,7 @@ CONTAINS
                         'at the same time', FRIENDLY, Input_Opt%LCONV,     &
                         TRIM(Int2Spc(I)%Name)
              WRITE(*,*) '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-             _ASSERT(.FALSE.,'MOIST friendly error')
+!             _ASSERT(.FALSE.,'MOIST friendly error')
           ENDIF
 
           ! Check for friendliness to turbulence: only if GEOS-Chem turbulence
@@ -1543,6 +1588,10 @@ CONTAINS
                 _ASSERT(.FALSE.,'Error in Friendly settings')
              ENDIF
           ENDIF
+       ENDIF
+
+       IF (isGOCART2G) THEN
+          CALL GEOS_SetMixGOCART2G( GcFld, FieldName, RC )
        ENDIF
 #endif
 
@@ -2000,7 +2049,7 @@ CONTAINS
                                         GEOS_InitFromFile,         &
                                         GEOS_RATSandOxDiags,       &
                                         GEOS_PreRunChecks
-    USE GEOS_AeroCoupler,        ONLY : GEOS_FillAeroBundle
+    USE GEOS_AeroCoupler !,        ONLY : GEOS_FillAeroBundle
     USE GEOS_CarbonInterface,    ONLY : GEOS_CarbonSetConc,        &
                                         GEOS_CarbonRunPhoto
 #endif
@@ -2085,6 +2134,8 @@ CONTAINS
     CHARACTER(LEN=2)             :: intStr
     REAL, POINTER                :: Ptr2d   (:,:)   => NULL()
     REAL, POINTER                :: Ptr3d   (:,:,:) => NULL()
+    REAL, POINTER                :: Ptr3D_1(:,:,:)  => NULL() ! Extra
+    REAL, POINTER                :: Ptr3D_2(:,:,:)  => NULL() ! Extra
     REAL(ESMF_KIND_R8), POINTER  :: Ptr2d_R8(:,:)   => NULL()
     REAL(ESMF_KIND_R8), POINTER  :: Ptr3d_R8(:,:,:) => NULL()
 
@@ -2148,6 +2199,9 @@ CONTAINS
     LOGICAL                      :: isStartTime
     REAL(ESMF_KIND_r8), POINTER  :: CostFuncMask(:,:,:) => NULL()
 #endif
+
+    type(ESMF_FieldBundle)       :: fSPC ! Species fields friendly to GCC 
+    TYPE(ESMF_Field)             :: Fld
 
     __Iam__('Run_')
 
@@ -2472,6 +2526,14 @@ CONTAINS
 !       ! restart file (and stored in the internal state).
 !       !=======================================================================
        CALL MAPL_TimerOn(STATE, "CP_BFRE")
+       call ESMF_StateGet (EXPORT, 'fSPC', fSPC, __RC__ )
+#if defined( MODEL_GEOS )
+       IF (isGOCART2G) THEN
+          DO I = 1,SIZE(Int2Spc,1) ! There's got to be a better way. But how to pass Int2Spc?
+          CALL GEOS_BeforeRunGOCART2G( Int2Spc(I)%Internal, I, fSPC, RC )
+          ENDDO
+       ENDIF
+#endif
 #include "Includes_Before_Run.H"
        CALL MAPL_TimerOff(STATE, "CP_BFRE")
 
@@ -2956,6 +3018,12 @@ CONTAINS
        ! Connect to aerosols - experimental
        IF ( DoAERO ) THEN
           CALL GEOS_FillAeroBundle ( GC, EXPORT, State_Chm, State_Grid, Input_Opt, __RC__ )
+       ENDIF
+
+       IF (isGOCART2G) THEN
+          DO I = 1,SIZE(Int2Spc,1) ! There's got to be a better way. But how to pass Int2Spc?
+          CALL GEOS_AfterRunGOCART2G( Int2Spc(I)%Internal, I, fSPC, RC )
+          ENDDO
        ENDIF
 
        ! Archive last active time steps

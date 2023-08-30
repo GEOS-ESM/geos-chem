@@ -1560,6 +1560,9 @@ CONTAINS
     ! Look up this species in the species database
     ThisSpc       => State_Chm%SpcData(N)%Info
 
+    ! Cycle out if not Do_DryDep
+    IF ( .not. ThisSpc%Do_DryDep ) RETURN
+
     ! Point to the species concentration array
     TC            => State_Chm%Species(N)%Conc(:,:,:)
 

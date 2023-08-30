@@ -798,6 +798,9 @@ CONTAINS
        ! to query the Species Database (bmy, 3/16/17)
        ThisSpc => State_Chm%SpcData(NA)%Info
 
+       ! Skip if this is not a drydep species
+       if (.not. ThisSpc%Do_Drydep) cycle
+
        ! Get the drydep ID corresponding to this species
        ND      =  ThisSpc%DryDepId
 

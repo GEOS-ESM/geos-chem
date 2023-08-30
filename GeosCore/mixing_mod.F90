@@ -519,6 +519,9 @@ CONTAINS
                DryDepSpec = .TRUE.
        ENDIF
 
+       ! Check for drydep flag
+       IF ( .NOT. SpcInfo%Do_DryDep ) DryDepSpec = .FALSE.
+
        ! Set emissions top level:
        ! This is the top of atmosphere unless concentration build-up
        ! in stratosphere wants to be avoided.
@@ -548,7 +551,7 @@ CONTAINS
        !--------------------------------------------------------------------
        ! Check if we need to do emissions for this species
        !--------------------------------------------------------------------
-       IF ( LEMIS ) THEN
+       IF ( LEMIS .AND. SpcInfo%Do_Emis ) THEN
           CALL InquireHco ( N, Emis=EmisSpec )
        ELSE
           EmisSpec = .FALSE.

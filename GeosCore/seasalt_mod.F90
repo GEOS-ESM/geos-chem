@@ -163,7 +163,7 @@ CONTAINS
     USE ErrCode_Mod
     USE Error_Mod,      ONLY : Debug_Msg
     USE Input_Opt_Mod,  ONLY : OptInput
-    USE Species_Mod,    ONLY : SpcConc
+    USE Species_Mod,    ONLY : SpcConc, SpcPtr
     USE State_Chm_Mod,  ONLY : ChmState
     USE State_Diag_Mod, ONLY : DgnState
     USE State_Grid_Mod, ONLY : GrdState
@@ -206,6 +206,8 @@ CONTAINS
     CHARACTER(LEN=255) :: thisLoc
     CHARACTER(LEN=512) :: errMsg
 
+    TYPE(SpcPtr),  POINTER :: SpcData(:)
+
 #if   defined( APM )
     INTEGER           :: N, Seasalt_ids(NSALTBIN)
 #endif
@@ -217,11 +219,13 @@ CONTAINS
     ! Initialize
     RC       =  GC_SUCCESS
     prtDebug = ( Input_Opt%LPRT .and. Input_Opt%amIRoot )
+    SpcData  => State_Chm%SpcData
 
     !========================================================================
     ! Accumulation mode (SALA) wet settling
     !========================================================================
     IF ( id_SALA > 0 ) THEN
+    IF ( SpcData(id_SALA)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -242,11 +246,13 @@ CONTAINS
           CALL DEBUG_MSG( '### CHEMSEASALT: WET_SET, Accum' )
        ENDIF
     ENDIF
+    ENDIF
 
     !========================================================================
     ! Coarse mode (SALC) wet settling
     !========================================================================
     IF ( id_SALC > 0 ) THEN
+    IF ( SpcData(id_SALC)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -267,11 +273,13 @@ CONTAINS
           CALL DEBUG_MSG( '### CHEMSEASALT: WET_SET, Coarse' )
        ENDIF
     ENDIF
+    ENDIF
 
     !========================================================================
     ! Accumulation mode chloride (SALACL) wet settling
     !========================================================================
     IF ( id_SALACL > 0 ) THEN
+    IF ( SpcData(id_SALACL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -292,11 +300,13 @@ CONTAINS
           CALL DEBUG_MSG( '### CHEMSEASALT: WET_SET, Accum Cl' )
        ENDIF
     ENDIF
+    ENDIF
 
     !========================================================================
     ! Coarse mode chloride (SALCCL) wet settling
     !========================================================================
     IF ( id_SALCCL > 0 ) THEN
+    IF ( SpcData(id_SALCCL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -317,11 +327,13 @@ CONTAINS
           CALL DEBUG_MSG( '### CHEMSEASALT: WET_SET, Coarse Cl' )
        ENDIF
     ENDIF
+    ENDIF
 
     !========================================================================
     ! Accumulation mode alkalinity (SALAAL) wet settling
     !========================================================================
     IF ( id_SALAAL > 0 ) THEN
+    IF ( SpcData(id_SALAAL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -342,11 +354,13 @@ CONTAINS
           CALL DEBUG_MSG( '### CHEMSEASALT: WET_SET, Accum Al' )
        ENDIF
     ENDIF
+    ENDIF
 
     !========================================================================
     ! Coarse mode Alkalinity (SALCAL) wet settling
     !========================================================================
     IF ( id_SALCAL > 0 ) THEN
+    IF ( SpcData(id_SALACL)%Info%Do_Drydep ) THEN
        CALL Wet_Settling(                                                    &
             Input_Opt  = Input_Opt,                                          &
             State_Chm  = State_Chm,                                          &
@@ -366,6 +380,7 @@ CONTAINS
        IF ( prtDebug ) THEN
           CALL DEBUG_MSG( '### CHEMSEASALT: WET_SET, Coarse Al' )
        ENDIF
+    ENDIF
     ENDIF
 
     !========================================================================

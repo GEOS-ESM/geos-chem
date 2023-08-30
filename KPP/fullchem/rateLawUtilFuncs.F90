@@ -29,6 +29,11 @@ MODULE rateLawUtilFuncs
   ! Minimum heterogeneous chemistry lifetime and reaction rate
   REAL(dp), PRIVATE, PARAMETER :: HET_MIN_LIFE = 1.e-3_dp
   REAL(dp), PRIVATE, PARAMETER :: HET_MIN_RATE = 1.0_dp / HET_MIN_LIFE
+
+  INTERFACE Ars_L1k
+     MODULE PROCEDURE Ars_L1k0, Ars_L1k1
+  END INTERFACE Ars_L1k
+
 !EOP
 !-----------------------------------------------------------------------------
 !BOC
@@ -74,7 +79,7 @@ CONTAINS
   !#####         COMMON FUNCTIONS FOR COMPUTING UPTAKE RATES           #####
   !#########################################################################
 
-  FUNCTION Ars_L1k( area, radius, gamma, srMw ) RESULT( k )
+  FUNCTION Ars_L1k0( area, radius, gamma, srMw ) RESULT( k )
     !
     ! Calculates the 1st-order loss rate of species on wet aerosol surface.
     !
@@ -93,7 +98,33 @@ CONTAINS
     !
     ! Compute ArsL1k according to the formula listed above
     k = area / ( (radius / dfkg) + 2.749064E-4_dp * srMw / (gamma * SR_TEMP) )
-  END FUNCTION Ars_L1k
+  END FUNCTION Ars_L1k0
+
+  FUNCTION Ars_L1k1( xradi, wetarea, gamma, srMw, k_ex ) RESULT( k )
+    !
+    ! Calculates the 1st-order loss rate of species on wet aerosol surface.
+    !
+    ! -- Uses a derived type for aerosol fields to permit coupling between
+    !    a single reaction in KPP with multiple aerosol bins. MSL Jul262022
+    REAL(dp), INTENT(IN)  :: xradi(:), wetArea(:)
+    REAL(dp), INTENT(OUT) :: k_ex(:)
+    REAL(dp), INTENT(IN)           :: gamma, srMw
+    REAL(dp)                       :: k,     dfkg
+    !
+    ! If gamma or radius is very small, set rate to zero and return
+    IF ( gamma < 1.0e-30_dp .or. sum(xRadi) < 1.0e-30_dp ) THEN
+       k = 0.0_dp
+       RETURN
+    ENDIF
+    !
+    ! DFKG = Gas phase diffusion coeff [cm2/s] (order of 0.1)
+    dfkg = ( 9.45E+17_dp / NUMDEN ) * SR_TEMP *                              &
+           SQRT( 3.472E-2_dp + 1.0_dp / ( srMw * srMw ) )
+    !
+    ! Compute ArsL1k according to the formula listed above
+    k_ex = wetArea / ( (xRadi / dfkg) + 2.749064E-4_dp * srMw / (gamma * SR_TEMP) )
+    k = sum(k_ex)
+  END FUNCTION Ars_L1k1
 
   FUNCTION kIIR1Ltd( concGas, concEduct, kISource ) RESULT( kII )
     !
