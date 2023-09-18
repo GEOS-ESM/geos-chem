@@ -776,15 +776,6 @@ CONTAINS
     END SUBROUTINE GEOS_AeroInit
 !EOC
 !------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-!------------------------------------------------------------------------------
 !                  GEOS-Chem Global Chemical Model                            !
 !------------------------------------------------------------------------------
 !BOP
@@ -1811,31 +1802,35 @@ CONTAINS
     ! CA.oc & CA.bc -- hard-coded for now
 
     if (I == IND_( 'BCPI' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CA.bcphilic', Ptr3d, __RC__ )
        Internal = Ptr3d ! 
        Ptr3d => null()
        return
     endif
 
     if (I == IND_( 'BCPO' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CA.bcphobic', Ptr3d, __RC__ )
        Internal = Ptr3d ! 
        Ptr3d => null()
        return
     endif
 
     if (I == IND_( 'OCPI' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CA.ocphilic', Ptr3d, __RC__ )
        Internal = Ptr3d / 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
        Ptr3d => null()
        return
     endif
 
     if (I == IND_( 'OCPO' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CA.ocphobic', Ptr3d, __RC__ )
        Internal = Ptr3d / 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
        Ptr3d => null()
     endif
+
+    ! Return
+    _RETURN(ESMF_SUCCESS)
+
 !       ENDIF
   END SUBROUTINE GEOS_BeforeRunGOCART2G
 
@@ -1915,32 +1910,35 @@ CONTAINS
 !       IF (G2G_CA) THEN
     ! Since chem has acted on it, we have to pass OC & BC back to CA2G
     if (I == IND_( 'BCPI' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphilicCA.bc', Ptr3d, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CA.bcphilic', Ptr3d, __RC__ )
        Ptr3d =  Internal! 
        Ptr3d => null()
        return
     endif
 
     if (I == IND_( 'BCPO' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CAphobicCA.bc', Ptr3d, __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.bc::CA.bcphobic', Ptr3d, __RC__ )
        Ptr3d =  Internal! 
        Ptr3d => null()
        return
     endif
 
     if (I == IND_( 'OCPI' )) then
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphilicCA.oc', Ptr3d  , __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CA.ocphilic', Ptr3d  , __RC__ )
        Ptr3d   =  Internal * 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
        Ptr3d   => null()
        return
     endif
 
     if (I == IND_( 'OCPO' )) then ! Have to break OCPO into OC and BrC for G2G
-       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CAphobicCA.oc', Ptr3d  , __RC__ )
+       call ESMFL_BundleGetPointerToData( fSPC, 'CA.oc::CA.ocphobic', Ptr3d  , __RC__ )
        Ptr3d   =  Internal * 1.8e0 ! 1.8 is GOCART2G::CA.oc OM/OC ratio
        Ptr3d   => null()
        return
     endif
+
+    ! Return
+    _RETURN(ESMF_SUCCESS)
 
 !       ENDIF
   END SUBROUTINE GEOS_AfterRunGOCART2G
