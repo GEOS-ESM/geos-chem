@@ -165,7 +165,7 @@ CONTAINS
     ! Scalars
     LOGICAL            :: SALAAL_gt_0_1
     LOGICAL            :: SALCAL_gt_0_1
-    REAL(fp)           :: k_ex, k_ex_
+    REAL(fp)           :: k_ex
 
     ! Strings
     CHARACTER(LEN=255) :: ErrMsg
@@ -290,7 +290,7 @@ CONTAINS
 !                       radius = State_Chm%AeroRadi(I,J,L,12),                &
 !                       gamma  = 0.5_dp,                                      &
 !                       srMw   = SR_MW(ind_HNO3)                             )
-        k_ex_ = Ars_L1K(area   = State_Chm%WetAeroArea(I,J,L,12),                &
+        k_ex = Ars_L1K(area   = State_Chm%WetAeroArea(I,J,L,12),                &
                         radius = State_Het%xRadi(12),                            &
                         gamma  = 0.5_dp,                                         &
                         srMw   = SR_MW(ind_HNO3)                                )
