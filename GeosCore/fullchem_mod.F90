@@ -159,6 +159,7 @@ CONTAINS
 ! !LOCAL VARIABLES:
 !
     ! Scalars
+    LOGICAL                :: relax_rtol, relax_atol_PL ! relax KPP tols
     LOGICAL                :: prtDebug,   IsLocNoon, Size_Res, Failed2x
     INTEGER                :: I,          J,         L,        N
     INTEGER                :: NA,         F,         SpcID,    KppID
@@ -431,9 +432,33 @@ CONTAINS
 
     ! Absolute tolerance
     ATOL      = 1e-2_dp
+    relax_atol_PL = .TRUE.
+    IF (relax_atol_PL) THEN
+       IF (Input_Opt%amIRoot) write(*,*) "Setting ATOL of P/L dummy species to 1e25"
+       ATOL(ind_LBRO2H)    = 1e25_dp
+       ATOL(ind_LBRO2N)    = 1e25_dp
+       ATOL(ind_LCH4)      = 1e25_dp
+       ATOL(ind_LCO)       = 1e25_dp
+       ATOL(ind_LISOPNO3)  = 1e25_dp
+       ATOL(ind_LISOPOH)   = 1e25_dp
+       ATOL(ind_LNRO2H)    = 1e25_dp
+       ATOL(ind_LNRO2N)    = 1e25_dp
+       ATOL(ind_LOx)       = 1e25_dp
+       ATOL(ind_LTRO2H)    = 1e25_dp
+       ATOL(ind_LTRO2N)    = 1e25_dp
+       ATOL(ind_LXRO2H)    = 1e25_dp
+       ATOL(ind_LXRO2N)    = 1e25_dp
+       ATOL(ind_PCO)       = 1e25_dp
+       ATOL(ind_PH2O2)     = 1e25_dp
+       ATOL(ind_POx)       = 1e25_dp
+       ATOL(ind_PSO4)      = 1e25_dp
+    END IF
 
     ! Relative tolerance
     RTOL      = 0.5e-2_dp
+    relax_rtol = .TRUE.
+    IF (Input_Opt%amIRoot .and. relax_rtol) &
+            write(*,*) "Relaxing RTOL of certain species in the twilight zone"
 
     !=======================================================================
     ! %%%%% SOLVE CHEMISTRY -- This is the main KPP solver loop %%%%%
@@ -539,6 +564,41 @@ CONTAINS
     DO L = 1, State_Grid%NZ
     DO J = 1, State_Grid%NY
     DO I = 1, State_Grid%NX
+
+       IF (relax_rtol .and. (abs( State_Met%SUNCOSmid(I,J)) < 0.1391731e+0_fp ) ) THEN
+          ! top species from SumScaledErrorNorm of all twilight cases with 10 or more timesteps
+          RTOL(ind_INO)     = 0.2_dp
+          RTOL(ind_I2)      = 0.2_dp
+          RTOL(ind_OIO)     = 0.2_dp
+          RTOL(ind_I2O2)    = 0.2_dp
+          RTOL(ind_I2O4)    = 0.2_dp
+          RTOL(ind_Br)      = 0.2_dp
+          RTOL(ind_I2O3)    = 0.2_dp
+          RTOL(ind_IONO)    = 0.2_dp
+          RTOL(ind_I)       = 0.2_dp
+          ! RTOL(ind_OH)    = 0.2_dp
+          RTOL(ind_CO2)     = 0.2_dp
+          RTOL(ind_OClO)    = 0.2_dp
+          RTOL(ind_Cl)      = 0.2_dp
+          RTOL(ind_BrNO2)   = 0.2_dp
+          RTOL(ind_H)       = 0.2_dp
+          RTOL(ind_NO3)     = 0.2_dp
+          ! RTOL(ind_NO)    = 0.2_dp
+          RTOL(ind_HOBr)    = 0.2_dp
+          RTOL(ind_IO)      = 0.2_dp
+          ! RTOL(ind_HO2)   = 0.2_dp
+          ! Another 10
+          RTOL(ind_Br2)     = 0.2_dp
+          RTOL(ind_BrSALA)  = 0.2_dp
+          RTOL(ind_ICl)     = 0.2_dp
+          RTOL(ind_MO2)     = 0.2_dp
+          RTOL(ind_BrO)     = 0.2_dp
+          RTOL(ind_ClOO)    = 0.2_dp
+          RTOL(ind_HI)      = 0.2_dp
+          RTOL(ind_Cl2O2)   = 0.2_dp
+          RTOL(ind_R4N1)    = 0.2_dp
+          RTOL(ind_IONO2)   = 0.2_dp
+       END IF
 
        !=====================================================================
        ! Initialize private loop variables for each (I,J,L)
