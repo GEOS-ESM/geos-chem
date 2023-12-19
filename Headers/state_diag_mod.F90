@@ -605,6 +605,9 @@ MODULE State_Diag_Mod
      REAL(f4),           POINTER :: KppTotSteps (:,:,:)
      LOGICAL                     :: Archive_KppTotSteps
 
+     REAL(f4),           POINTER :: KppCPUSteps(:,:,:)
+     LOGICAL                     :: Archive_KppCPUSteps
+
      REAL(f4),           POINTER :: KppAccSteps (:,:,:)
      LOGICAL                     :: Archive_KppAccSteps
 
@@ -1709,6 +1712,9 @@ CONTAINS
 
     State_Diag%KppTotSteps                         => NULL()
     State_Diag%Archive_KppTotSteps                 = .FALSE.
+
+    State_Diag%KppCPUSteps                         => NULL()
+    State_Diag%Archive_KppCPUSteps                 = .FALSE.
 
     State_Diag%KppAccSteps                         => NULL()
     State_Diag%Archive_KppAccSteps                 = .FALSE.
@@ -4837,6 +4843,28 @@ CONTAINS
        ENDIF
 
        !-------------------------------------------------------------------
+       ! Number of KPP total internal integration timesteps per CPU
+       !-------------------------------------------------------------------
+       diagID  = 'KppCPUSteps'
+       CALL Init_and_Register(                                               &
+            Input_Opt      = Input_Opt,                                      &
+            State_Chm      = State_Chm,                                      &
+            State_Diag     = State_Diag,                                     &
+            State_Grid     = State_Grid,                                     &
+            DiagList       = Diag_List,                                      &
+            TaggedDiagList = TaggedDiag_List,                                &
+            Ptr2Data       = State_Diag%KppCPUSteps,                        &
+            archiveData    = State_Diag%Archive_KppCPUSteps,                &
+            diagId         = diagId,                                         &
+            RC             = RC                                             )
+
+       IF ( RC /= GC_SUCCESS ) THEN
+          errMsg = TRIM( errMsg_ir ) // TRIM( diagId )
+          CALL GC_Error( errMsg, RC, thisLoc )
+          RETURN
+       ENDIF
+
+       !-------------------------------------------------------------------
        ! Number of KPP accepted internal integration time steps
        !-------------------------------------------------------------------
        diagID  = 'KppAccSteps'
@@ -5113,7 +5141,7 @@ CONTAINS
        ! being requested as diagnostic output when the corresponding
        ! array has not been allocated.
        !-------------------------------------------------------------------
-       DO N = 1, 40
+       DO N = 1, 41
           ! Select the diagnostic ID
           SELECT CASE( N )
              CASE( 1  )
@@ -5196,6 +5224,8 @@ CONTAINS
                 diagID = 'KppNegatives'
              CASE( 40 )
                 diagID = 'KppNegatives0'
+             CASE( 41 )
+                diagID = 'KppCPUSteps'
           END SELECT
 
           ! Exit if any of the above are in the diagnostic list
@@ -9384,6 +9414,7 @@ CONTAINS
     State_Diag%Archive_KppDiags = ( State_Diag%Archive_KppIntCounts       .or. &
                                     State_Diag%Archive_KppJacCounts       .or. &
                                     State_Diag%Archive_KppTotSteps        .or. &
+                                    State_Diag%Archive_KppCPUSteps        .or. &
                                     State_Diag%Archive_KppAccSteps        .or. &
                                     State_Diag%Archive_KppRejSteps        .or. &
                                     State_Diag%Archive_KppLuDecomps       .or. &
@@ -10616,6 +10647,11 @@ CONTAINS
 
     CALL Finalize( diagId   = 'KppTotSteps',                                 &
                    Ptr2Data = State_Diag%KppTotSteps,                        &
+                   RC       = RC                                            )
+    IF ( RC /= GC_SUCCESS ) RETURN
+
+    CALL Finalize( diagId   = 'KppCPUSteps',                                &
+                   Ptr2Data = State_Diag%KppCPUSteps,                       &
                    RC       = RC                                            )
     IF ( RC /= GC_SUCCESS ) RETURN
 
@@ -12081,6 +12117,11 @@ CONTAINS
 
     ELSE IF ( TRIM( Name_AllCaps ) == 'KPPTOTSTEPS' ) THEN
        IF ( isDesc    ) Desc  = 'Total number of KPP internal timesteps'
+       IF ( isUnits   ) Units = 'count'
+       IF ( isRank    ) Rank  =  3
+
+    ELSE IF ( TRIM( Name_AllCaps ) == 'KPPCPUSTEPS' ) THEN
+       IF ( isDesc    ) Desc  = 'Total KPP internal timesteps per CPU'
        IF ( isUnits   ) Units = 'count'
        IF ( isRank    ) Rank  =  3
 

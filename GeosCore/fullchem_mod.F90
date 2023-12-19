@@ -267,6 +267,7 @@ CONTAINS
        IF (State_Diag%Archive_KppSubsts   ) State_Diag%KppSubsts      = 0.0_f4
        IF (State_Diag%Archive_KppSmDecomps) State_Diag%KppSmDecomps   = 0.0_f4
        IF (State_Diag%Archive_KppAutoReducerNVAR) State_Diag%KppAutoReducerNVAR   = 0.0_f4
+       IF (State_Diag%Archive_KppCPUSteps ) State_Diag%KppCPUSteps    = 0.0_f4
        IF (State_Diag%Archive_KppcNONZERO)  State_Diag%KppcNONZERO    = 0.0_f4
        IF (State_Diag%Archive_KppNegatives) State_Diag%KppNegatives   = 0.0_f4
        IF (State_Diag%Archive_KppNegatives0) State_Diag%KppNegatives0 = 0.0_f4
@@ -1243,6 +1244,11 @@ CONTAINS
           ! # of internal timesteps
           IF ( State_Diag%Archive_KppTotSteps ) THEN
              State_Diag%KppTotSteps(I,J,L) = ISTATUS(3)
+          ENDIF
+
+          ! # of internal timesteps in the CPU
+          IF ( State_Diag%Archive_KppCPUSteps ) THEN
+             State_Diag%KppCPUSteps(:,:,1) =  State_Diag%KppCPUSteps(:,:,1) + ISTATUS(3)
           ENDIF
 
           ! # of accepted internal timesteps
