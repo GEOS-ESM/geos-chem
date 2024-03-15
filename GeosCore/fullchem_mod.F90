@@ -119,6 +119,9 @@ CONTAINS
     USE State_Grid_Mod,           ONLY : GrdState
     USE State_Met_Mod,            ONLY : MetState
     USE TIME_MOD,                 ONLY : GET_TS_CHEM
+    USE TIME_MOD,                 ONLY : TIMESTAMP_STRING
+    USE TIME_MOD,                 ONLY : Get_Minute
+    USE TIME_MOD,                 ONLY : Get_Hour    
     USE TIME_MOD,                 ONLY : Get_Day
     USE TIME_MOD,                 ONLY : Get_Month
     USE TIME_MOD,                 ONLY : Get_Year
@@ -128,6 +131,7 @@ CONTAINS
     USE UCX_MOD,                  ONLY : SO4_PHOTFRAC
     USE UCX_MOD,                  ONLY : UCX_NOX
     USE UCX_MOD,                  ONLY : UCX_H2SO4PHOT
+    USE KPP_Standalone_Interface
 #ifdef TOMAS
 #ifdef BPCH_DIAG
     USE TOMAS_MOD,                ONLY : H2SO4_RATE
@@ -159,7 +163,7 @@ CONTAINS
 ! !LOCAL VARIABLES:
 !
     ! Scalars
-    LOGICAL                :: relax_rtol, relax_atol_PL ! relax KPP tols
+    LOGICAL                :: relax_rtol, relax_atol_PL   ! relax KPP tols
     LOGICAL                :: prtDebug,   IsLocNoon, Size_Res, Failed2x
     INTEGER                :: I,          J,         L,        N
     INTEGER                :: NA,         F,         SpcID,    KppID
@@ -169,6 +173,8 @@ CONTAINS
     REAL(fp)               :: TOUT,       SR,        LWC
 
     ! Strings
+    CHARACTER(LEN=255)     :: YYYYMMDD_hhmmz
+    CHARACTER(LEN=255)     :: level_string
     CHARACTER(LEN=63)      :: OrigUnit
     CHARACTER(LEN=255)     :: ErrMsg,   ThisLoc
 
@@ -176,7 +182,6 @@ CONTAINS
     LOGICAL,  SAVE         :: FIRSTCHEM = .TRUE.
     INTEGER,  SAVE         :: CH4_YEAR  = -1
 
-    ! For
 
 #ifdef MODEL_CLASSIC
 #ifndef NO_OMP
@@ -209,10 +214,14 @@ CONTAINS
     REAL(f4)               :: TROP_NOx_Tau
     REAL(f4)               :: TROPv_NOx_tau(State_Grid%NX,State_Grid%NY)
     REAL(f4)               :: TROPv_NOx_mass(State_Grid%NX,State_Grid%NY)
-    REAL(dp)               :: localC(NSPEC)
+    REAL(dp)               :: initC(NSPEC)
+    REAL(dp)               :: localRCONST(NREACT)
+    REAL(dp)               :: initHvalue
 #endif
 #ifdef MODEL_WRF
-    REAL(dp)               :: localC(NSPEC)
+    REAL(dp)               :: initC(NSPEC)
+    REAL(dp)               :: localRCONST(NREACT)
+    REAL(dp)               :: initHvalue
 #endif
 
     ! Grid box integration time diagnostic
@@ -402,6 +411,11 @@ CONTAINS
        mapData => NULL()
     ENDIF
 
+    !=======================================================================
+    ! Switches to print the full chemical state
+    !=======================================================================
+    CALL Check_Domain( RC )
+
     !========================================================================
     ! Set up integration convergence conditions and timesteps
     ! (cf. M. J. Evans)
@@ -554,11 +568,11 @@ CONTAINS
     !$OMP PRIVATE( OHreact,  PCO_TOT,  PCO_CH4, PCO_NMVOC, SR               )&
     !$OMP PRIVATE( SIZE_RES, LWC                                            )&
 #ifdef MODEL_GEOS
-    !$OMP PRIVATE( NOxTau,     NOxConc, localC                              )&
+    !$OMP PRIVATE( NOxTau,     NOxConc, initC                              )&
     !$OMP PRIVATE( NOx_weight, NOx_tau_weighted                             )&
 #endif
 #ifdef MODEL_WRF
-    !$OMP PRIVATE( localC                                                   )&
+    !$OMP PRIVATE( initC                                                   )&
 #endif
     !$OMP COLLAPSE( 3                                                       )&
     !$OMP SCHEDULE( DYNAMIC, 24                                             )
@@ -631,7 +645,9 @@ CONTAINS
 #endif
 #endif
 #if defined( MODEL_GEOS ) || defined( MODEL_WRF )
-       localC    = 0.0_dp                   ! Local backup array for C
+       initC    = 0.0_dp                   ! Local backup array for C
+       localRCONST = 0.0_dp                ! Local array for rate constants
+       initHvalue  = 0.0_dp
 #endif
 
        ! Per discussions for Lin et al., force keepActive throughout the atmosphere
@@ -1056,6 +1072,49 @@ CONTAINS
        ENDIF
 
        !=====================================================================
+       ! Print the full chemical state of certain grid cells
+       ! Obin Sturm, 2023/12/29
+       !=====================================================================
+!       IF (create_samples) THEN
+          CALL Check_ActiveCell( I, J, L, State_Grid )
+!       END IF
+       IF ( .FALSE. ) THEN
+             CALL Fun( V       = C(1:NVAR),                                     &
+                       F       = C(NVAR+1:NSPEC),                               &
+                       RCT     = RCONST,                                        &
+                       Vdot    = Vloc,                                          &
+                       Aout    = Aout                                          )
+             !IF (abs( State_Met%SUNCOSmid(I,J)) < 0.1391731e+0_fp ) &
+             !sample_cell_name = trim(sample_cell_name)//"Twilight"
+             write(level_string,'(I0)') L
+             write(YYYYMMDD_hhmmz,'(I0.4,I0.2,I0.2,a,I0.2,I0.2)' ) Year, Month, Day,'_', Get_Hour(), Get_Minute()
+             open(998,FILE='/discover/nobackup/projects/gmao/geos_cf_dev/psturm/CFv2_c48/samples/'//'oldsamples.txt',action = "WRITE",iostat=ierr,access='SEQUENTIAL')
+             write(998,'(a)'      ) 'Meteorological Fields'
+             write(998,'(a,a)'    ) 'Timestamp:           ', TIMESTAMP_STRING()
+             write(998,'(a,F11.4)') 'Longitude:           ', State_Grid%XMid(I,J)
+             write(998,'(a,F11.4)') 'Latitude:            ', State_Grid%YMid(I,J)
+             write(998,'(a,i6)'   ) 'Level:               ', L
+             write(998,'(a,F11.2)') 'Temperature:         ', State_Met%T(I,J,L)
+             write(998,'(a,F11.4)') 'Pressure:            ', Get_Pcenter(I,J,L)
+             write(998,'(a,e11.4)') 'Air number density:  ', State_Met%AIRNUMDEN(I,J,L)
+             write(998,'(a,e11.4)') 'Average water:       ', State_Met%AVGW(I,J,L)
+             write(998,'(a,e11.4)') 'Cloud fraction:      ', State_Met%CLDF(I,J,L)
+             write(998,'(a,e11.4)') 'cos(SZA):            ', State_Met%SUNCOSmid(I,J)
+             write(998,'(a)'      ) 'Integrator-specific parameters'
+             write(998,'(a,e11.4)') 'KPP H val:           ', State_Chm%KPPHvalue(I,J,L)
+             write(998,'(a)'      ) 'Chemical state: C (concentrations), R (rate constants), and A (rates)'
+             DO N=1,NSPEC
+                write(998,*) 'C(',N,') = ', C(N)
+             ENDDO
+             DO N=1,NREACT
+                write(998,*) 'R(',N,') = ', RCONST(N)
+             ENDDO
+             DO N=1,NREACT
+                write(998,*) 'A(',N,') = ', Aout(N)
+             ENDDO
+       ENDIF
+
+       !=====================================================================
        ! Set options for the KPP Integrator (M. J. Evans)
        !
        ! NOTE: Because RCNTRL(3) is set to an array value that
@@ -1164,7 +1223,13 @@ CONTAINS
        ! reuse them for a second attempt. The old code would set all concentrations
        ! to zero on the second attempt, which looks like a bug to me.
        ! cakelle2, 2023/10/26
-       localC = C
+       initC = C
+
+       ! Do the same for RCONST and initial timestep, make a local copy 
+       ! to pass it to the KPP  standalone interface for writing.
+       ! psturm, 2024/02/27
+       localRCONST = RCONST
+       initHvalue  = State_Chm%KPPHvalue(I,J,L)
 #endif
 
        ! Start timer
@@ -1299,7 +1364,7 @@ CONTAINS
 
 #if defined( MODEL_WRF )
           ! Save a copy of the C vector (GEOS and WRF only)
-          localC    = C
+          initC    = C
 #endif
 
           ! Reset first time step and start concentrations
@@ -1312,7 +1377,7 @@ CONTAINS
           ! Also inflate the error tolerances. 
           ! cakelle2, 2023/10/26.
 #if defined( MODEL_GEOS )
-          C    = localC
+          C    = initC
           ATOL = 1.0e-2_dp * Input_Opt%KppTolScale
           RTOL = 1.0e-2_dp * Input_Opt%KppTolScale
 #endif
@@ -1411,7 +1476,7 @@ CONTAINS
                 CALL ERROR_STOP(ERRMSG, 'INTEGRATE_KPP')
              ! Revert to start values
              ELSE
-                C = localC
+                C = initC
              ENDIF
              IF ( ASSOCIATED(State_Diag%KppError) ) THEN
                 State_Diag%KppError(I,J,L) = State_Diag%KppError(I,J,L) + 1.0
@@ -1423,9 +1488,6 @@ CONTAINS
              Failed2x = .TRUE.
 
              ! Print concentrations at trouble box KPP error
-             PRINT*, REPEAT( '###', 79 )
-             PRINT*, '### KPP DEBUG OUTPUT!'
-             PRINT*, '### Species concentrations at problem box ', I, J, L
              PRINT*, REPEAT( '###', 79 )
              DO N = 1, NSPEC
                 PRINT*, '### ', C(N), TRIM( ADJUSTL( SPC_NAMES(N) ) )
@@ -1445,6 +1507,14 @@ CONTAINS
 
        ENDIF
 
+!       IF ( create_samples .and. sample_cell &
+!          .and. (L.eq.1 .or. L.eq.10 .or. L.eq.23 .or. L.eq.35 .or. L.eq.48 .or. L.eq.56) ) &
+!          THEN
+!          IF ( State_Diag%Archive_KppTotSteps ) THEN
+!             write(998, * ) 'Number of internal timesteps:  ', State_Diag%KppTotSteps(I,J,L)
+!          END IF
+!          close(998)
+!       END IF
 
        !=====================================================================
        ! Continue upon successful return...
@@ -1455,6 +1525,13 @@ CONTAINS
           CALL fullchem_ConvertEquivToAlk()
        ENDIF
 
+!       IF ( create_samples .and. sample_cell &
+!          .and. (L.eq.1 .or. L.eq.10 .or. L.eq.23 .or. L.eq.35 .or. L.eq.48 .or. L.eq.56) ) &
+!          THEN
+!          IF ( State_Diag%Archive_KppTotSteps ) THEN
+!             write(998, * ) 'Number of internal timesteps:  ', State_Diag%KppTotSteps(I,J,L)
+!          END IF
+!          close(998)
        ! Save Hnew (the last predicted but not taken step) from the 3rd slot
        ! of RSTATE into State_Chm so that it can be written to the restart
        ! file.  For simulations that are broken into multiple stages,
@@ -1469,6 +1546,14 @@ CONTAINS
           State_Diag%KppTime(I,J,L) = TimeEnd - TimeStart
        ENDIF
 
+       ! Write chemical state to file for the kpp standalone interface
+       ! No external logic needed, this subroutine exits early if the
+       ! chemical state should not be printed
+#ifdef MODEL_GEOS
+       CALL Write_Samples( I, J, L, initC, localRCONST, initHvalue,    &
+                           State_Grid, State_Chm, State_Met,           &
+                           RC )
+#endif
        !=====================================================================
        ! Check we have no negative values and copy the concentrations
        ! calculated from the C array back into State_Chm%Species%Conc
@@ -2668,6 +2753,102 @@ CONTAINS
 !------------------------------------------------------------------------------
 !BOP
 !
+! !IROUTINE: check_domain
+!
+! !DESCRIPTION: Subroutine Check_Domain is used to identify if a
+! specified latitude and longitude falls within a grid cell on the
+! current CPU. Multiple lat/lon pairs can be checked simultaneously.
+! Obin Sturm (psturm@usc.edu) 2023/12/29
+!\\
+!\\
+! !INTERFACE:
+!
+   SUBROUTINE Check_Domain_Old( nloc, idx, jdx, loc_names )
+
+! !USES:
+     USE HCO_GeoTools_Mod,         ONLY:  HCO_GetHorzIJIndex
+     USE HCO_State_GC_Mod,         ONLY : HcoState
+     USE HCO_ERROR_MOD             ! For real precisions (hp)
+! !INPUT PARAMETERS:
+    INTEGER,         INTENT(  IN )  :: NLOC
+! !OUTPUT PARAMETERS
+    INTEGER,         INTENT(  OUT)  :: IDX(NLOC), JDX(NLOC)
+    CHARACTER(LEN=20), DIMENSION(NLOC), INTENT(OUT) :: LOC_NAMES
+! !LOCAL VARIABLES
+    integer                         :: RC
+    real(hp), dimension(NLOC)  :: LocationLon
+    real(hp), dimension(NLOC)  :: LocationLat
+    
+    
+    LocationLon = [-118.243, 2.3522, 116.4074, 15.3105, 144.6833, -28.0069, 166.6698, -156.7886,-91.259, -62.2159, 12.5484, 114.0, 87.2, -41.574755, -121.964508, -6.6661]
+    LocationLat = [34.0522, 48.8566, 39.9042, -4.3033, -40.6833, 39.0525, -77.8455, 71.2906, 37.502, -3.4653, -5.9175, 0.0, 23.0, 34.707874, 0.0, 21.5008]
+    LOC_NAMES = ["LosAngeles", "Paris", "Beijing", "Kinshasa", "Kennaook", "Graciosa", "McMurdo", "Utqiagvik", "Ozarks", "Amazon", "Congo", "Borneo", "IndianOcean", "AtlanticOcean", "PacificOcean", "ElDjouf"]
+    CALL HCO_GetHorzIJIndex( HcoState, NLOC,  &
+                             LocationLon, LocationLat, &
+                             idx,  jdx,                &
+                             RC)
+   END SUBROUTINE Check_Domain_Old 
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Transport Model                  !
+!------------------------------------------------------------------------------
+!BOP
+!
+! !IROUTINE: check_horzij
+!
+! !DESCRIPTION: Subroutine Check_HorzIJ is used to identify if a grid cell
+! is within a specified latitude and longitude to print the full chemical state
+! (all concentrations, reaction rates, rate constants, and meteo metadata).
+! Obin Sturm (psturm@usc.edu) 2023/12/29
+!\\
+!\\
+! !INTERFACE:
+!
+   SUBROUTINE Check_HorzIJ_Old( nloc, loc_names, idx, jdx, I, J, State_Grid, sample_cell, sample_cell_name)
+
+! !USES:
+     USE State_Grid_Mod,   ONLY : GrdState
+! !INPUT PARAMETERS:
+     INTEGER, INTENT(IN)   :: NLOC                   ! Number of locations
+     INTEGER, INTENT(IN)   :: IDX(NLOC), JDX(NLOC)
+     INTEGER, INTENT(IN)   :: I,J        ! Grid Indices
+     TYPE(GrdState), INTENT(IN)     :: State_Grid ! Grid State object
+     CHARACTER(LEN=20), DIMENSION(NLOC), INTENT(IN) :: LOC_NAMES 
+! !OUTPUT PARAMETERS
+    ! Scalars
+    LOGICAL, INTENT(OUT)            :: sample_cell ! Writing samples of the full chemical state
+    ! Strings
+    CHARACTER(LEN=255), INTENT(OUT) :: sample_cell_name
+! !LOCAL VARIABLES
+    INTEGER                :: K
+
+
+    sample_cell = .FALSE.
+    DO K = 1, NLOC
+       IF ( IDX(K) == I .AND. JDX(K) == J ) THEN
+          sample_cell = .TRUE.
+          sample_cell_name = LOC_NAMES(K)
+          write(*,*) trim(sample_cell_name), " LatLon: " , State_Grid%YMid(I,J), State_Grid%XMid(I,J)
+          write(*,*) "WELCOME TO ", trim(sample_cell_name), "!!!"
+       ENDIF
+    ENDDO 
+
+    IF ( ABS(State_Grid%XMid(I,J) -  -118.243) < 2.0  &
+       .and. ABS(State_Grid%YMid(I,J) - 34.0522 ) < 2.0 ) THEN
+        sample_cell = .TRUE.
+        sample_cell_name = "LosAngeles"
+        write(*,*) trim(sample_cell_name), " LatLon: " , State_Grid%YMid(I,J), State_Grid%XMid(I,J)
+        write(*,*) "WELCOME TO LA!!!"
+        write(*,*) "I, J =", I, J
+        write(*,*) "State_Grid%NX, State_Grid%NY = ", State_Grid%NX, State_Grid%NY
+    END IF
+   END SUBROUTINE Check_HorzIJ_Old
+!EOC
+!------------------------------------------------------------------------------
+!                  GEOS-Chem Global Chemical Transport Model                  !
+!------------------------------------------------------------------------------
+!BOP
+!
 ! !IROUTINE: init_fullchem
 !
 ! !DESCRIPTION: Subroutine Init\_FullChem is used to allocate arrays for the
@@ -2691,6 +2872,7 @@ CONTAINS
     USE State_Chm_Mod,            ONLY : ChmState
     USE State_Chm_Mod,            ONLY : Ind_
     USE State_Diag_Mod,           ONLY : DgnState
+    USE KPP_Standalone_Interface, ONLY : Config_KPP_Standalone
 !
 ! !INPUT PARAMETERS:
 !
@@ -2923,6 +3105,15 @@ CONTAINS
        ENDIF
     ENDIF
 
+    !--------------------------------------------------------------------
+    ! Initialize locations to print for input to KPP Standalone
+    !--------------------------------------------------------------------
+    CALL Config_KPP_Standalone( Input_Opt, RC )
+    IF ( RC /= GC_SUCCESS ) THEN
+       ErrMsg = 'Error encountered in "KPP_Standalone"!'
+       CALL GC_Error( ErrMsg, RC, ThisLoc )
+       RETURN
+    ENDIF
   END SUBROUTINE Init_FullChem
 !EOC
 !------------------------------------------------------------------------------
@@ -2942,6 +3133,7 @@ CONTAINS
 ! !USES:
 !
     USE ErrCode_Mod
+    USE KPP_Standalone_Interface,   ONLY : Cleanup_KPP_Standalone
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -2990,6 +3182,9 @@ CONTAINS
        CALL GC_CheckVar( 'fullchem_mod.F90:JvCountMon', 2, RC )
        IF ( RC /= GC_SUCCESS ) RETURN
     ENDIF
+
+    ! Deallocate variables from kpp standalone module
+    CALL Cleanup_KPP_Standalone( RC )
 
   END SUBROUTINE Cleanup_FullChem
 !EOC

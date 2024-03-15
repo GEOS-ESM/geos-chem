@@ -18,6 +18,10 @@ MODULE State_Grid_Mod
   USE ErrCode_Mod
   USE Precision_Mod
 
+#if defined(MODEL_GEOS)
+  USE ESMF
+#endif
+
   IMPLICIT NONE
   PRIVATE
 !

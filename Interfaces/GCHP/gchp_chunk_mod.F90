@@ -992,6 +992,8 @@ CONTAINS
     ENDIF
 #endif
 
+
+
     ! Compute the cosine of the solar zenith angle array:
     !    State_Met%SUNCOS     => COS(SZA) at the current time
     !    State_Met%SUNCOSmid  => COS(SZA) at the midpt of the chem timestep
