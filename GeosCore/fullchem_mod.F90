@@ -128,6 +128,10 @@ CONTAINS
     USE UCX_MOD,                  ONLY : SO4_PHOTFRAC
     USE UCX_MOD,                  ONLY : UCX_NOX
     USE UCX_MOD,                  ONLY : UCX_H2SO4PHOT
+    USE inquireMod,    ONLY : findFreeLUN
+    USE TIME_MOD,                 ONLY : Get_Minute
+    USE TIME_MOD,                 ONLY : Get_Hour
+    USE KPP_Standalone_Interface
 #ifdef TOMAS
 #ifdef BPCH_DIAG
     USE TOMAS_MOD,                ONLY : H2SO4_RATE
@@ -161,11 +165,17 @@ CONTAINS
     ! Scalars
     LOGICAL                :: prtDebug,   IsLocNoon, Size_Res, Failed2x
     INTEGER                :: I,          J,         L,        N
+    INTEGER                :: II,JJ,KK
     INTEGER                :: NA,         F,         SpcID,    KppID
     INTEGER                :: P,          MONTH,     YEAR,     Day
     INTEGER                :: WAVELENGTH, IERR,      S,        Thread
     REAL(fp)               :: SO4_FRAC,   T,         TIN
     REAL(fp)               :: TOUT,       SR,        LWC
+    REAL(dp)               :: KPPH_before_integrate, local_RCONST(NREACT)
+    ! Strings
+    CHARACTER(LEN=255)     :: YYYYMMDD_hhmmz
+    CHARACTER(LEN=255)     :: level_string
+    INTEGER                :: IU_FILE    ! Available unit for writing
 
     ! Strings
     CHARACTER(LEN=63)      :: OrigUnit
@@ -188,6 +198,7 @@ CONTAINS
     INTEGER                :: ISTATUS(20)
     REAL(dp)               :: RCNTRL (20)
     REAL(dp)               :: RSTATE (20)
+    REAL(dp)               :: C_init(NSPEC)
     REAL(fp)               :: Before(State_Grid%NX, State_Grid%NY,           &
                                      State_Grid%NZ, State_Chm%nAdvect       )
 
@@ -400,6 +411,13 @@ CONTAINS
        mapData => NULL()
     ENDIF
 
+    !=======================================================================
+    ! Should we print the full chemical state for any grid cell on this CPU?
+    ! for use with the KPP Standalone
+    ! (psturm, 03/22/24)
+    !=======================================================================
+    CALL Check_Domain( RC )
+
     !========================================================================
     ! Set up integration convergence conditions and timesteps
     ! (cf. M. J. Evans)
@@ -576,6 +594,12 @@ CONTAINS
        ! Per discussions for Lin et al., force keepActive throughout the atmosphere
        ! if keepActive option is enabled. (hplin, 2/9/22)
        keepActive = .true.
+
+       ! Check if the current grid cell in this loop should have its
+       ! full chemical state printed (concentrations, rates, constants)
+       ! for use with the KPP Standalone
+       ! (psturm, 03/22/24)
+       CALL Check_ActiveCell( I, J, L, State_Grid )
 
        ! Start measuring KPP-related routine timing for this grid box
        IF ( State_Diag%Archive_KppTime ) THEN
@@ -978,21 +1002,21 @@ CONTAINS
        ! and point to C.  Therefore, pass C(1:NVAR) instead of VAR and
        ! C(NVAR+1:NSPEC) instead of FIX to routine FUN.
        !=====================================================================
-       IF ( State_Diag%Archive_RxnRate ) THEN
-          !---------------------------------------------------
-          ! Get equation rates (Aout)
-          !---------------------------------------------------
+!       IF ( State_Diag%Archive_RxnRate ) THEN
+!          !---------------------------------------------------
+!          ! Get equation rates (Aout)
+!          !---------------------------------------------------
           CALL Fun( V       = C(1:NVAR),                                     &
                     F       = C(NVAR+1:NSPEC),                               &
                     RCT     = RCONST,                                        &
                     Vdot    = Vloc,                                          &
                     Aout    = Aout                                          )
 
-          DO S = 1, State_Diag%Map_RxnRate%nSlots
-             N = State_Diag%Map_RxnRate%slot2Id(S)
-             State_Diag%RxnRate(I,J,L,S) = Aout(N)
-          ENDDO
-       ENDIF
+!          DO S = 1, State_Diag%Map_RxnRate%nSlots
+!             N = State_Diag%Map_RxnRate%slot2Id(S)
+!             State_Diag%RxnRate(I,J,L,S) = Aout(N)
+!          ENDDO
+!       ENDIF
 
        !=====================================================================
        ! Set options for the KPP Integrator (M. J. Evans)
@@ -1004,6 +1028,12 @@ CONTAINS
        !
        ! Ditto for ICNTRL. (hplin, 4/13/22)
        !=====================================================================
+       C_init = C
+
+       ! Do the same for the KPP initial timestep
+       ! Save local rate constants too
+       KPPH_before_integrate = State_Chm%KPPHvalue(I,J,L)
+       local_RCONST          = RCONST
        !%%%%% SOLVER OPTIONS %%%%%
        ! Zero all slots of ICNTRL
        ICNTRL    = 0
@@ -1117,6 +1147,59 @@ CONTAINS
        ! Call the KPP integrator
        CALL Integrate( TIN,    TOUT,    ICNTRL,                              &
                        RCNTRL, ISTATUS, RSTATE, IERR                        )
+
+       IF (KPP_Standalone_YAML%Active_Cell) then
+          if (abs(State_Met%SUNCOSmid(I,J)).le.0.25) then
+             IU_FILE = findFreeLUN()
+             write(level_string,'(I0)') L
+             write(YYYYMMDD_hhmmz,'(I0.4,I0.2,I0.2,a,I0.2,I0.2)' ) &
+                  Get_Year(), Get_Month(), Get_Day(),'_', Get_Hour(), Get_Minute()
+
+!>>             open(IU_FILE,FILE=trim(KPP_Standalone_YAML%Output_Directory)//'/'                 &
+!>>                  //trim(KPP_Standalone_YAML%ACTIVE_CELL_NAME) &
+!>>                  //'_L'//trim(level_string)//'_' //trim(YYYYMMDD_hhmmz)//'.txtr',   &
+!>>                  action = "WRITE",iostat=RC)
+!>>
+!>>             write(IU_FILE,'(f12.8,a,f12.8,a,i4,a,i4,a,i4,a,i4,a,f12.8,a,i4,a,e10.3,a,e10.3)') &
+!>>                  RCNTRL(19),',', RCNTRL(20),',', ISTATUS(3),',', &
+!>>                  ISTATUS(4),',', ISTATUS(5),',', ISTATUS(1),',', RSTATE(20),',', IERR, &
+!>>                  ',', State_Chm%KPPHvalue(I,J,L),',',State_Met%SUNCOSmid(I,J)
+!>>
+!>>             close(IU_FILE)
+
+             open(IU_FILE,FILE=trim(KPP_Standalone_YAML%Output_Directory)//'/'                 &
+                  //trim(KPP_Standalone_YAML%ACTIVE_CELL_NAME) &
+                  //'_L'//trim(level_string)//'_' //trim(YYYYMMDD_hhmmz)//'.c.csv',   &
+                  action = "WRITE",iostat=RC)
+
+             write(IU_FILE,'(a)',advance='NO') 'NSTEPS'
+             write(IU_FILE,'(a)',advance='NO') ',ERR'
+             write(IU_FILE,'(a)',advance='NO') ',Hstart'
+             write(IU_FILE,'(a)',advance='NO') ',COSsza'
+             do ii=1,NSPEC
+                write(IU_FILE,'(a)',advance='NO') ','//trim(spc_names(ii))//'_i'
+             end do
+             do ii=1,NVAR
+                write(IU_FILE,'(a)',advance='NO') ',d'//trim(spc_names(ii))//'_dt'
+             end do
+             write(IU_FILE,'(a)') ''
+             
+             write(IU_FILE,'(i3,a,*(e10.3,:,","))') ISTATUS(3),',', RSTATE(20), State_Chm%KPPHvalue(I,J,L),State_Met%SUNCOSmid(I,J), C_init, Vloc
+
+             close(IU_FILE)
+
+          ENDIF
+       ENDIF
+
+       ! Write chemical state to file for the kpp standalone interface
+       ! No external logic needed, this subroutine exits early if the
+       ! chemical state should not be printed (psturm, 03/23/24)
+       if (abs(State_Met%SUNCOSmid(I,J)).le.0.25) &
+       CALL Write_Samples( I, J, L,      C_init,     &
+                           local_RCONST, KPPH_before_integrate,  &
+                           RSTATE(Nhexit),                       &
+                           State_Grid,   State_Chm,  State_Met,  &
+                           Input_Opt,    ISTATUS(3), RC )
 
        ! Stop timer
        IF ( Input_Opt%useTimers ) THEN
@@ -1304,13 +1387,13 @@ CONTAINS
              ENDIF
 
              ! # of accepted internal timesteps
-             IF ( State_Diag%Archive_KppTotSteps ) THEN
+             IF ( State_Diag%Archive_KppAccSteps ) THEN
                 State_Diag%KppAccSteps(I,J,L) =                              &
                 State_Diag%KppAccSteps(I,J,L) + ISTATUS(4)
              ENDIF
 
              ! # of rejected internal timesteps
-             IF ( State_Diag%Archive_KppTotSteps ) THEN
+             IF ( State_Diag%Archive_KppRejSteps ) THEN
                 State_Diag%KppRejSteps(I,J,L) =                              &
                 State_Diag%KppRejSteps(I,J,L) + ISTATUS(5)
              ENDIF
@@ -2625,6 +2708,7 @@ CONTAINS
     USE State_Chm_Mod,            ONLY : ChmState
     USE State_Chm_Mod,            ONLY : Ind_
     USE State_Diag_Mod,           ONLY : DgnState
+    USE KPP_Standalone_Interface, ONLY : Config_KPP_Standalone
 !
 ! !INPUT PARAMETERS:
 !
@@ -2857,6 +2941,16 @@ CONTAINS
        ENDIF
     ENDIF
 
+    !--------------------------------------------------------------------
+    ! Initialize grid cells for input to KPP Standalone (Obin Sturm)
+    !--------------------------------------------------------------------
+    CALL Config_KPP_Standalone( Input_Opt, RC )
+    IF ( RC /= GC_SUCCESS ) THEN
+       ErrMsg = 'Error encountered in "KPP_Standalone"!'
+       CALL GC_Error( ErrMsg, RC, ThisLoc )
+       RETURN
+    ENDIF
+
   END SUBROUTINE Init_FullChem
 !EOC
 !------------------------------------------------------------------------------
@@ -2876,6 +2970,7 @@ CONTAINS
 ! !USES:
 !
     USE ErrCode_Mod
+    USE KPP_Standalone_Interface,   ONLY : Cleanup_KPP_Standalone
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -2924,6 +3019,10 @@ CONTAINS
        CALL GC_CheckVar( 'fullchem_mod.F90:JvCountMon', 2, RC )
        IF ( RC /= GC_SUCCESS ) RETURN
     ENDIF
+
+    ! Deallocate variables from kpp standalone module
+    ! psturm, 03/22/2024
+    CALL Cleanup_KPP_Standalone( RC )
 
   END SUBROUTINE Cleanup_FullChem
 !EOC
