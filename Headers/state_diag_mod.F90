@@ -1462,16 +1462,6 @@ MODULE State_Diag_Mod
 
      REAL(f4),           POINTER :: CO2photrate(:,:,:)
      LOGICAL                     :: Archive_CO2photrate
-#endif
-
-#if defined( MODEL_GEOS ) || defined( MODEL_WRF ) || defined( MODEL_CESM )
-     !----------------------------------------------------------------------
-     ! The following diagnostics are only used when
-     ! GEOS-Chem is interfaced into WRF (as WRF-GC) or CESM
-     !----------------------------------------------------------------------
-     REAL(f4),           POINTER :: KppError(:,:,:)
-     LOGICAL                     :: Archive_KppError
-#endif
 
      !----------------------------------------------------------------------
      ! Diagnostics related to analysis (nudging) module 
@@ -1503,6 +1493,16 @@ MODULE State_Diag_Mod
      REAL(f4),           POINTER :: AnaIncColPbl(:,:,:)
      TYPE(DgnMap),       POINTER :: Map_AnaIncColPbl
      LOGICAL                     :: Archive_AnaIncColPbl
+#endif
+
+#if defined( MODEL_GEOS ) || defined( MODEL_WRF ) || defined( MODEL_CESM )
+     !----------------------------------------------------------------------
+     ! The following diagnostics are only used when
+     ! GEOS-Chem is interfaced into WRF (as WRF-GC) or CESM
+     !----------------------------------------------------------------------
+     REAL(f4),           POINTER :: KppError(:,:,:)
+     LOGICAL                     :: Archive_KppError
+#endif
 
      !----------------------------------------------------------------------
      ! Registry of variables contained within State_Diag
@@ -2878,17 +2878,7 @@ CONTAINS
 
     State_Diag%CO2photrate                         => NULL()
     State_Diag%Archive_CO2photrate                 = .FALSE.
-#endif
-
-#if defined( MODEL_GEOS ) || defined( MODEL_WRF ) || defined( MODEL_CESM )
-    !=======================================================================
-    ! These diagnostics are only activated when running GC
-    ! either in NASA/GEOS, WRF, or CESM
-    !=======================================================================
-    State_Diag%KppError                            => NULL()
-    State_Diag%Archive_KppError                    = .FALSE.
-#endif
-
+    
     State_Diag%AnaInc                              => NULL()
     State_Diag%Map_AnaInc                          => NULL()
     State_Diag%Archive_AnaInc                      = .FALSE. 
@@ -2915,7 +2905,17 @@ CONTAINS
 
     State_Diag%AnaIncColPbl                        => NULL()
     State_Diag%Map_AnaIncColPbl                    => NULL()
-    State_Diag%Archive_AnaIncColPbl                = .FALSE. 
+    State_Diag%Archive_AnaIncColPbl                = .FALSE.     
+#endif
+
+#if defined( MODEL_GEOS ) || defined( MODEL_WRF ) || defined( MODEL_CESM )
+    !=======================================================================
+    ! These diagnostics are only activated when running GC
+    ! either in NASA/GEOS, WRF, or CESM
+    !=======================================================================
+    State_Diag%KppError                            => NULL()
+    State_Diag%Archive_KppError                    = .FALSE.
+#endif
 
   END SUBROUTINE Zero_State_Diag
 !EOC
@@ -9931,7 +9931,6 @@ CONTAINS
           CALL GC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
-#endif
 
        !-------------------------------------------------------------------
        ! Analysis (nudging) diagnostics 
@@ -10075,6 +10074,7 @@ CONTAINS
           CALL GC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
+#endif
 
        !-------------------------------------------------------------------
        ! Total organic aerosol mass [ug/m3]
@@ -14638,7 +14638,6 @@ CONTAINS
                    Ptr2Data = State_Diag%COincCO2phot,                       &
                    RC       = RC                                            )
     IF ( RC /= GC_SUCCESS ) RETURN
-#endif
 
    ! Analysis diagnostics
     CALL Finalize( diagId   = 'AnaInc',                                      &
@@ -14682,6 +14681,7 @@ CONTAINS
                    mapData  = State_Diag%Map_AnaIncColPbl,                   &
                    RC       = RC                                            )
     IF ( RC /= GC_SUCCESS ) RETURN
+#endif
 
 #if defined(MODEL_GEOS) || defined(MODEL_WRF)
     !=======================================================================
@@ -16213,7 +16213,6 @@ CONTAINS
        IF ( isDesc    ) Desc  = 'CO2 photolysis rate' 
        IF ( isUnits   ) Units = 's-1'
        IF ( isRank    ) Rank  =  3
-#endif
 
     ELSE IF ( TRIM( Name_AllCaps ) == 'ANAINC' ) THEN
        IF ( isDesc    ) Desc  = 'Analysis increment'
@@ -16256,6 +16255,7 @@ CONTAINS
        IF ( isUnits   ) Units = '1e15 molec cm-2'
        IF ( isRank    ) Rank  = 2
        IF ( isTagged  ) TagId = 'ALL'
+#endif
 
     ELSE IF ( TRIM( Name_AllCaps ) == 'TERPENESOA' ) THEN
        IF ( isDesc    ) Desc  = 'Monoterpene and sesqiterpene SOA'
