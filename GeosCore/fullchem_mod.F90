@@ -3045,18 +3045,6 @@ CONTAINS
        RETURN
     ENDIF
 
-    !------------------------------------------------------------------------
-    ! Initialize the KPP standalone interface, which will save model state
-    ! for the grid cells specified in kpp_standalone_interface.yml.
-    ! This is needed for input to the KPP standalone box model.
-    !------------------------------------------------------------------------
-    CALL KppSa_Config( Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
-       ErrMsg = 'Error encountered in "KPP_Standalone"!'
-       CALL GC_Error( ErrMsg, RC, ThisLoc )
-       RETURN
-    ENDIF
-
 #ifdef MODEL_GEOS
     !--------------------------------------------------------------------
     ! Initialize tagged tracer chemistry
