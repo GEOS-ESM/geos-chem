@@ -14683,7 +14683,7 @@ CONTAINS
     IF ( RC /= GC_SUCCESS ) RETURN
 #endif
 
-#if defined(MODEL_GEOS) || defined(MODEL_WRF)
+#if defined(MODEL_GEOS) || defined(MODEL_WRF) || defined( MODEL_CESM )
     !=======================================================================
     ! These fields are only used when GEOS-Chem
     ! is interfaced to NASA/GEOS, WRF (as WRF-GC), or CESM
