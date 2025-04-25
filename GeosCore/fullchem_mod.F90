@@ -145,6 +145,9 @@ CONTAINS
     USE TOMAS_MOD,                ONLY : H2SO4_RATE
     USE TOMAS_MOD,                ONLY : PSO4AQ_RATE
 #endif
+#ifdef MODEL_GEOS
+    USE GEOS_TaggedSpecies,       ONLY : Run_TaggedSpecies
+#endif
 !
 ! !INPUT PARAMETERS:
 !
@@ -1298,6 +1301,14 @@ CONTAINS
           call cpu_time(TimeEnd)
           State_Diag%KppTime(I,J,L) = TimeEnd - TimeStart
        ENDIF
+
+       !=====================================================================
+       ! Check for tagged tracers and adjust those before updating the
+       ! Species arrays
+       !=====================================================================
+#if defined( MODEL_GEOS )
+       CALL Run_TaggedSpecies( I, J, L, C, PRESS, TEMP, State_Chm, RC )
+#endif
 
        ! Write chemical state to file for the kpp standalone interface
        ! No external logic needed, this subroutine exits early if the
@@ -2727,6 +2738,9 @@ CONTAINS
     USE State_Chm_Mod,            ONLY : ChmState
     USE State_Chm_Mod,            ONLY : Ind_
     USE State_Diag_Mod,           ONLY : DgnState
+#ifdef MODEL_GEOS
+    USE GEOS_TaggedSpecies,       ONLY : Init_TaggedSpecies
+#endif
 !
 ! !INPUT PARAMETERS:
 !
@@ -3031,6 +3045,18 @@ CONTAINS
        RETURN
     ENDIF
 
+#ifdef MODEL_GEOS
+    !--------------------------------------------------------------------
+    ! Initialize tagged tracer chemistry
+    !--------------------------------------------------------------------
+    CALL Init_TaggedSpecies( Input_Opt, State_Chm, State_Diag, RC ) 
+    IF ( RC /= GC_SUCCESS ) THEN
+       ErrMsg = 'Error encountered in "Init_TaggedSpecies"!'
+       CALL GC_Error( ErrMsg, RC, ThisLoc )
+       RETURN
+    ENDIF
+#endif
+
   END SUBROUTINE Init_FullChem
 !EOC
 !------------------------------------------------------------------------------
@@ -3051,6 +3077,10 @@ CONTAINS
 !
     USE ErrCode_Mod
     USE KppSa_Interface_Mod, ONLY : KppSa_Cleanup
+#ifdef MODEL_GEOS
+    USE GEOS_TaggedSpecies,        ONLY : Finalize_TaggedSpecies
+#endif
+
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -3103,6 +3133,11 @@ CONTAINS
     ! Deallocate variables from kpp standalone module
     ! psturm, 03/22/2024
     CALL KppSa_Cleanup( RC )
+
+#ifdef MODEL_GEOS
+    ! Clean up tagged species
+    CALL Finalize_TaggedSpecies( RC )
+#endif 
 
   END SUBROUTINE Cleanup_FullChem
 !EOC
