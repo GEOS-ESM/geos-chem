@@ -38,8 +38,8 @@ Collections:
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/EDGARv43/v2016-11/EDGAR_v43.CO.TRO.0.1x0.1.nc
   GEOSCHEMchem_EDGAR_v43.Seasonal:
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/EDGARv43/v2016-11/EDGAR_v43.Seasonal.1x1.nc
-  TT_GEOSCHEMchem_d5294_geosit_jan18.asm_const_0hr_glo_C180x180x6_slv.2018-01-01T0300Z.nc4:
-      template: /gpfsm/dnb06/projects/p171/dao_ops/archive/d5294_geosit_jan18/diag/Y2018/M01/d5294_geosit_jan18.asm_const_0hr_glo_C180x180x6_slv.2018-01-01T0300Z.nc4
+  GEOSCHEMchem_GEOS_IT_constants:
+    template: /discover/nobackup/projects/gmao/geos-it/dao_ops/archive/d5294_geosit_jan18/diag/Y2018/M01/d5294_geosit_jan18.asm_const_0hr_glo_C180x180x6_slv.2018-01-01T0300Z.nc4
   GEOSCHEMchem_Olson_2001_Land_Map:
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/GEOSCHEMchem/v0.0.0/CHEM_INPUTS/Olson_Land_Map_201203/Olson_2001_Land_Map.025x025.generic.nc
   GEOSCHEMchem_Rn222_Emis_Zhang_Liu_et_al:
