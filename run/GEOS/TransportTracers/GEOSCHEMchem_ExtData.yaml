@@ -6,8 +6,10 @@ Collections:
     valid_range: "1750-01-01/2019-01-01"
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/CEDS/v2021-06/%y4/CO-em-anthro_CMIP_CEDS_%y4.nc
   GEOSCHEMchem_Condensed_Yuan_proc_MODIS_XLAI:
+    valid_range: "2000-01-01/2020-12-31T00:00"
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/Yuan_XLAI/v2019-03/Condensed_Yuan_proc_MODIS_XLAI.025x025.%y4.nc
   GEOSCHEMchem_EDGAR_v42_SF6_IPCC_2:
+    valid_range: "1970-01-01/2010-01-01"
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/SF6/v2019-01/EDGAR_v42_SF6_IPCC_2.generic.01x01.nc
   GEOSCHEMchem_EDGAR_v43.CO.ENG:
     valid_range: "1970-01-01/2010-01-01"
