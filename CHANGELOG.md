@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [geos/develop] - TBD
 ### Fixed
-- Fixed missing FROCEAN and incorrect yaml logical format in GEOS transport tracers GEOSCHEMchem_ExtData.yaml used by ExtData2G
+- Fixed bugs in GEOSCHEMchem_ExtData.yaml used for GEOS-Chem transport tracers simulation in GEOS
 
 ## [14.5.1] - 2025-01-10
 ### Added
