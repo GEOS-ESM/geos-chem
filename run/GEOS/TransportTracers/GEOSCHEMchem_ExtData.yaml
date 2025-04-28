@@ -1,7 +1,4 @@
 Collections:
-  GEOSCHEMchem_AnnualScalar:
-    valid_range: "1985-01-01/2010-01-01"
-    template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/AnnualScalar/v2014-07/AnnualScalar.geos.1x1.nc
   GEOSCHEMchem_CO-em-anthro_CMIP_CEDS:
     valid_range: "1750-01-01/2019-01-01"
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/CEDS/v2021-06/%y4/CO-em-anthro_CMIP_CEDS_%y4.nc
@@ -176,16 +173,6 @@ Exports:
     regrid: CONSERVE
     sample: monthly
     variable: IND
-  LIQFUEL_2008_2010:
-    collection: GEOSCHEMchem_AnnualScalar
-    regrid: CONSERVE
-    sample: annual
-    variable: COscalar
-  LIQFUEL_THISYR:
-    collection: GEOSCHEMchem_AnnualScalar
-    regrid: CONSERVE
-    sample: annual
-    variable: COscalar
   OCEAN_MASK:
     collection: GEOSCHEMchem_GEOS_IT_constants
     regrid: CONSERVE
