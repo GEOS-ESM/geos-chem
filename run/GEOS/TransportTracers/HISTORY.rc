@@ -4,15 +4,15 @@ EXPDSC: c90_test_run
 EXPSRC: GEOSgcm-v10.23.0
 
 
-COLLECTIONS: 'Emissions',
-             'Budget',
-             'CloudConvFlux',
-             'DryDep',
-             'RadioNuclide',
-             'SpeciesConc',
-             'StateMet',
-             'WetLossConv',
-             'WetLossLS',
+COLLECTIONS: 'Emissions'
+             'Budget'
+             'CloudConvFlux'
+             'DryDep'
+             'RadioNuclide'
+             'SpeciesConc'
+             'StateMet'
+             'WetLossConv'
+             'WetLossLS'
              #'geosgcm_tracer'
              #'gcc_dev'
 
