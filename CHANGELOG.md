@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Fixed bugs in GEOSCHEMchem_ExtData.yaml used for GEOS-Chem transport tracers simulation in GEOS
 
+### Changed
+- Updated GEOS-only transport tracer HISTORY.rc to configure time-averaging period of diagnostics to start at midnight.
+
 ## [14.5.1] - 2025-01-10
 ### Added
 - Added Australian Hg emissions for 2000-2019 from MacFarlane et. al. [2022], plus corresponding mask file
