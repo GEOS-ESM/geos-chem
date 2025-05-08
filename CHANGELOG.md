@@ -4,9 +4,10 @@ This file documents all notable changes to the GEOS-Chem repository starting in 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [geos/develop] - TBD
+## [geos/develop] - Updates not yet in standard model
 ### Fixed
 - Fixed bugs in GEOSCHEMchem_ExtData.yaml used for GEOS-Chem transport tracers simulation in GEOS
+- Fixed convection scheme when using met-field generated with Grell-Freitas convection
 
 ### Changed
 - Updated GEOS-only transport tracer HISTORY.rc to configure time-averaging period of diagnostics to start at midnight.
