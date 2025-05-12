@@ -3035,11 +3035,11 @@ CONTAINS
           ! Call GEOS analysis routine
           CALL GEOS_AnaRun( Input_Opt, State_Met, State_Chm, State_Grid, &
                             State_Diag, __RC__ )
-
-          ! GEOS Diagnostics. This includes the 'default' GEOS-Chem diagnostics.
-          CALL GEOS_Diagnostics( GC, IMPORT, EXPORT, Clock, Phase, Input_Opt, &
-                                 State_Met, State_Chm, State_Diag, State_Grid, __RC__ )
        ENDIF
+
+       ! GEOS Diagnostics. This includes the 'default' GEOS-Chem diagnostics.
+       CALL GEOS_Diagnostics( GC, IMPORT, EXPORT, Clock, Phase, Input_Opt, &
+            State_Met, State_Chm, State_Diag, State_Grid, __RC__ )
 
        ! Fill RATS and OX diagnostics
        IF ( PHASE == RATSPHASE ) THEN

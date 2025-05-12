@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [geos/develop] - TBD
 ### Fixed
 - Fixed bugs in GEOSCHEMchem_ExtData.yaml used for GEOS-Chem transport tracers simulation in GEOS
+- Fixed zero values in GEOS-Chem diagnostics when not using analysis phase
 
 ### Changed
 - Updated GEOS-only transport tracer HISTORY.rc to configure time-averaging period of diagnostics to start at midnight.
