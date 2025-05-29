@@ -289,6 +289,9 @@ MODULE State_Chm_Mod
      ! CO2 photolysis
      INTEGER            :: CO2fromGOCART
      CHARACTER(LEN=255) :: impCO2name
+     ! CH4 from GOCART
+     INTEGER            :: CH4fromGOCART
+     CHARACTER(LEN=255) :: impCH4name     
      INTEGER            :: numphoto
      INTEGER            :: nxdo
      INTEGER            :: nlam
@@ -519,6 +522,8 @@ CONTAINS
     State_Chm%impCOmeso         = "unknown" 
     State_Chm%CO2fromGOCART     = .FALSE.
     State_Chm%impCO2name        = "unknown" 
+    State_Chm%CH4fromGOCART     = .FALSE.
+    State_Chm%impCH4name        = "unknown" 
     State_Chm%numphoto          = 0
     State_Chm%nxdo              = 0
     State_Chm%nlam              = 0

@@ -94,18 +94,17 @@ CONTAINS
     INTEGER                      :: STATUS
 
     ! Methane field from GEOS.
-    ! This is not yet fully implemented. Need corresponding connectivity in Chem_GridComp.
-!    CALL ESMF_ConfigGetAttribute( CF, DoIt, Label="CH4_from_GEOS:", Default=0, __RC__ )
-!    IF ( DoIt == 1 ) THEN
-!       call MAPL_AddImportSpec(GC,                               &
-!               SHORT_NAME         = 'GEOS_CH4',                  &
-!               LONG_NAME          = 'GEOS_CH4_dry_mixing_ratio', &
-!               UNITS              = 'v/v',                       &
-!               DIMS               = MAPL_DimsHorzVert,           &
-!               VLOCATION          = MAPL_VLocationCenter,        &
-!               RC=STATUS  )
-!       _VERIFY(STATUS)
-!    ENDIF
+    CALL ESMF_ConfigGetAttribute( CF, DoIt, Label="Import_CH4_from_GOCART:", Default=0, __RC__ )
+    IF ( DoIt == 1 ) THEN
+       call MAPL_AddImportSpec(GC,                               &
+               SHORT_NAME         = "GOCART_CH4",                &
+               LONG_NAME          = 'CH4_mixing_ratio',          &
+               UNITS              = 'v/v_total_air',             &
+               DIMS               = MAPL_DimsHorzVert,           &
+               VLOCATION          = MAPL_VLocationCenter,        &
+               RC=STATUS  )
+       _VERIFY(STATUS)
+    ENDIF
 
     ! If enabled, create import field 
     CALL ESMF_ConfigGetAttribute( CF, DoIt, Label="Import_CO2_from_GOCART:", Default=0, __RC__ )
@@ -208,6 +207,15 @@ CONTAINS
        CALL ESMF_ConfigGetAttribute( CF, ImpCO2name, Label="GOCART_CO2_FieldName:", Default="GOCART_CO2", __RC__ )
        State_Chm%ImpCO2name = TRIM(ImpCO2name)
        IF ( MAPL_am_I_Root() ) WRITE(*,*) 'Will get CO2 from import field '//TRIM(ImpCO2name)
+    ENDIF
+
+    ! Import CH4 from GOCART 
+    ! ----------------------
+    CALL ESMF_ConfigGetAttribute( CF, DoIt, Label="Import_CH4_from_GOCART:", Default=0, __RC__ )
+    State_Chm%CH4fromGOCART = ( DoIt == 1 )
+    IF ( State_Chm%CH4fromGOCART ) THEN
+       State_Chm%ImpCH4name = "GOCART_CH4"
+       IF ( MAPL_am_I_Root() ) WRITE(*,*) 'Will get CH4 from import field GOCART_CH4'
     ENDIF
 
     ! CO2 photolysis
@@ -507,17 +515,21 @@ CONTAINS
     CHARACTER(LEN=*), PARAMETER  :: myname = 'GEOS_CarbonSetConc'
     CHARACTER(LEN=*), PARAMETER  :: Iam = myname    
     CHARACTER(LEN=63)            :: OrigUnit
-    INTEGER                      :: I, LM, indCO2, indCO, STATUS
+    INTEGER                      :: I, LM, indCO2, indCO, indCH4, STATUS
     REAL, POINTER                :: CO2(:,:,:)  => null()
+    REAL, POINTER                :: CH4(:,:,:)  => null()
     REAL, POINTER                :: COmeso(:,:) => null()
     REAL, PARAMETER              :: MWCO2 = 44.01 ! everybody knows this
+    REAL, PARAMETER              :: MWCH4 = 16.04
     REAL, PARAMETER              :: MWCO  = 28.01 ! CO2 - 16 
 
     !=======================================================================
     ! GEOS_CarbonSetConc starts here
     !=======================================================================
 
-    IF ( State_Chm%CO2fromGOCART .OR. State_Chm%COmesosphere ) THEN
+    IF ( State_Chm%CO2fromGOCART .OR.              &
+         State_Chm%CH4fromGOCART .OR.               &
+         State_Chm%COmesosphere ) THEN
 
        ! Make sure concentrations are in kg/kg total (this should already be the case) 
        CALL Convert_Spc_Units( Input_Opt,         State_Chm,     State_Grid, &
@@ -527,11 +539,15 @@ CONTAINS
 
        ! Get index
        indCO2  = -1
+       indCH4  = -1       
        indCO   = -1
        DO I = 1, State_Chm%nSpecies
           IF ( TRIM(State_Chm%SpcData(I)%Info%Name) == "CO2"  ) THEN
              indCO2 = I 
           ENDIF
+          IF ( TRIM(State_Chm%SpcData(I)%Info%Name) == "CH4"  ) THEN
+             indCH4 = I
+          ENDIF          
           IF ( TRIM(State_Chm%SpcData(I)%Info%Name) == "CO"  ) THEN
              indCO = I 
           ENDIF
@@ -549,6 +565,17 @@ CONTAINS
 
           ! Pass to GEOS-Chem. Flip in vertical and convert v/v to kg/kg
           State_Chm%Species(indCO2)%Conc(:,:,:) = CO2(:,:,LM:1:-1) * ( MWCO2 / MAPL_AIRMW )
+       ENDIF
+
+       ! Set CH4 concentrations
+       IF ( State_Chm%CH4fromGOCART ) THEN
+          ASSERT_(indCH4 > 0  )
+
+          ! Get CH4 field via import. This is expected in v/v total!! 
+          CALL MAPL_GetPointer ( Import, CH4, TRIM(State_Chm%ImpCH4name), __RC__ )
+
+          ! Pass to GEOS-Chem. Flip in vertical and convert v/v to kg/kg
+          State_Chm%Species(indCH4)%Conc(:,:,:) = CH4(:,:,LM:1:-1) * ( MWCH4 / MAPL_AIRMW )
        ENDIF
 
        IF ( State_Chm%COmesosphere  ) THEN
