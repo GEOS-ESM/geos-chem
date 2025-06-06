@@ -1003,6 +1003,43 @@ CONTAINS
             DIMS               = MAPL_DimsHorzVert,                       &
             VLOCATION          = MAPL_VLocationCenter,                    &
             __RC__ )
+
+       ! delta dry pressure used to conserve mass across consecutive runs
+       call MAPL_AddInternalSpec(GC, &
+            SHORT_NAME         = 'DELP_DRY',  &
+            LONG_NAME          = 'Delta dry pressure across box',  &
+            UNITS              = 'hPa', &
+            DIMS               = MAPL_DimsHorzVert,    &
+            VLOCATION          = MAPL_VLocationCenter,    &
+            RC=STATUS  )
+       _VERIFY(STATUS)
+
+       ! Additional outputs useful for unit conversions and post-processing analysis
+       call MAPL_AddInternalSpec(GC, &
+            SHORT_NAME         = 'AREA',  &
+            LONG_NAME          = 'Grid horizontal area',  &
+            UNITS              = 'm2', &
+            DIMS               = MAPL_DimsHorzOnly,    &
+            RC=STATUS  )
+       _VERIFY(STATUS)
+       call MAPL_AddInternalSpec(GC, &
+            SHORT_NAME         = 'BXHEIGHT',  &
+            LONG_NAME          = 'Grid box height (w/r/t dry air)',  &
+            UNITS              = 'm', &
+            DIMS               = MAPL_DimsHorzVert,    &
+            VLOCATION          = MAPL_VLocationCenter,    &
+            RC=STATUS  )
+       _VERIFY(STATUS)
+
+       call MAPL_AddInternalSpec(GC, &
+            SHORT_NAME         = 'TropLev',  &
+            LONG_NAME          = 'GEOS-Chem level where the tropopause occurs',  &
+            UNITS              = '1', &
+            DIMS               = MAPL_DimsHorzOnly,    &
+            VLOCATION          = MAPL_VLocationCenter,    &
+            RC=STATUS  )
+       _VERIFY(STATUS)
+
     ENDIF
 #endif
 
@@ -3206,6 +3243,40 @@ CONTAINS
                     State_Met%SPHU(:,:,1:State_Grid%NZ) * 1e-3_fp
        ENDIF
        Ptr3d => NULL()
+
+       ! Update other internal variables useful for post-procesing (if found)
+       CALL MAPL_GetPointer( INTSTATE, Ptr3d, 'DELP_DRY', &
+                             notFoundOK=.TRUE., __RC__ )
+       IF ( ASSOCIATED(Ptr3d) ) THEN
+          Ptr3d(:,:,State_Grid%NZ:1:-1) =  &
+                    State_Met%DELP_DRY(:,:,1:State_Grid%NZ)
+       ENDIF
+       Ptr3d => NULL()
+
+       CALL MAPL_GetPointer( INTSTATE, Ptr3d, 'BXHEIGHT', &
+                             notFoundOK=.TRUE., __RC__ )
+       IF ( ASSOCIATED(Ptr3d) ) THEN
+          Ptr3d(:,:,State_Grid%NZ:1:-1) =  &
+                    State_Met%BXHEIGHT(:,:,1:State_Grid%NZ)
+       ENDIF
+       Ptr3d => NULL()
+
+       CALL MAPL_GetPointer( INTSTATE, Ptr2d, 'TropLev', &
+                             notFoundOK=.TRUE., __RC__ )
+       IF ( ASSOCIATED(Ptr2d) ) THEN
+          Ptr2d(:,:) = State_Met%TropLev(:,:)
+       ENDIF
+       Ptr2d => NULL()
+
+       ! Only update area the first timestep
+       IF ( FIRST ) THEN
+          CALL MAPL_GetPointer( INTSTATE, Ptr2d, 'AREA', &
+               notFoundOK=.TRUE., __RC__ )
+          IF ( ASSOCIATED(Ptr2d) ) THEN
+             Ptr2d(:,:) = State_Met%AREA_M2(:,:)
+          ENDIF
+          Ptr2d => NULL()
+       ENDIF
 #endif
        
        ! Stop timer
