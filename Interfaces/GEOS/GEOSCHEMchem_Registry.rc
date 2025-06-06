@@ -244,10 +244,10 @@
 #================
 # GEOS-5 only:
 #================
- H2O2AfterChem    |   vv-1     | xyz | C |    |   |   |     |      |    |    | S       | soluble_fraction_H2O2
- SO2AfterChem     |   vv-1     | xyz | C |    |   |   |     |      |    |    | S       | soluble_fraction_SO2
- KPPHvalue        |   1        | xyz | C |    |   |   |     |      |    |    | S       | HSAVE_for_KPP 
- SESQ_CARBDENS    | kgCm-3     | xyz | C |    |   |   |     |      |    |    | S       | sesquiterpene_conc_restart
+#Turn off for TT# H2O2AfterChem    |   vv-1     | xyz | C |    |   |   |     |      |    |    | S       | soluble_fraction_H2O2
+#Turn off for TT# SO2AfterChem     |   vv-1     | xyz | C |    |   |   |     |      |    |    | S       | soluble_fraction_SO2
+#Turn off for TT# KPPHvalue        |   1        | xyz | C |    |   |   |     |      |    |    | S       | HSAVE_for_KPP 
+#Turn off for TT# SESQ_CARBDENS    | kgCm-3     | xyz | C |    |   |   |     |      |    |    | S       | sesquiterpene_conc_restart
 # Iso_Hplus_coarse | molL-1     | xyz | C |    |   |   |     |0.0   |    |    | S       | Isorropia_H+_concentration_coarse
 # Iso_Hplus_fine   | molL-1     | xyz | C |    |   |   |     |0.0   |    |    | S       | Isorropia_H+_concentration_fine
 # Iso_sulfate      | molL-1     | xyz | C |    |   |   |     |0.0   |    |    | S       | Isorropia_sulfate_concentratio
