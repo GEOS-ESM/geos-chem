@@ -979,7 +979,7 @@ CONTAINS
                                    +   SOILDUST(I,J,L,2)           &
                                    +   SOILDUST(I,J,L,3)           &
                                    +   SOILDUST(I,J,L,4)           &
-                                   +   SOILDUST(I,J,L,5) * 0.38  ) &
+                                   +   SOILDUST(I,J,L,5)*0.3_fp  ) &
                                    * ( 1013.25_fp  / PMID(I,J,L) ) &
                                    * ( T(I,J,L)    / 298.0_fp    ) &
                                    * 1.0e+9_fp
@@ -995,13 +995,19 @@ CONTAINS
 
        ! PM2.5 SOA
        IF ( State_Diag%Archive_PM25soa ) THEN
-          State_Diag%PM25soa(I,J,L) = ( TSOA(I,J,L)   * ORG_GROWTH    &
-                                    +   ASOA(I,J,L)   * ORG_GROWTH    &
-                                    +   SOAS(I,J,L)   * ORG_GROWTH    &
-                                    +   ISOAAQ(I,J,L) * ORG_GROWTH  ) &
-                                    * ( 1013.25_fp    / PMID(I,J,L) ) &
-                                    * ( T(I,J,L)      / 298.0_fp    ) &
-                                    * 1.0e+9_fp
+            IF ( Is_SimpleSOA ) THEN
+                State_Diag%PM25soa(I,J,L) = ( SOAS(I,J,L) * ORG_GROWTH  )   &
+                                          * ( 1013.25_fp    / PMID(I,J,L) ) &
+                                          * ( T(I,J,L)      / 298.0_fp    ) &
+                                          * 1.0e+9_fp
+            ELSE IF ( Is_ComplexSOA ) THEN
+                State_Diag%PM25soa(I,J,L) = ( TSOA(I,J,L)   * ORG_GROWTH    &
+                                          +   ASOA(I,J,L)   * ORG_GROWTH    &
+                                          +   ISOAAQ(I,J,L) * ORG_GROWTH  ) &
+                                          * ( 1013.25_fp    / PMID(I,J,L) ) &
+                                          * ( T(I,J,L)      / 298.0_fp    ) &
+                                          * 1.0e+9_fp
+           ENDIF
        ENDIF
 
        ! PM2.5 nitrate 
