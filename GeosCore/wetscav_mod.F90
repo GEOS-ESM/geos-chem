@@ -236,6 +236,8 @@ CONTAINS
 !###    IF ( State_Diag%Archive_RainFracLS   ) State_Diag%RainFracLS   = 0.0_f4
 !###    IF ( State_Diag%Archive_WashFracLS   ) State_Diag%WashFracLS   = 0.0_f4
     IF ( State_Diag%Archive_WetLossLS    ) State_Diag%WetLossLS    = 0.0_f4
+    IF ( State_Diag%Archive_WetDepLS    )  State_Diag%WetDepLS     = 0.0_f4
+
 
     !------------------------------------------
     ! Create precip fields
@@ -3174,6 +3176,8 @@ CONTAINS
     REAL(fp)               :: DEP_HG
     REAL(fp)               :: CNVSCL
     REAL(fp)               :: COND_WATER_CONTENT
+    REAL(fp)               :: DEP_FLX
+    INTEGER                :: S
 
     ! Arrays
     ! DSpc is the accumulator array of rained-out
@@ -3262,7 +3266,7 @@ CONTAINS
     !$OMP PRIVATE( F_RAINOUT,   F_WASHOUT,  K_RAIN,      Q          ) &
     !$OMP PRIVATE( QDOWN,       IS_RAINOUT, IS_WASHOUT,  N          ) &
     !$OMP PRIVATE( DEP_HG,      SpcInfo,    Hg_Cat,      EC         ) &
-    !$OMP PRIVATE( COND_WATER_CONTENT                               ) &
+    !$OMP PRIVATE( COND_WATER_CONTENT,      DEP_FLX,     S          ) &
     !$OMP SCHEDULE( DYNAMIC                                         )
     DO J = 1, State_Grid%NY
     DO I = 1, State_Grid%NX
@@ -3770,6 +3774,23 @@ CONTAINS
              SpcInfo => NULL()
           ENDDO
 
+       ENDIF
+
+      IF ( State_Diag%Archive_WetDepLS ) THEN
+         ! Loop over soluble species and/or aerosol species
+         DO NW = 1, State_Chm%nWetDep
+            ! Wet deposition flux at the surface over the timestep [ kg/m2 ]
+            DEP_FLX  = DSpc(NW,1,I,J) 
+
+            ! Get the species index from the wetdep index
+            S = State_Diag%Map_WetDepLS%id2slot(NW)
+
+            IF ( S > 0 ) THEN
+               ! Save flux per unit time [ kg/m2/s ]
+               State_Diag%WetDepLS(I,J,S) = State_Diag%WetDepLS(I,J,S) + ( DEP_FLX / DT )
+            ENDIF
+            
+         ENDDO
        ENDIF
 
     ENDDO

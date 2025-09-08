@@ -1516,6 +1516,18 @@ CONTAINS
           !$OMP END PARALLEL DO
        ENDIF
 
+      IF ( State_Diag%Archive_ColAODDustWL1 ) THEN
+          !$OMP PARALLEL DO       &
+          !$OMP DEFAULT( SHARED ) &
+          !$OMP PRIVATE( I, J, L )
+          DO J = 1, State_Grid%NY
+          DO I = 1, State_Grid%NX
+             State_Diag%ColAODDustWL1(I,J) = SUM( tempOD(I,J,:,:,1) )
+          ENDDO
+          ENDDO
+          !$OMP END PARALLEL DO            
+      ENDIF
+
     ENDIF
 
     ! Archive total dust surface area (sum across all bins)

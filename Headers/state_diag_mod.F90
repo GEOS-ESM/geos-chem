@@ -339,6 +339,7 @@ MODULE State_Diag_Mod
      REAL(f4),           POINTER :: AODDust(:,:,:)
      LOGICAL                     :: Archive_AODDust
      LOGICAL                     :: Archive_AOD
+     LOGICAL                     :: Archive_ColAOD
 
      REAL(f4),           POINTER :: AODDustWL1(:,:,:,:)
      TYPE(DgnMap),       POINTER :: Map_AODDustWL1
@@ -376,6 +377,8 @@ MODULE State_Diag_Mod
      REAL(f4),           POINTER :: AODSLAWL1(:,:,:)
      LOGICAL                     :: Archive_AODSLAWL1
      LOGICAL                     :: Archive_AODStrat
+     LOGICAL                     :: Archive_ColAODStrat
+
 
      REAL(f4),           POINTER :: AODSLAWL2(:,:,:)
      LOGICAL                     :: Archive_AODSLAWL2
@@ -1120,6 +1123,25 @@ MODULE State_Diag_Mod
 
      REAL(f4),           POINTER :: CO2photrate(:,:,:)
      LOGICAL                     :: Archive_CO2photrate
+
+     ! LS WetDep flux at the surface
+     REAL(f4),           POINTER :: WetDepLS(:,:,:)
+     TYPE(DgnMap),       POINTER :: Map_WetDepLS     
+     LOGICAL                     :: Archive_WetDepLS
+
+     ! Total column AOD 
+     REAL(f4),           POINTER :: ColAODDustWL1(:,:)
+     LOGICAL                     :: Archive_ColAODDustWL1
+
+     REAL(f4),           POINTER :: ColAODHygWL1(:,:,:)
+     TYPE(DgnMap),       POINTER :: Map_ColAODHygWL1
+     LOGICAL                     :: Archive_ColAODHygWL1
+
+     REAL(f4),           POINTER :: ColAODSLAWL1(:,:)
+     LOGICAL                     :: Archive_ColAODSLAWL1
+
+     REAL(f4),           POINTER :: ColAODPSCWL1(:,:)
+     LOGICAL                     :: Archive_ColAODPSCWL1
 #endif
 
 #ifdef MODEL_WRF
@@ -1488,6 +1510,10 @@ CONTAINS
     State_Diag%Archive_AODDust                     = .FALSE.
     State_Diag%Archive_AOD                         = .FALSE.
     State_Diag%Archive_AODStrat                    = .FALSE.
+
+    State_Diag%Archive_ColAOD                      = .FALSE.
+    State_Diag%Archive_ColAODStrat                 = .FALSE.
+
 
     State_Diag%AODDustWL1                          => NULL()
     State_Diag%Map_AODDustWL1                      => NULL()
@@ -2188,16 +2214,10 @@ CONTAINS
 
     State_Diag%CO2photrate                         => NULL()
     State_Diag%Archive_CO2photrate                 = .FALSE.
-#endif
 
-#if defined( MODEL_GEOS ) || defined( MODEL_WRF )
-    !=======================================================================
-    ! These diagnostics are only activated when running GC
-    ! either in NASA/GEOS or in WRF
-    !=======================================================================
-    State_Diag%KppError                            => NULL()
-    State_Diag%Archive_KppError                    = .FALSE.
-#endif
+    State_Diag%WetDepLS                            => NULL()
+    State_Diag%Map_WetDepLS                        => NULL()
+    State_Diag%Archive_WetDepLS                    = .FALSE.
 
     State_Diag%AnaInc                              => NULL()
     State_Diag%Map_AnaInc                          => NULL()
@@ -2226,6 +2246,31 @@ CONTAINS
     State_Diag%AnaIncColPbl                        => NULL()
     State_Diag%Map_AnaIncColPbl                    => NULL()
     State_Diag%Archive_AnaIncColPbl                = .FALSE. 
+
+    State_Diag%ColAODDustWL1                          => NULL()
+    State_Diag%Archive_ColAODDustWL1                  = .FALSE.
+
+    State_Diag%ColAODHygWL1                           => NULL()
+    State_Diag%Map_ColAODHygWL1                       => NULL()
+    State_Diag%Archive_ColAODHygWL1                   = .FALSE.
+
+    State_Diag%ColAODSLAWL1                           => NULL()
+    State_Diag%Archive_ColAODSLAWL1                   = .FALSE.
+
+    State_Diag%ColAODPSCWL1                           => NULL()
+    State_Diag%Archive_ColAODPSCWL1                   = .FALSE.    
+#endif
+
+#if defined( MODEL_GEOS ) || defined( MODEL_WRF )
+    !=======================================================================
+    ! These diagnostics are only activated when running GC
+    ! either in NASA/GEOS or in WRF
+    !=======================================================================
+    State_Diag%KppError                            => NULL()
+    State_Diag%Archive_KppError                    = .FALSE.
+#endif
+
+
 
   END SUBROUTINE Zero_State_Diag
 !EOC
@@ -7030,7 +7075,30 @@ CONTAINS
           CALL GC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
-#endif
+
+       !--------------------------------------------------------------------
+       ! Wet deposition flux from LS 
+       !--------------------------------------------------------------------
+       diagID = 'WetDepLS'
+       CALL Init_and_Register(                                               &
+            Input_Opt      = Input_Opt,                                      &
+            State_Chm      = State_Chm,                                      &
+            State_Diag     = State_Diag,                                     &
+            State_Grid     = State_Grid,                                     &
+            DiagList       = Diag_List,                                      &
+            TaggedDiagList = TaggedDiag_List,                                &
+            Ptr2Data       = State_Diag%WetDepLS,                            &
+            archiveData    = State_Diag%Archive_WetDepLS,                    &
+            mapData        = State_Diag%Map_WetDepLS,                        &
+            diagId         = diagId,                                         &
+            diagFlag       = 'W',                                            &
+            RC             = RC                                             )          
+
+       IF ( RC /= GC_SUCCESS ) THEN
+          errMsg = TRIM( errMsg_ir ) // TRIM( diagId )
+          CALL GC_Error( errMsg, RC, thisLoc )
+          RETURN
+       ENDIF
 
        !-------------------------------------------------------------------
        ! Analysis (nudging) diagnostics 
@@ -7174,6 +7242,91 @@ CONTAINS
           CALL GC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
+
+       !--------------------------------------------------------------------
+       ! Column integrated AOD
+       !--------------------------------------------------------------------
+       TmpWL   = RadWL(1)                           ! Workaround for ifort 17
+       diagID  = 'ColAODDust' // TRIM( TmpWL ) // 'nm' ! to avoid seg faults
+       CALL Init_and_Register(                                               &
+            Input_Opt      = Input_Opt,                                      &
+            State_Chm      = State_Chm,                                      &
+            State_Diag     = State_Diag,                                     &
+            State_Grid     = State_Grid,                                     &
+            DiagList       = Diag_List,                                      &
+            TaggedDiagList = TaggedDiag_List,                                &
+            Ptr2Data       = State_Diag%ColAODDustWL1,                          &
+            archiveData    = State_Diag%Archive_ColAODDustWL1,                  &
+            diagId         = diagId,                                         &
+            RC             = RC                                             )
+
+       IF ( RC /= GC_SUCCESS ) THEN
+          errMsg = TRIM( errMsg_ir ) // TRIM( diagId )
+          CALL GC_Error( errMsg, RC, thisLoc )
+          RETURN
+       ENDIF
+
+       diagID = 'ColAODHyg' // TRIM( TmpWL ) // 'nm'
+       CALL Init_and_Register(                                               &
+            Input_Opt      = Input_Opt,                                      &
+            State_Chm      = State_Chm,                                      &
+            State_Diag     = State_Diag,                                     &
+            State_Grid     = State_Grid,                                     &
+            DiagList       = Diag_List,                                      &
+            TaggedDiagList = TaggedDiag_List,                                &
+            Ptr2Data       = State_Diag%ColAODHygWL1,                           &
+            archiveData    = State_Diag%Archive_ColAODHygWL1,                   &
+            mapData        = State_Diag%Map_ColAODHygWL1,                       &
+            diagId         = diagId,                                         &
+            diagFlag       = 'H',                                            &
+            RC             = RC                                             )
+
+       IF ( RC /= GC_SUCCESS ) THEN
+          errMsg = TRIM( errMsg_ir ) // TRIM( diagId )
+          CALL GC_Error( errMsg, RC, thisLoc )
+          RETURN
+       ENDIF
+
+       diagID = 'ColAODStratLiquidAer' // TRIM( TmpWL ) // 'nm'
+       CALL Init_and_Register(                                               &
+            Input_Opt      = Input_Opt,                                      &
+            State_Chm      = State_Chm,                                      &
+            State_Diag     = State_Diag,                                     &
+            State_Grid     = State_Grid,                                     &
+            DiagList       = Diag_List,                                      &
+            TaggedDiagList = TaggedDiag_List,                                &
+            Ptr2Data       = State_Diag%ColAODSLAWL1,                        &
+            archiveData    = State_Diag%Archive_ColAODSLAWL1,                &
+            diagId         = diagId,                                         &
+            RC             = RC                                             )
+
+       IF ( RC /= GC_SUCCESS ) THEN
+          errMsg = TRIM( errMsg_ir ) // TRIM( diagId )
+          CALL GC_Error( errMsg, RC, thisLoc )
+          RETURN
+       ENDIF
+
+       diagID = 'ColAODPolarStratCloud' // TRIM( TmpWL ) // 'nm'
+       CALL Init_and_Register(                                               &
+            Input_Opt      = Input_Opt,                                      &
+            State_Chm      = State_Chm,                                      &
+            State_Diag     = State_Diag,                                     &
+            State_Grid     = State_Grid,                                     &
+            DiagList       = Diag_List,                                      &
+            TaggedDiagList = TaggedDiag_List,                                &
+            Ptr2Data       = State_Diag%ColAODPSCWL1,                        &
+            archiveData    = State_Diag%Archive_ColAODPSCWL1,                &
+            diagId         = diagId,                                         &
+            RC             = RC                                             )
+
+       IF ( RC /= GC_SUCCESS ) THEN
+          errMsg = TRIM( errMsg_ir ) // TRIM( diagId )
+          CALL GC_Error( errMsg, RC, thisLoc )
+          RETURN
+       ENDIF
+
+
+#endif
 
        !-------------------------------------------------------------------
        ! Total organic aerosol mass [ug/m3]
@@ -9614,6 +9767,14 @@ CONTAINS
                                    State_Diag%Archive_TotalOC           .or. &
                                    State_Diag%Archive_TotalBiogenicOA       )
 
+#ifdef MODEL_GEOS
+    State_Diag%Archive_ColAOD  = ( State_Diag%Archive_ColAODHygWL1            .or. &
+                                   State_Diag%Archive_ColAODDustWL1           )
+
+    State_Diag%Archive_ColAODStrat = ( State_Diag%Archive_ColAODSLAWL1        .or. &
+                                       State_Diag%Archive_ColAODPSCWL1         )
+#endif
+
     State_Diag%Archive_AOD  = ( State_Diag%Archive_AODHygWL1            .or. &
                                 State_Diag%Archive_AODHygWL2            .or. &
                                 State_Diag%Archive_AODHygWL3            .or. &
@@ -9623,7 +9784,8 @@ CONTAINS
                                 State_Diag%Archive_AODDust              .or. &
                                 State_Diag%Archive_AODDustWL1           .or. &
                                 State_Diag%Archive_AODDustWL2           .or. &
-                                State_Diag%Archive_AODDustWL3               )
+                                State_Diag%Archive_AODDustWL3           .or. &
+                                State_Diag%Archive_ColAOD                )
 
     State_Diag%Archive_AODStrat = ( State_Diag%Archive_AODSLAWL1        .or. &
                                     State_Diag%Archive_AODSLAWL2        .or. &
@@ -9632,7 +9794,8 @@ CONTAINS
                                     State_Diag%Archive_AODPSCWL2        .or. &
                                     State_Diag%Archive_AODPSCWL3        .or. &
                                     State_Diag%Archive_AerNumDenSLA     .or. &
-                                    State_Diag%Archive_AerNumDenPSC        )
+                                    State_Diag%Archive_AerNumDenPSC     .or. &
+                                    State_Diag%Archive_ColAODStrat        )
 
     State_Diag%Archive_ConcAboveSfc =                                        &
                                  ( State_Diag%Archive_SpeciesConcALT1  .and. &
@@ -9676,6 +9839,7 @@ CONTAINS
          State_Diag%Archive_LossOHbyMCFcolumnTrop                       .or. &
          State_Diag%Archive_OHwgtByAirMassColumnFull                    .or. &
          State_Diag%Archive_OHwgtByAirMassColumnTrop                        )
+
 
     !========================================================================
     ! Work array used to to calculate budget diagnostics, if needed
@@ -11114,7 +11278,12 @@ CONTAINS
                    Ptr2Data = State_Diag%COincCO2phot,                       &
                    RC       = RC                                            )
     IF ( RC /= GC_SUCCESS ) RETURN
-#endif
+    
+    CALL Finalize( diagId   = 'WetDepLS',                                   &
+                   Ptr2Data = State_Diag%WetDepLS,                          &
+                   mapData  = State_Diag%Map_WetDepLS,                        &
+                   RC       = RC                                            )
+    IF ( RC /= GC_SUCCESS ) RETURN
 
    ! Analysis diagnostics
     CALL Finalize( diagId   = 'AnaInc',                                      &
@@ -11159,6 +11328,28 @@ CONTAINS
                    RC       = RC                                            )
     IF ( RC /= GC_SUCCESS ) RETURN
 
+    CALL Finalize( diagId   = 'ColAODDustWL1',                                  &
+                   Ptr2Data = State_Diag%ColAODDustWL1,                         &
+                   RC       = RC                                            )
+    IF ( RC /= GC_SUCCESS ) RETURN
+
+    CALL Finalize( diagId   = 'ColAODHygWL1',                                   &
+                   Ptr2Data = State_Diag%ColAODHygWL1,                          &
+                   mapData  = State_Diag%Map_ColAODHygWL1,                      &
+                   RC       = RC                                            )
+    IF ( RC /= GC_SUCCESS ) RETURN
+
+    CALL Finalize( diagId   = 'ColAODSLAWL1',                                   &
+                   Ptr2Data = State_Diag%ColAODSLAWL1,                          &
+                   RC       = RC                                            )
+    IF ( RC /= GC_SUCCESS ) RETURN
+
+    CALL Finalize( diagId   = 'ColAODPSCWL1',                                   &
+                   Ptr2Data = State_Diag%ColAODPSCWL1,                          &
+                   RC       = RC                                            )
+    IF ( RC /= GC_SUCCESS ) RETURN
+
+#endif
 #if defined(MODEL_GEOS) || defined(MODEL_WRF)
     !=======================================================================
     ! These fields are only used when GEOS-Chem
@@ -12152,7 +12343,12 @@ CONTAINS
        IF ( isDesc    ) Desc  = 'CO2 photolysis rate' 
        IF ( isUnits   ) Units = 's-1'
        IF ( isRank    ) Rank  =  3
-#endif
+    
+    ELSE IF ( TRIM( Name_AllCaps ) == 'WETDEPLS' ) THEN
+       IF ( isDesc    ) Desc  = 'Wet deposition flux at surface from LS+anvil precipitation'
+       IF ( isUnits   ) Units = 'kg m-2 s-1'
+       IF ( isRank    ) Rank  = 2
+       IF ( isTagged  ) TagId = 'WET'    
 
     ELSE IF ( TRIM( Name_AllCaps ) == 'ANAINC' ) THEN
        IF ( isDesc    ) Desc  = 'Analysis increment'
@@ -12195,6 +12391,36 @@ CONTAINS
        IF ( isUnits   ) Units = '1e15 molec cm-2'
        IF ( isRank    ) Rank  = 2
        IF ( isTagged  ) TagId = 'ALL'
+
+    ELSE IF ( TRIM(Name_AllCaps) == 'COLAODDUST' // TRIM(RadWL(1)) // 'NM' ) THEN
+       IF ( isDesc    ) Desc    = 'Column integrated optical depth for dust at ' // &
+                                   TRIM(RadWL(1)) // ' nm'
+       IF ( isUnits   ) Units   = '1'
+       IF ( isRank    ) Rank    =  2
+
+    ELSE IF ( TRIM(Name_AllCaps) == 'COLAODHYG' // TRIM(RadWL(1)) // 'NM' ) THEN
+       IF ( isDesc    ) Desc  =  'Column integrated optical depth for hygroscopic aerosol ' // &
+                                 'at ' // TRIM(RadWL(1)) // ' nm'
+       IF ( isUnits   ) Units = '1'
+       IF ( isRank    ) Rank  =  2
+       IF ( isTagged  ) TagId = 'HYG'
+
+    ELSE IF ( TRIM(Name_AllCaps) == 'COLAODSTRATLIQUIDAER'// &
+                                    TRIM(RadWL(1)) // 'NM' ) THEN
+       IF ( isDesc    ) Desc  = 'Column integrated stratospheric liquid aerosol optical ' // &
+                                'depth at ' // TRIM(RadWL(1)) // ' nm'
+       IF ( isUnits   ) Units = '1'
+       IF ( isRank    ) Rank  =  2
+
+    ELSE IF ( TRIM(Name_AllCaps) == 'COLAODPOLARSTRATCLOUD'// &
+                                    TRIM(RadWL(1)) // 'NM' ) THEN
+       IF ( isDesc    ) Desc  = 'Column integrated polar stratospheric cloud type 1a/2 ' // &
+                                'optical depth at ' // TRIM(RadWL(1)) // ' nm'
+       IF ( isUnits   ) Units = '1'
+       IF ( isRank    ) Rank  =  2
+
+
+#endif
 
     ELSE IF ( TRIM( Name_AllCaps ) == 'TERPENESOA' ) THEN
        IF ( isDesc    ) Desc  = 'Monoterpene and sesqiterpene SOA'

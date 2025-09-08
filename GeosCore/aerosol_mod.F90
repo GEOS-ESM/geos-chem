@@ -2042,6 +2042,14 @@ CONTAINS
              ENDIF
           ENDIF
 
+          IF ( ODSWITCH .EQ. 1 .and. L .eq. 1 ) THEN
+             IF ( State_Diag%Archive_ColAODSLAWL1 .and. IsSLA ) THEN
+                  State_Diag%ColAODSLAWL1(I,J) = SUM( ODAER(I,J,:,IWVSELECT(1,1),N) )
+             ELSEIF ( State_Diag%Archive_ColAODPSCWL1 .and. IsPSC ) THEN
+                   State_Diag%ColAODPSCWL1(I,J) = SUM( ODAER(I,J,:,IWVSELECT(1,1),N) )
+             ENDIF
+          ENDIF
+
        ENDDO
        ENDDO
        ENDDO
@@ -2181,6 +2189,13 @@ CONTAINS
                    ENDIF
                 ENDIF
 
+               IF ( L == 1 .AND. State_Diag%Archive_ColAODHygWL1 .AND. IsWL1 ) THEN
+                  S = State_Diag%Map_ColAODHygWL1%id2slot(NA)
+                  IF ( S > 0 ) THEN
+                     State_Diag%ColAODHygWL1(I,J,S) = &
+                        SUM(ODAER(I,J,:,IWVSELECT(1,W),N))
+                  ENDIF
+               ENDIF
              ENDDO
              ENDDO
              ENDDO
