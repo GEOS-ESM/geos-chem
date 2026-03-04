@@ -85,6 +85,7 @@ MODULE GEOS_Analysis
      REAL                         :: MaskThreshold 
      LOGICAL                      :: InStrat
      LOGICAL                      :: InTrop
+     LOGICAL                      :: InPSC
      INTEGER                      :: AnaL1 
      INTEGER                      :: AnaL2 
      INTEGER                      :: AnaL3 
@@ -799,6 +800,11 @@ CONTAINS
                 IF ( stratwgt > 0.0 .AND. StratCount <= iopt%StratSponge ) wgt = 0.0 
              ENDIF
 
+             ! Don't apply increments in PSCs
+             IF ( .NOT. iopt%InPSC .AND. State_Chm%STATE_PSC(I,J,L) > 0 ) THEN                
+                wgt = 0.0
+             ENDIF
+
              ! Adjust weight by # of time steps if spreading evenly using IAU.
              IF ( iopt%IAU ) wgt = wgt / DilFact
 
@@ -1462,6 +1468,12 @@ CONTAINS
     IF ( RC /= GC_SUCCESS ) RETURN
     AnaConfig(ispec)%InTrop = v_bool
 
+    ! Apply around PSCs? 
+    key = TRIM(pkey)//"%InPSC"
+    CALL GetKey_( Config, key, RC, vbool=v_bool, vbool_default=.TRUE. )
+    IF ( RC /= GC_SUCCESS ) RETURN
+    AnaConfig(ispec)%InPSC = v_bool
+
     ! Has mask field 
     key = TRIM(pkey)//"%HasMask"
     CALL GetKey_( Config, key, RC, vbool=v_bool, vbool_default=.FALSE. )
@@ -1659,6 +1671,7 @@ CONTAINS
              WRITE(6,*) '- Mask threshold : ', AnaConfig(ispec)%MaskThreshold
           ENDIF
           WRITE(6,*) '- Apply analysis in stratosphere: ', AnaConfig(ispec)%InStrat
+          WRITE(6,*) '- Apply analysis near PSCs :      ', AnaConfig(ispec)%InPSC
           WRITE(6,*) '- Apply analysis in troposphere : ', AnaConfig(ispec)%InTrop
           WRITE(6,*) '- Tropopause sponge layer       : ', AnaConfig(ispec)%StratSponge
           WRITE(6,*) '- Analysis level 1              : ', AnaConfig(ispec)%AnaL1  

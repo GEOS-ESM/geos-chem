@@ -23,7 +23,8 @@ species:
     FileVarUnit: ppmv
     DryFlag: 0 
     IsIncrement: true 
-    InStrat: true 
+    InStrat: true
+    InPSC: true
     InTrop: true
     IAU: true
     AnaL1: 1
@@ -48,7 +49,8 @@ species:
     FileVarUnit: v/v 
     DryFlag: 1
     IsIncrement: true
-    InStrat: true 
+    InStrat: true
+    InPSC: true
     InTrop: true
     IAU: true
     AnaL1: 1
@@ -78,7 +80,8 @@ species:
     FileVarUnit: v/v 
     DryFlag: 1
     IsIncrement: true
-    InStrat: true 
+    InStrat: true
+    InPSC: true    
     InTrop: true
     IAU: true
     AnaL1: 1
