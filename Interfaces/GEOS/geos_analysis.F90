@@ -801,7 +801,7 @@ CONTAINS
              ENDIF
 
              ! Don't apply increments in PSCs
-             IF ( .NOT. iopt%InPSC .AND. State_Chm%STATE_PSC(I,J,L) > 0 ) THEN                
+             IF ( .NOT. iopt%InPSC .AND. State_Diag%AerSurfAreaPSC(I,J,L) > 0 ) THEN                
                 wgt = 0.0
              ENDIF
 
