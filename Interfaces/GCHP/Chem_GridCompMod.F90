@@ -52,6 +52,7 @@ MODULE Chem_GridCompMod
   USE CMN_Size_Mod
   USE ESMF                                           ! ESMF library
   USE MAPL_Mod                                       ! MAPL library
+  USE mapl3g_GridGet, ONLY: grid_get_interior
   USE Charpak_Mod                                    ! String functions
   USE Hco_Types_Mod, ONLY : ConfigObj
   USE Input_Opt_Mod                                  ! Input Options obj
@@ -4333,7 +4334,11 @@ CONTAINS
        CALL GridGetInterior( Grid, IL, IU, JL, JU, __RC__  )
 #else
        ! Get the upper and lower bounds of on each PET using MAPL
-       CALL MAPL_GridGetInterior( Grid, IL, IU, JL, JU )
+       block
+         integer, allocatable :: interior_(:)
+         call grid_get_interior(Grid, interior_)
+         IL=interior_(1); IU=interior_(2); JL=interior_(3); JU=interior_(4)
+       end block
 #endif
 
     ENDIF
