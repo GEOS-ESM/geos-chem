@@ -5490,7 +5490,7 @@ CONTAINS
           CALL MAPL_GetPointer( INTSTATE, PtrTmp, FieldName, RC=STATUS )
           IF ( STATUS /= ESMF_SUCCESS ) THEN
              WRITE(*,*) 'Error reading ',TRIM(SpcName)
-             VERIFY_(STATUS)
+             _VERIFY(STATUS)
           ENDIF
 
           ! NOy concentration
@@ -5519,7 +5519,7 @@ CONTAINS
 
     ! Successful return
     FIRST = .FALSE.
-    RETURN_(ESMF_SUCCESS)
+    _RETURN(ESMF_SUCCESS)
 
   END SUBROUTINE CalcSpeciesDiagnostics_
 !EOC
@@ -5875,7 +5875,7 @@ CONTAINS
     ENDIF ! DoUpdate 
 
     ! Return
-    RETURN_(ESMF_SUCCESS)
+    _RETURN(ESMF_SUCCESS)
 
   END SUBROUTINE InitFromFile_ 
 !EOC
@@ -6110,7 +6110,7 @@ CONTAINS
     ENDIF
 
     ! All done
-    RETURN_(ESMF_SUCCESS)
+    _RETURN(ESMF_SUCCESS)
 
   END SUBROUTINE SetAnaO3_ 
 !EOC
@@ -6275,7 +6275,7 @@ CONTAINS
        ENDIF
     ENDDO
 
-    RETURN_(ESMF_SUCCESS)
+    _RETURN(ESMF_SUCCESS)
 
   END SUBROUTINE AddSpecInfoForMoist 
 !EOC
@@ -6396,7 +6396,7 @@ CONTAINS
                                                               __RC__ )
 
 
-    RETURN_(ESMF_SUCCESS)
+    _RETURN(ESMF_SUCCESS)
 
   END SUBROUTINE MetVars_For_Lightning_Init
 !EOC
@@ -6572,7 +6572,7 @@ CONTAINS
 !-Cleanup 
   IF ( PRESENT(LfrSrc) ) LfrSrc = LFR_SOURCE
   IF ( PRESENT(CnvSrc) ) CnvSrc = CNV_SOURCE
-  RETURN_(ESMF_SUCCESS)
+  _RETURN(ESMF_SUCCESS)
 
   END SUBROUTINE MetVars_For_Lightning_Run
 !EOC

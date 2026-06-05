@@ -120,7 +120,7 @@ MODULE inquireMod
     ENDIF
 
 #ifdef ESMF_
-    VERIFY_(status)
+    _VERIFY(status)
 #endif
 
   END FUNCTION findFreeLUN
