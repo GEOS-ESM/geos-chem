@@ -11,7 +11,7 @@ Collections:
 
 Samplings:
   GAAS_sample_0:
-    update_offset: PT300S
+    update_offset: PT>>>DT<<<S
     exact: True
 
 Exports:
