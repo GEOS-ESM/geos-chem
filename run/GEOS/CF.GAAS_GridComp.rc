@@ -14,7 +14,7 @@
            single_channel:  550.  # Single channel to analyze
 eps_for_log_transform_aod:  0.01 
                   verbose: .TRUE.
-              monitor_gcc: .FALSE.
+              monitor_gcc: .TRUE.
               monitor_g2g: .FALSE.
 
              CoresPerNode:  8     # Will be reset in SetServices with value from main CF
