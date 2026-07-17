@@ -81,7 +81,7 @@ Warnings:                    1
     --> UCX_PROD_LOSS          :       false
     --> OMOC_RATIO             :       false
     --> GMD_SFC_CH4            :       false
-    --> GEOS_3HR_CH4           :       true   
+    --> GEOS_3HR_CH4           :       false
     --> CMIP6_SFC_CH4          :       false
 # OLSON and MODIS read via MAPL not HEMCO in GEOS
     --> OLSON_LANDMAP          :       false
