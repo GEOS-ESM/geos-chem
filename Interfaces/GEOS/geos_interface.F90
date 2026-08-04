@@ -572,12 +572,13 @@ CONTAINS
     CHARACTER(LEN=ESMF_MAXSTR)       :: FieldName
     real(ESMF_KIND_R4), dimension(4) :: HenryCoeffs
     real(ESMF_KIND_R4), dimension(3) :: kcs
-    REAL                             :: fscav
+    REAL                             :: AerScavEff
     REAL(ESMF_KIND_R4)               :: hstar,dhr,ak0,dak
     REAL                             :: liq_and_gas, retfactor, convfaci2g
     INTEGER                          :: N
     INTEGER                          :: TurnOffSO2
     INTEGER                          :: online_cldliq, online_vud
+    LOGICAL                          :: is_wetdep
     TYPE(Species), POINTER           :: SpcInfo
 
     __Iam__('AddSpecInfoForMoist')
@@ -604,7 +605,7 @@ CONTAINS
        WRITE(*,*) 'Turn off SO2 washout: ',TurnOffSO2
        WRITE(*,*) 'Calculate CLDLIQ online: ',online_cldliq
        WRITE(*,*) 'Calculate VUD online: ',online_vud
-       WRITE(*,*) 'ID,          Name:  Hstar, dHstar, Ka, dKa, AerScavEff, KcScal1, KcScal2, KcScal3, liq/gas, i2g, retention'
+       WRITE(*,*) 'ID,          Name:  WetDep, Hstar, dHstar, Ka, dKa, AerScavEff, KcScal1, KcScal2, KcScal3, liq/gas, i2g, retention'
     ENDIF
 
     ! Loop over all species
@@ -620,12 +621,23 @@ CONTAINS
        ! Skip to next species if not found. This can happen if not all species are in the internal state
        IF ( RC /= ESMF_SUCCESS ) CYCLE
 
-       ! Scavenging efficiency
-       fscav = MIN(MAX(SpcInfo%WD_AerScavEff,0.0),1.0)
-       ! Don't washout SO2 if specified so
-       IF ( (TRIM(FieldName)==TRIM(SPFX)//'SO2') .AND. (TurnOffSO2==1) ) fscav = 0.0
-       CALL ESMF_AttributeSet(Field, NAME='ScavengingFractionPerKm', VALUE=fscav, __RC__ )
+       ! Set as GEOS-Chem species
+       CALL ESMF_AttributeSet(Field, 'is_gcc_species', .TRUE. , __RC__ )
 
+       ! Do wetdep
+       is_wetdep = SpcInfo%Is_WetDep
+
+       ! Don't washout SO2 if specified so
+       IF ( (TRIM(FieldName)==TRIM(SPFX)//'SO2') .AND. (TurnOffSO2==1) ) is_wetdep = .FALSE.
+       CALL ESMF_AttributeSet(Field, 'IsWetDep', is_wetdep, __RC__ )
+
+       ! Scavenging efficiency
+       IF ( SpcInfo%WD_AerScavEff /= MISSING_DBLE ) AerScavEff = SpcInfo%WD_AerScavEff
+       IF ( TRIM(FieldName)==TRIM(SPFX)//'HNO3' ) THEN
+         AerScavEff = 1.0
+       ENDIF
+       CALL ESMF_AttributeSet(Field, 'AerScavEff',AerScavEff, __RC__ )      
+       
        ! Henry coefficients. All values default to -1.0
        hstar = -99.0
        dhr   = 0.0 !mkelp 20210114
@@ -638,29 +650,34 @@ CONTAINS
        IF ( SpcInfo%Henry_pKa /= MISSING_DBLE ) ak0 = SpcInfo%Henry_pKa
        ! Temperature correction for Ka, currently ignored by GEOS-Chem
        dak   = 0.0 !mkelp
+
        ! Don't washout SO2 if specified so
        IF ( (TRIM(FieldName)==TRIM(SPFX)//'SO2') .AND. (TurnOffSO2==1) ) THEN
           hstar = -99.0
-          dhr   = 0.0 !mkelp
+          dhr   = 0.0 !mkelp 
           ak0   = 0.0 !mkelp
        ENDIF
+
        ! Pass to array
        HenryCoeffs(1) = hstar
        HenryCoeffs(2) = dhr
        HenryCoeffs(3) = ak0
        HenryCoeffs(4) = dak
        CALL ESMF_AttributeSet(Field, 'SetofHenryLawCts', HenryCoeffs, __RC__ )
+       
        ! KC scale factors
        kcs(:) = 1.0
        IF ( SpcInfo%WD_KcScaleFac(1) /= MISSING ) kcs(1) = SpcInfo%WD_KcScaleFac(1)
        IF ( SpcInfo%WD_KcScaleFac(2) /= MISSING ) kcs(2) = SpcInfo%WD_KcScaleFac(2)
        IF ( SpcInfo%WD_KcScaleFac(3) /= MISSING ) kcs(3) = SpcInfo%WD_KcScaleFac(3)
        CALL ESMF_AttributeSet(Field, 'SetofKcScalFactors', kcs, __RC__ )
+       
        ! Gas-phase washout parameter
        ! Liquid and gas washout?
        liq_and_gas = 0.0
        IF ( SpcInfo%WD_LiqAndGas ) liq_and_gas = 1.0
        CALL ESMF_AttributeSet(Field, 'LiqAndGas', liq_and_gas, __RC__ )
+       
        ! ice to gas ratio
        IF ( SpcInfo%WD_ConvFacI2G == MISSING ) THEN
           convfaci2g = 0.0
@@ -668,6 +685,7 @@ CONTAINS
           convfaci2g = SpcInfo%WD_ConvFacI2G
        ENDIF
        CALL ESMF_AttributeSet(Field, 'ConvFacI2G', convfaci2g, __RC__ )
+       
        ! Retention factor
        IF ( SpcInfo%WD_RetFactor == MISSING ) THEN
           retfactor = 1.0
@@ -675,14 +693,17 @@ CONTAINS
           retfactor = SpcInfo%WD_RetFactor
        ENDIF
        CALL ESMF_AttributeSet(Field, 'RetentionFactor', retfactor, __RC__ )
+       
        ! Use online or offline CLDLIQ? This is the same for all species
        CALL ESMF_AttributeSet(Field, 'OnlineCLDLIQ', real(online_cldliq), __RC__ )
+       
        ! Use online or offline VUD? This is the same for all species
        CALL ESMF_AttributeSet(Field, 'OnlineVUD', real(online_vud), __RC__ )
+
        ! Verbose
        IF ( am_I_Root ) THEN
-          WRITE(*,100) N, TRIM(SpcInfo%Name), hstar, dhr, ak0, dak, fscav, kcs(1), kcs(2), kcs(3), liq_and_gas, convfaci2g, retfactor
-100       FORMAT( i3,1x,a14,': ',4(1x,es9.2),7(1x,f3.1) )
+          WRITE(*,100) N, TRIM(SpcInfo%Name), is_wetdep, hstar, dhr, ak0, dak, AerScavEff, kcs(1), kcs(2), kcs(3), liq_and_gas, convfaci2g, retfactor
+100       FORMAT( i3,1x,a14,': ',1x,L2,4(1x,es9.2),7(1x,f3.1) )
        ENDIF
     ENDDO
 
@@ -966,14 +987,6 @@ CONTAINS
        WRITE(*,*) 'Only overwrite above tropopause: ',AboveTroppOnly
        WRITE(*,*) 'Maximum valid level (will be used above that level): ',TopLev
        WRITE(*,*) 'Maximum valid level (will be used above that level): ',TopLev
-    ENDIF
-
-    ! Initialize array to missing values
-    IF ( UniformIfMissing >= 0.0 ) THEN
-        DO N = 1, State_Chm%nSpecies
-           State_Chm%Species(N)%Conc(:,:,:) = UniformIfMissing
-        ENDDO
-        IF ( am_I_Root ) WRITE(*,*) 'All species initialized to ',UniformIfMissing
     ENDIF
 
     ! Initialize array to missing values
