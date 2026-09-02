@@ -143,88 +143,88 @@ Collections:
   GEOSCHEMchem_qfed2_forest_mask:
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/Masks/v0.0.0/sfc/qfed2_forest_mask.nc4
   GEOSCHEMchem_qfed2.emis_acet_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_acet.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_acet.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_acet_061:
     template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_acet.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_ald2_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_ald2.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_ald2.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_ald2_061:
     template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_ald2.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_alk4_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_alk4.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_alk4.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_alk4_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_alk4.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_alk4.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_bc_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_bc.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_bc.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_bc_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_bc.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_bc.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_c2h6_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c2h6.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_c2h6.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_c2h6_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c2h6.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c2h6.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_c3h6_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c3h6.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_c3h6.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_c3h6_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c3h6.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c3h6.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_c3h8_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c3h8.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_c3h8.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_c3h8_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c3h8.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_c3h8.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_ch2o_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_ch2o.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_ch2o.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_ch2o_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_ch2o.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_ch2o.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_co_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_co.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_co.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_co_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_co.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_co.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_mek_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_mek.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_mek.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_mek_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_mek.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_mek.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_nh3_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_nh3.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_nh3.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_nh3_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_nh3.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_nh3.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_no_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_no.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_no.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_no_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_no.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_no.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_oc_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_oc.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_oc.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_oc_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_oc.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_oc.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_so2_006:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_so2.006.%y4%m2%d2.nc4
-    valid_range: "2014-12-01T12:00/2021-11-01T12:00"
+    template: /discover/nobackup/projects/gmao/share/gmao_ops/fvInput/chemistry/QFED/v2.6r1/sfc/0.1/Y%y4/M%m2/qfed2.emis_so2.061.%y4%m2%d2.nc4
+    valid_range: "2000-02-24T12:00/2026-01-01T12:00"
   GEOSCHEMchem_qfed2.emis_so2_061:
-    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_so2.006.%y4%m2%d2.nc4
+    template: /discover/nobackup/projects/gmao/share/dao_ops/fvInput_nc3/PIESA/sfc/QFED/NRT/v2.5r1_0.1_deg/Y%y4/M%m2/qfed2.emis_so2.061.%y4%m2%d2.nc4
     valid_range: "2021-11-01T12:00/2025-01-01T12:00"
   GEOSCHEMchem_NH3_Arctic_seabirds:
     template: /discover/nobackup/projects/gmao/share/dasilva/fvInput/ExtData/chemistry/SEABIRDS/v0.0.0/sfc/NH3_Arctic_seabirds_x1440_y720_t12.1990.nc
@@ -1998,424 +1998,424 @@ Exports:
     variable: qfed2_temperate
   QFED_ACET_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ACET_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ACET_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_ACET_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_ACET_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_ACET_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_ACET_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_ACET_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_ACET_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ACET_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_006, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_acet_061, linear_transformation: [0.0, 0.61984], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALD2_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALD2_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALD2_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_ALD2_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_ALD2_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_ALD2_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_ALD2_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_ALD2_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_ALD2_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALD2_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_006, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ald2_061, linear_transformation: [0.0, 0.54484], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALK4_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALK4_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALK4_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_ALK4_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_ALK4_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_ALK4_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_ALK4_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_ALK4_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_ALK4_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_ALK4_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_006, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_alk4_061, linear_transformation: [0.0, 0.82588], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_BCPI_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_BCPI_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_BCPI_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_BCPI_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_BCPI_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_BCPI_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_BCPI_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_BCPI_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_BCPI_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_BCPI_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_bc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C2H6_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C2H6_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C2H6_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_C2H6_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_C2H6_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_C2H6_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_C2H6_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_C2H6_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_C2H6_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C2H6_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_006, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c2h6_061, linear_transformation: [0.0, 0.79814], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C3H8_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C3H8_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C3H8_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_C3H8_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_C3H8_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_C3H8_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_C3H8_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_C3H8_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_C3H8_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_C3H8_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h8_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CH2O_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CH2O_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CH2O_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_CH2O_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_CH2O_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_CH2O_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_CH2O_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_CH2O_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_CH2O_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CH2O_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_ch2o_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CO_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CO_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CO_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_CO_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_CO_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_CO_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_CO_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_CO_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_CO_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_CO_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_co_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_MEK_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_MEK_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_MEK_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_MEK_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_MEK_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_MEK_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_MEK_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_MEK_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_MEK_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_MEK_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_006, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_mek_061, linear_transformation: [0.0, 0.66565], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NH3_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NH3_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NH3_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_NH3_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_NH3_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_NH3_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_NH3_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_NH3_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_NH3_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NH3_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_nh3_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NO_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NO_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NO_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_NO_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_NO_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_NO_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_NO_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_NO_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_NO_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_NO_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_no_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_OCPI_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_OCPI_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_OCPI_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_OCPI_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_OCPI_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_OCPI_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_OCPI_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_OCPI_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_OCPI_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_OCPI_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_oc_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_PRPE_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_PRPE_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_PRPE_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_PRPE_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_PRPE_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_PRPE_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_PRPE_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_PRPE_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_PRPE_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_PRPE_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_006, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_c3h6_061, linear_transformation: [0.0, 0.81633], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_SO2_BO_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_SO2_BO_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_SO2_GL_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_SO2_GL_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_gl}
   QFED_SO2_SV_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_SO2_SV_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_sv}
   QFED_SO2_TF_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_SO2_TF_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_tf}
   QFED_SO2_TP_FT:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   QFED_SO2_TP_SFC:
     - {starting: "2014-12-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_006, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
-    - {starting: "2021-11-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
+    - {starting: "2026-01-01T12:00", collection: GEOSCHEMchem_qfed2.emis_so2_061, linear_transformation: [0.0, 1.0], regrid: CONSERVE, sample: gcc_daily, variable: biomass_xf}
   SEABIRD_NH3:
     collection: GEOSCHEMchem_NH3_Arctic_seabirds
     regrid: CONSERVE

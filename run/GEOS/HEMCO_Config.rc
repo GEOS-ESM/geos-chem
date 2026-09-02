@@ -62,8 +62,8 @@ Warnings:                    1
     --> C2H6_ZITELY            :       false
     --> QFED                   :       true
     --> ORDONEZ_IODOCARB       :       true
-    --> DECAYING_PLANTS        :       true 
-    --> AFCID                  :       true 
+    --> DECAYING_PLANTS        :       true
+    --> AFCID                  :       true
     --> POET                   :       false
     --> SEABIRDS               :       true
     --> DICE_AFRICA            :       false
@@ -75,12 +75,12 @@ Warnings:                    1
     --> AEIC_SCALE_1990_2019   :       true
 # ----- NON-EMISSIONS DATA ------------------
     --> UVALBEDO               :       true
-    --> CCM_STRAT_Bry          :       true
-    --> GMI_STRAT_OH           :       true
+    --> CCM_STRAT_Bry          :       false
+    --> GMI_STRAT_OH           :       false
     --> GMI_PROD_LOSS          :       false
     --> UCX_PROD_LOSS          :       false
     --> OMOC_RATIO             :       false
-    --> GMD_SFC_CH4            :       false
+    --> GMD_SFC_CH4            :       true
     --> GEOS_3HR_CH4           :       false
     --> CMIP6_SFC_CH4          :       false
 # OLSON and MODIS read via MAPL not HEMCO in GEOS
