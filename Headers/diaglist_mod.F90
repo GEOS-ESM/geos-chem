@@ -607,9 +607,19 @@ CONTAINS
 
        ! Skip line if gridded component name not present and using GCHP or GEOS
 #if defined( MODEL_GCHPCTM )
-       IF ( INDEX( Line, 'GCHPchem' ) .le. 0 ) CYCLE
+       LineInd = INDEX( Line, ',' )
+       IF ( LineInd > 0 ) THEN
+          IF ( INDEX( Line(LineInd+1:), 'GCHPchem' ) .le. 0 ) CYCLE
+       ELSE
+          CYCLE
+       ENDIF
 #elif defined( MODEL_GEOS )
-       IF ( INDEX( Line, 'GEOSCHEMCHEM' ) .le. 0 ) CYCLE
+       LineInd = INDEX( Line, ',' )
+       IF ( LineInd > 0 ) THEN
+          IF ( INDEX( Line(LineInd+1:), 'GEOSCHEMCHEM' ) .le. 0 ) CYCLE
+       ELSE
+          CYCLE
+       ENDIF
 #endif
 
        ! Get diagnostic name
